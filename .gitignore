@@ -1,0 +1,5 @@
+OUTPUT/
+iso/
+to-squash/
+live.iso
+*.tar.*
