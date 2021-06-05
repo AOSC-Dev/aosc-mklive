@@ -1,54 +1,27 @@
 set -e
+rm -r iso to-squash
 mkdir iso to-squash
-echo "Preparing OS with CIEL!..."
-( yes yes | ciel farewell ) || true
-ciel init
-ciel load-os "$TARBALL"
-if [ "$MIRROR" ]; then
-	ciel switchmirror "$MIRROR"
-fi
-ciel update-os
-ciel add ciel--livecd--
-ciel shell -i ciel--livecd-- "apt-get update"
-ciel shell -i ciel--livecd-- "apt-get install dracut -y"
-if [ "$EXTRA_PACKAGES" ]; then
-	ciel shell -i ciel--livecd-- "apt-get install $EXTRA_PACKAGES -y"
-fi
-if [ "$(ls ciel--livecd--/lib/modules/ | wc -l)" != "1" ]; then
-	echo "Multiple or no kernel versions found, abort..." >&2
-	( yes yes | ciel farewell ) || true
-	rm -rfv iso to-squash
-	exit 1
-fi
-KVER="$(ls ciel--livecd--/lib/modules/)"
-KIMG=""
-if [ -e "ciel--livecd--/boot/vmlinuz-$KVER" ]; then
-	KIMG="ciel--livecd--/boot/vmlinuz-$KVER"
-fi
-if [ -e "ciel--livecd--/boot/vmlinux-$KVER" ]; then
-	KIMG="ciel--livecd--/boot/vmlinux-$KVER"
-fi
-if [ ! "$KIMG" ]; then
-	echo "Kernel image for $KVER not found, abort..." >&2
-	( yes yes | ciel farewell ) || true
-	rm -rfv iso to-squash
-	exit 1
-fi
-echo "Extracting LiveCD kernel/initramfs before CIEL! instance is gone..."
-ciel shell -i ciel--livecd-- "dracut --add \"dmsquash-live livenet\" \"/live-initramfs-$KVER.img\" $KVER"
+
+echo "Generating LiveKit distribution ..."
+aoscbootstrap \
+    stable livekit ${REPO:-https://repo.aosc.io/debs} \
+    --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
+    -x \
+    --arch ${ARCH:-$(dpkg --print-architecture)} \
+    -s \
+        /usr/share/aoscbootstrap/scripts/reset-repo.sh \
+        /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
+        /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
+        /usr/share/aoscbootstrap/scripts/livekit.sh \
+    --include-files /usr/share/aoscbootstrap/recipes/livekit.lst
+
+echo "Extracting LiveKit kernel/initramfs ..."
 mkdir -pv iso/boot
-cp -v "$KIMG" iso/boot/kernel
-cp -v "ciel--livecd--/live-initramfs-$KVER.img" iso/boot/live-initramfs.img
-echo "Finalizing CIEL!..."
-ciel factory-reset -i ciel--livecd--
-ciel commit -i ciel--livecd--
-ciel del ciel--livecd--
-if [ "$MIRROR" ]; then
-	ciel switchmirror origin
-fi
+cp -v livekit/kernel iso/boot/kernel
+cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
 
 echo "Evaulating size of generated rootfs..."
-ROOTFS_SIZE="$(du -sm ".ciel/container/dist/" | awk '{print $1}')"
+ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
 ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/3))"
 
 echo "Generating empty back storage for rootfs..."
@@ -61,7 +34,7 @@ mkfs.ext4 -F -m 1 to-squash/LiveOS/rootfs.img
 echo "Filling rootfs..."
 mkdir mountpoint
 mount -t ext4 -o loop to-squash/LiveOS/rootfs.img mountpoint/
-rsync --info=progress2 -a .ciel/container/dist/* mountpoint/
+rsync --info=progress2 -a livekit/* mountpoint/
 umount mountpoint
 rmdir mountpoint
 
@@ -80,5 +53,4 @@ echo "Generating ISO with grub-mkrescue..."
 grub-mkrescue -o live.iso iso -- -volid "AOSC_OS_LIVECD"
 
 echo "Cleaning up..."
-( yes yes | ciel farewell ) || true
 rm -r iso to-squash
