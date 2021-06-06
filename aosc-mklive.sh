@@ -1,5 +1,5 @@
 set -e
-rm -r iso to-squash
+rm -fr livekit iso to-squash
 mkdir iso to-squash
 
 echo "Generating LiveKit distribution ..."
@@ -53,4 +53,4 @@ echo "Generating ISO with grub-mkrescue..."
 grub-mkrescue -o live.iso iso -- -volid "AOSC_OS_LIVECD"
 
 echo "Cleaning up..."
-rm -r iso to-squash
+rm -r iso to-squash livekit
