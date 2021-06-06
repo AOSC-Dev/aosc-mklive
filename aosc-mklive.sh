@@ -52,7 +52,9 @@ if [ -d "template-$DPKG_ARCH" ]; then
 fi
 
 echo "Generating ISO with grub-mkrescue..."
-grub-mkrescue -o live.iso iso -- -volid "AOSC_OS_LIVECD"
+grub-mkrescue \
+    -o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
+    iso -- -volid "LiveKit"
 
 echo "Cleaning up..."
 rm -r iso to-squash livekit
