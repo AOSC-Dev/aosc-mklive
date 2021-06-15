@@ -1,5 +1,6 @@
 OUTPUT/
 iso/
+livekit/
 to-squash/
 *.iso
 *.tar.*
