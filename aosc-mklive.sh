@@ -2,18 +2,30 @@ set -e
 rm -fr livekit iso to-squash
 mkdir iso to-squash
 
+if ! $RETRO;
 echo "Generating LiveKit distribution ..."
-aoscbootstrap \
-    stable livekit ${REPO:-https://repo.aosc.io/debs} \
-    --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
-    -x \
-    --arch ${ARCH:-$(dpkg --print-architecture)} \
-    -s \
-        /usr/share/aoscbootstrap/scripts/reset-repo.sh \
-        /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
-        /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-        "$PWD/scripts/livekit.sh" \
-    --include-files "$PWD/recipes/livekit.lst"
+    aoscbootstrap \
+        stable livekit ${REPO:-https://repo.aosc.io/debs} \
+        --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
+        -x \
+        --arch ${ARCH:-$(dpkg --print-architecture)} \
+        -s \
+            /usr/share/aoscbootstrap/scripts/reset-repo.sh \
+            /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
+            /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
+            "$PWD/scripts/livekit.sh" \
+        --include-files "$PWD/recipes/livekit.lst"
+else
+echo "Generating Retro LiveKit distribution ..."
+    aoscbootstrap \
+        stable livekit ${REPO:-https://repo.aosc.io/debs-retro} \
+        --config /usr/share/aoscbootstrap/config/aosc-retro.toml \
+        -x \
+        --arch ${ARCH:-$(dpkg --print-architecture)} \
+        -s \
+            "$PWD/scripts/livekit.sh" \
+        --include-files "$PWD/recipes/retro-livekit.lst"
+fi
 
 echo "Extracting LiveKit kernel/initramfs ..."
 mkdir -pv iso/boot
