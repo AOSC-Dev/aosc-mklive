@@ -12,8 +12,8 @@ aoscbootstrap \
         /usr/share/aoscbootstrap/scripts/reset-repo.sh \
         /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
         /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-        "$PWD/aoscbootstrap/scripts/livekit.sh" \
-    --include-files /usr/share/aoscbootstrap/recipes/livekit.lst
+        "$PWD/scripts/livekit.sh" \
+    --include-files "$PWD/recipes/livekit.lst"
 
 echo "Extracting LiveKit kernel/initramfs ..."
 mkdir -pv iso/boot
