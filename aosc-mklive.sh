@@ -3,10 +3,7 @@ set -e
 rm -fr livekit iso to-squash
 mkdir iso to-squash
 
-# Disable Retro mode by default.
-export RETRO=false
-
-if [[ "$RETRO" != "true" ]]; then
+if [[ "${RETRO}" != "1" ]]; then
 	echo "Generating LiveKit distribution ..."
 	    aoscbootstrap \
         	stable livekit ${REPO:-https://repo.aosc.io/debs} \
@@ -56,9 +53,14 @@ rmdir mountpoint
 
 echo "Generating squashfs for dracut dmsquash-live..."
 mkdir -pv iso/LiveOS
-env XZ_OPT="-9e --lzma2=preset=9e,dict=1536M,nice=273" \
-    mksquashfs to-squash/ iso/LiveOS/squashfs.img \
-        -comp xz -b 1M -Xdict-size 100% -no-recovery
+if [[ "${RETRO}" != "1" ]]; then
+	env XZ_OPT="-9e --lzma2=preset=9e,dict=1536M,nice=273" \
+	mksquashfs to-squash/ iso/LiveOS/squashfs.img \
+		-comp xz -b 1M -Xdict-size 100% -no-recovery
+else
+        mksquashfs to-squash/ iso/LiveOS/squashfs.img \
+                -comp lz4 -no-recovery
+fi
 
 echo "Copying template to ISO..."
 DPKG_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null || true)"
