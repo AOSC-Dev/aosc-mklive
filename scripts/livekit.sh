@@ -24,7 +24,7 @@ ExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux
 EOF
 
 echo "Cutting out unwanted files ..."
-rm -r /usr/{include,src,share/{doc,gtk-doc}}
+rm -rf /usr/{include,src,share/{doc,gtk-doc}}
 rm `find /usr/lib -name '*.a'`
 
 echo "Generating /etc/motd ..."
