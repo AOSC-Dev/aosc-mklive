@@ -71,8 +71,12 @@ fi
 
 echo "Generating ISO with grub-mkrescue..."
 grub-mkrescue \
-    -o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
-    iso -- -volid "LiveKit"
+	-o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
+	iso -- -volid "LiveKit"
+
+echo "Generating checksum ..."
+sha256sum aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
+	>> aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso.sha256sum
 
 echo "Cleaning up..."
 rm -r iso to-squash livekit
