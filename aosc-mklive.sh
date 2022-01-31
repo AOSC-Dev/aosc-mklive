@@ -64,7 +64,15 @@ fi
 
 echo "Copying template to ISO..."
 DPKG_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null || true)"
-cp -a template-noarch/* iso/
+cp -av template-noarch/* iso/
+if [[ "${RETRO}" = "1" ]]; then
+	echo "Retro: Setting GRUB menu display to console output..."
+	sed \
+		-e '/insmod gfxterm/d' \
+		-e 's|gfxterm|console|g' \
+		-i iso/boot/grub/grub.cfg
+fi
+
 if [ -d "template-$DPKG_ARCH" ]; then
 	cp -a template-$DPKG_ARCH/* iso/
 fi
