@@ -33,25 +33,25 @@ mkdir -pv iso/boot
 cp -v livekit/kernel iso/boot/kernel
 cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
 
-echo "Evaulating size of generated rootfs..."
+echo "Evaulating size of generated rootfs ..."
 ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
 ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/3))"
 
-echo "Generating empty back storage for rootfs..."
+echo "Generating empty back storage for rootfs ..."
 mkdir -pv to-squash/LiveOS
 truncate -s "${ROOTFS_SIZE}M" to-squash/LiveOS/rootfs.img
 
-echo "Formatting rootfs..."
+echo "Formatting rootfs ..."
 mkfs.ext4 -F -m 1 to-squash/LiveOS/rootfs.img
 
-echo "Filling rootfs..."
+echo "Filling rootfs ..."
 mkdir mountpoint
 mount -t ext4 -o loop to-squash/LiveOS/rootfs.img mountpoint/
 rsync --info=progress2 -a livekit/* mountpoint/
 umount mountpoint
 rmdir mountpoint
 
-echo "Generating squashfs for dracut dmsquash-live..."
+echo "Generating squashfs for dracut dmsquash-live ..."
 mkdir -pv iso/LiveOS
 if [[ "${RETRO}" != "1" ]]; then
 	env XZ_OPT="-9e --lzma2=preset=9e,dict=1536M,nice=273" \
@@ -62,7 +62,7 @@ else
                 -comp lz4 -no-recovery
 fi
 
-echo "Copying template to ISO..."
+echo "Copying template to ISO ..."
 DPKG_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null || true)"
 cp -av template-noarch/* iso/
 if [[ "${RETRO}" = "1" ]]; then
@@ -77,7 +77,7 @@ if [ -d "template-$DPKG_ARCH" ]; then
 	cp -av template-$DPKG_ARCH/* iso/
 fi
 
-echo "Generating ISO with grub-mkrescue..."
+echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
 	-o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
 	iso -- -volid "LiveKit"
@@ -86,5 +86,5 @@ echo "Generating checksum ..."
 sha256sum aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
 	>> aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso.sha256sum
 
-echo "Cleaning up..."
+echo "Cleaning up ..."
 rm -r iso to-squash livekit
