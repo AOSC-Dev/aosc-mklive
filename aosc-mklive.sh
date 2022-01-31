@@ -74,7 +74,7 @@ if [[ "${RETRO}" = "1" ]]; then
 fi
 
 if [ -d "template-$DPKG_ARCH" ]; then
-	cp -a template-$DPKG_ARCH/* iso/
+	cp -av template-$DPKG_ARCH/* iso/
 fi
 
 echo "Generating ISO with grub-mkrescue..."
