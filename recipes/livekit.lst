@@ -1,3 +1,5 @@
 %include /usr/share/aoscbootstrap/recipes/base.lst
 aoscdk-rs
 dracut
+firmware-free
+firmware-nonfree
