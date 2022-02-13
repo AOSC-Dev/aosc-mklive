@@ -10,11 +10,10 @@ if [[ "${RETRO}" != "1" ]]; then
 	        --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
 	        -x \
 	        --arch ${ARCH:-$(dpkg --print-architecture)} \
-	        -s \
-	            /usr/share/aoscbootstrap/scripts/reset-repo.sh \
-	            /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
-	            /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-	            "$PWD/scripts/livekit.sh" \
+	        -s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
+	        -s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
+	        -s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
+	        -s "$PWD/scripts/livekit.sh" \
 	        --include-files "$PWD/recipes/livekit.lst"
 else
 	echo "Generating Retro LiveKit distribution ..."
@@ -23,8 +22,7 @@ else
 	        --config /usr/share/aoscbootstrap/config/aosc-retro.toml \
 	        -x \
 	        --arch ${ARCH:-$(dpkg --print-architecture)} \
-	        -s \
-	            "$PWD/scripts/livekit.sh" \
+	        -s "$PWD/scripts/retro-livekit.sh" \
 	        --include-files "$PWD/recipes/retro-livekit.lst"
 fi
 
