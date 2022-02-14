@@ -3,19 +3,7 @@ set -e
 rm -fr livekit iso to-squash
 mkdir iso to-squash
 
-if [[ "${RETRO}" != "1" ]]; then
-	echo "Generating LiveKit distribution ..."
-	    aoscbootstrap \
-        	stable livekit ${REPO:-https://repo.aosc.io/debs} \
-	        --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
-	        -x \
-	        --arch ${ARCH:-$(dpkg --print-architecture)} \
-	        -s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
-	        -s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
-	        -s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-	        -s "$PWD/scripts/livekit.sh" \
-	        --include-files "$PWD/recipes/livekit.lst"
-else
+if [[ "${RETRO}" = "1" ]]; then
 	echo "Generating Retro LiveKit distribution ..."
 	    aoscbootstrap \
 	        stable livekit ${REPO:-https://repo.aosc.io/debs-retro} \
@@ -24,6 +12,31 @@ else
 	        --arch ${ARCH:-$(dpkg --print-architecture)} \
 	        -s "$PWD/scripts/retro-livekit.sh" \
 	        --include-files "$PWD/recipes/retro-livekit.lst"
+elif [[ "${X11}" != "1" ]]; then
+	echo "Generating LiveKit with X11 distribution ..."
+	    aoscbootstrap \
+        	stable livekit ${REPO:-https://repo.aosc.io/debs} \
+	        --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
+	        -x \
+	        --arch ${ARCH:-$(dpkg --print-architecture)} \
+	        -s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
+	        -s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
+	        -s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
+	        -s "$PWD/scripts/livekit-x11.sh" \
+	        --include-files "$PWD/recipes/livekit-x11.lst"
+
+else
+	echo "Generating LiveKit distribution ..."
+	    aoscbootstrap \
+                stable livekit ${REPO:-https://repo.aosc.io/debs} \
+                --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
+	        -x \
+	        --arch ${ARCH:-$(dpkg --print-architecture)} \
+	        -s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
+	        -s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
+	        -s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
+	        -s "$PWD/scripts/livekit.sh" \
+	        --include-files "$PWD/recipes/livekit.lst"
 fi
 
 echo "Extracting LiveKit kernel/initramfs ..."
