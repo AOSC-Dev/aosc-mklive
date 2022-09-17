@@ -1,3 +1,7 @@
+echo "Customising Plymouth theme ..."
+sed -e 's|semaphore|livekit|g' \
+    -i /etc/plymouth/plymouthd.conf
+
 echo "Generating a LiveKit initramfs ..."
 dracut \
     --add "dmsquash-live drm" --omit "network dbus-daemon dbus network-manager btrfs crypt kernel-modules-extra kernel-network-modules multipath mdraid nvdimm nvmf lvm" \
