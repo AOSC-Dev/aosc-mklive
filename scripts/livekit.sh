@@ -20,10 +20,11 @@ fi
 
 echo "Enabling KMSCON with auto-login ..."
 rm -fv /etc/systemd/system/getty.target.wants/getty@tty1.service
-ln -sfv ../../../../usr/lib/systemd/system/kmsconvt@.service /etc/systemd/system/getty.target.wants/kmsconvt@tty1.service
-ln -sfv ../../../usr/lib/systemd/system/kmsconvt@.service /etc/systemd/system/autovt@.service
-mkdir -pv /etc/systemd/system/kmsconvt@.service.d/
-cat > /etc/systemd/system/kmsconvt@.service.d/override.conf << EOF
+mkdir -pv /usr/lib/systemd/system/getty.target.wants/
+ln -sfv ../kmsconvt@.service /usr/lib/systemd/system/getty.target.wants/kmsconvt@tty1.service
+ln -sfv kmsconvt@.service /usr/lib/systemd/system/autovt@.service
+mkdir -pv /usr/lib/systemd/system/kmsconvt@.service.d/
+cat > /usr/lib/systemd/system/kmsconvt@.service.d/override.conf << EOF
 [Service]
 ExecStart=
 ExecStart=/usr/bin/kmscon "--vt=%I" --seats=seat0 --no-switchvt --login -- /usr/bin/login -f root
