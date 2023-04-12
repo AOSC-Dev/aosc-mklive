@@ -33,7 +33,7 @@ cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
 
 echo "Evaluating size of generated rootfs ..."
 ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
-ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/3))"
+ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/2))"
 
 echo "Generating empty back storage for rootfs ..."
 mkdir -pv to-squash/LiveOS
