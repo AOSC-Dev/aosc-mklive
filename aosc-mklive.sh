@@ -31,7 +31,7 @@ mkdir -pv iso/boot
 cp -v livekit/kernel iso/boot/kernel
 cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
 
-echo "Evaulating size of generated rootfs ..."
+echo "Evaluating size of generated rootfs ..."
 ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
 ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/3))"
 
