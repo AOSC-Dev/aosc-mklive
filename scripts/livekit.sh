@@ -55,3 +55,10 @@ If you have encountered any issue, please get in touch with us:
 Enjoy your stay!
 
 EOF
+
+echo "Enabling LightDM ..."
+systemctl enable lightdm
+
+echo "Creating a default live user ..."
+useradd live
+usermod -a -G audio,cdrom,video,wheel live
