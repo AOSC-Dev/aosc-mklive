@@ -26,6 +26,11 @@ else
 	        --include-files "$PWD/recipes/retro-livekit.lst"
 fi
 
+if [[ "${RETRO}" != "1" ]]; then
+	echo "Copying LiveKit template ..."
+        cp -av template/* livekit/
+fi
+
 echo "Extracting LiveKit kernel/initramfs ..."
 mkdir -pv iso/boot
 cp -v livekit/kernel iso/boot/kernel
@@ -60,20 +65,8 @@ else
                 -comp lz4 -no-recovery
 fi
 
-echo "Copying template to ISO ..."
-DPKG_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null || true)"
-cp -av template-noarch/* iso/
-if [[ "${RETRO}" = "1" ]]; then
-	echo "Retro: Setting GRUB menu display to console output..."
-	sed \
-		-e '/insmod gfxterm/d' \
-		-e 's|gfxterm|console|g' \
-		-i iso/boot/grub/grub.cfg
-fi
-
-if [ -d "template-$DPKG_ARCH" ]; then
-	cp -av template-$DPKG_ARCH/* iso/
-fi
+echo "Copying boot template to ISO ..."
+cp -av boot/* iso/
 
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \

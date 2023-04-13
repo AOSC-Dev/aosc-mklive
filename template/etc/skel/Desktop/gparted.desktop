@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=GParted
+Name[zh_CN]=GParted
+GenericName=Partition Editor
+GenericName[zh_CN]=分区编辑器
+X-GNOME-FullName=GParted Partition Editor
+X-GNOME-FullName[zh_CN]=GParted 分区编辑器
+Comment=Create, reorganize, and delete partitions
+Comment[zh_CN]=创建、重新组织或删除分区
+Exec=sudo -H /usr/libexec/gpartedbin %f
+Icon=gparted
+Terminal=false
+Type=Application
+Categories=GNOME;System;Filesystem;
+Keywords=Partition;
+Keywords[zh_CN]=Partition;分区;
+StartupNotify=true
