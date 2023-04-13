@@ -31,7 +31,7 @@ ExecStart=/usr/bin/kmscon "--vt=%I" --seats=seat0 --no-switchvt --login -- /usr/
 EOF
 
 echo "Cutting out unwanted files ..."
-rm -rf /usr/{include,src,share/{doc,gtk-doc}}
+rm -rf /usr/{include,src,share/{clc,doc,gir-1.0,gtk-doc,ri}}
 rm `find /usr/lib -name '*.a'`
 
 echo "Generating /etc/motd ..."
