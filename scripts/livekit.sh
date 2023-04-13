@@ -57,8 +57,14 @@ Enjoy your stay!
 EOF
 
 echo "Enabling LightDM ..."
-systemctl enable lightdm
+ln -sv lightdm.service \
+    /usr/lib/systemd/system/display-manager.service
 
 echo "Creating a default live user ..."
-useradd live
+useradd live -m
+echo live:live | chpasswd
 usermod -a -G audio,cdrom,video,wheel live
+
+echo "Preparing for autologin ..."
+groupadd -r autologin
+usermod -a -G autologin live

@@ -28,7 +28,9 @@ fi
 
 if [[ "${RETRO}" != "1" ]]; then
 	echo "Copying LiveKit template ..."
+	chown -vR 0:0 template/*
         cp -av template/* livekit/
+	chown -vR 1000:1000 livekit/home/live
 fi
 
 echo "Extracting LiveKit kernel/initramfs ..."
