@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-rm -fr livekit iso to-squash
+rm -fr livekit iso to-squash memtest
 mkdir iso to-squash
 
 if [[ "${RETRO}" != "1" ]]; then
@@ -70,6 +70,45 @@ fi
 echo "Copying boot template to ISO ..."
 cp -av boot/* iso/
 
+if [[ "${ARCH}" = "amd64" || \
+      "${ARCH}" = "i486" ]]; then
+	echo "Building and installing Memtest86+ ..."
+	mkdir memtest && cd memtest
+	wget https://www.memtest.org/download/v${MT86VER:-6.20}/mt86plus_${MT86VER:-6.20}.src.zip
+	unzip mt86plus_${MT86VER:-6.20}.src.zip
+
+	if [[ "${ARCH}" = "amd64" ]]; then
+		make -C build64
+		install -Dvm644 build64/memtest.{bin,efi} \
+			../iso/boot/
+	elif [[ "${$ARCH}" = "i486" ]]; then
+		make -C build32
+		install -Dvm644 build32/memtest.{bin,efi} \
+			../iso/boot/
+	fi
+	cd ..
+
+	cat >> iso/boot/grub/grub.cfg << "EOF"
+grub_platform
+if [ "$grub_platform" = "efi" ]; then
+submenu 'Utilities >>' {
+	menuentry 'Memory Test' {
+		chainloader /boot/memtest.efi
+	}
+	menuentry 'UEFI Firmware Settings' $menuentry_id_option 'uefi-firmware' {
+		fwsetup
+	}
+}
+else
+submenu 'Utilities >>' {
+	menuentry 'Memory Test' {
+		linux16 /boot/memtest.efi
+	}
+}
+fi
+EOF
+fi
+
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
 	-o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
@@ -80,4 +119,4 @@ sha256sum aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.
 	>> aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso.sha256sum
 
 echo "Cleaning up ..."
-rm -r iso to-squash livekit
+rm -r iso to-squash livekit memtest
