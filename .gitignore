@@ -4,3 +4,5 @@ livekit/
 to-squash/
 *.iso*
 *.tar.*
+*.bin
+*.efi
