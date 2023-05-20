@@ -13,7 +13,7 @@ firefox
 firmware-free
 firmware-nonfree
 gparted
-lightdm-gtk-greeter
+lxdm
 linux+kernel
 mate-control-center
 mate-desktop

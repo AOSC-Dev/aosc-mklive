@@ -56,10 +56,6 @@ Enjoy your stay!
 
 EOF
 
-echo "Enabling LightDM ..."
-ln -sv lightdm.service \
-    /usr/lib/systemd/system/display-manager.service
-
 echo "Creating a default live user ..."
 useradd live -m
 echo live:live | chpasswd
