@@ -116,6 +116,10 @@ grub-mkrescue \
 	-o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
 	iso -- -volid "LiveKit"
 
+echo "Implanting MD5 checksum for media check ..."
+implantisomd5 \
+	aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso
+
 echo "Generating checksum ..."
 sha256sum aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
 	>> aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso.sha256sum
