@@ -3,6 +3,8 @@ set -e
 rm -fr livekit iso to-squash memtest
 mkdir iso to-squash
 
+export ARCH="${ARCH:-$(dpkg --print-architecture)}"
+
 if [[ "${RETRO}" != "1" ]]; then
 	echo "Generating LiveKit distribution ..."
 	    aoscbootstrap \
