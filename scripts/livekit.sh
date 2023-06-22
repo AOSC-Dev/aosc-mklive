@@ -68,3 +68,7 @@ usermod -a -G autologin live
 echo "Disabling suspend and hibernation ..."
 systemctl mask suspend.target
 systemctl mask hibernation.target
+
+echo "Disabling open file handle limit ..."
+sed -e '/^fs.file-max/d' \
+    -i /etc/sysctl.d/00-kernel.conf
