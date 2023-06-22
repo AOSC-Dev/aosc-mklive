@@ -111,6 +111,13 @@ fi
 EOF
 fi
 
+echo "Adding a boot-from-hdd option ..."
+cat >> iso/boot/grub/grub.cfg << "EOF"
+menuentry 'Boot Default OS' {
+	exit 1
+}
+EOF
+
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
 	-o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
