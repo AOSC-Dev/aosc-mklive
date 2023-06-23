@@ -4,6 +4,6 @@ Name[zh_CN]=安装 AOSC OS
 Comment=Install AOSC OS using DeployKit
 Comment[zh_CN]=使用 DeployKit 安装 AOSC OS
 Icon=deploykit
-Exec=mate-terminal --geometry="120x40" -t "AOSC OS" -e deploykit.sudo
+Exec=mate-terminal --geometry="120x40" -t "DeployKit" -e deploykit.sudo
 Terminal=true
 Type=Application
