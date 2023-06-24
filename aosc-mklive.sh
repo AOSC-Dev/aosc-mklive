@@ -60,14 +60,8 @@ rmdir mountpoint
 
 echo "Generating squashfs for dracut dmsquash-live ..."
 mkdir -pv iso/LiveOS
-if [[ "${RETRO}" != "1" ]]; then
-	env XZ_OPT="-9e --lzma2=preset=9e,dict=1536M,nice=273" \
-	mksquashfs to-squash/ iso/LiveOS/squashfs.img \
-		-comp xz -b 1M -Xdict-size 100% -no-recovery
-else
-        mksquashfs to-squash/ iso/LiveOS/squashfs.img \
-                -comp lz4 -no-recovery
-fi
+mksquashfs to-squash/ iso/LiveOS/squashfs.img \
+    -comp lz4 -no-recovery
 
 echo "Copying boot template to ISO ..."
 cp -av boot/* iso/
