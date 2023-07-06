@@ -126,4 +126,4 @@ sha256sum aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.
 	>> aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso.sha256sum
 
 echo "Cleaning up ..."
-rm -r iso to-squash livekit memtest
+rm -fr iso to-squash livekit memtest
