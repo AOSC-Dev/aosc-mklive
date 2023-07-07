@@ -66,6 +66,13 @@ mksquashfs to-squash/ iso/LiveOS/squashfs.img \
 echo "Copying boot template to ISO ..."
 cp -av boot/* iso/
 
+if [[ "$RETRO" = "1" ]]; then
+    echo "Tweaking GRUB menu to disable gfxterm, change color ..."
+    sed -e 's|terminal_output gfxterm|terminal_output console|g' \
+        -e 's|light-blue|light-red|g' \
+        -i iso/boot/grub/grub.cfg
+fi
+
 if [[ "${ARCH}" = "amd64" || \
       "${ARCH}" = "i486" ]]; then
 	echo "Building and installing Memtest86+ ..."
