@@ -108,7 +108,7 @@ submenu 'Utilities >>' {
 else
 submenu 'Utilities >>' {
 	menuentry 'Memory Test' {
-		linux16 /boot/memtest.efi
+		linux16 /boot/memtest.bin
 	}
 }
 fi
