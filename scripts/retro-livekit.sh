@@ -6,21 +6,24 @@ dracut \
     $(ls /usr/lib/modules/)
 
 echo "Moving kernel image out ..."
-if [ ! -h /boot/vmlinuz-* ]; then
+if [ -f /boot/vmlinuz-* ]; then
     mv -v /boot/vmlinuz-* /kernel
-elif [ ! -h /boot/vmlinux-* ]; then
+elif [ -f /boot/vmlinux-* ]; then
     mv -v /boot/vmlinux-* /kernel
 else
     echo "No kernel installed, aborting ..."
 fi
 
-echo "Enabling auto-login ..."
-mkdir -pv /etc/systemd/system/getty@tty1.service.d/
-cat > /etc/systemd/system/getty@tty1.service.d/override.conf << EOF
+echo "Enabling KMSCON with auto-login ..."
+rm -fv /etc/systemd/system/getty.target.wants/getty@tty1.service
+mkdir -pv /usr/lib/systemd/system/getty.target.wants/
+ln -sfv ../kmsconvt@.service /usr/lib/systemd/system/getty.target.wants/kmsconvt@tty1.service
+ln -sfv kmsconvt@.service /usr/lib/systemd/system/autovt@.service
+mkdir -pv /usr/lib/systemd/system/kmsconvt@.service.d/
+cat > /usr/lib/systemd/system/kmsconvt@.service.d/override.conf << EOF
 [Service]
-Type=simple
 ExecStart=
-ExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux
+ExecStart=/usr/bin/kmscon "--vt=%I" --seats=seat0 --no-switchvt --login -- /usr/bin/login -f root
 EOF
 
 echo "Cutting out unwanted files ..."
@@ -29,11 +32,11 @@ rm `find /usr/lib -name '*.a'`
 
 echo "Generating /etc/motd ..."
 cat > /etc/motd << EOF
-Welcome to AOSC OS LiveKit!
+Welcome to AOSC OS/Retro LiveKit!
 
-Here you may find basic tools to install AOSC OS, or rescue other operating
-systems installed on your computer. Here below is a basic guide to preinstalled
-applications (in the form of commands) on LiveKit:
+Here you may find basic tools to install AOSC OS/Retro, or rescue other
+operating systems installed on your computer. Here below is a basic guide to
+preinstalled applications (in the form of commands) on LiveKit:
 
 - deploykit: AOSC OS installer.
 - cfdisk: Disk partition manager.
