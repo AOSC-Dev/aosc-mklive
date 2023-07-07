@@ -84,8 +84,11 @@ if [[ "${ARCH}" = "amd64" || \
 		make -C build64
 		install -Dvm644 build64/memtest.{bin,efi} \
 			../iso/boot/
-	elif [[ "${$ARCH}" = "i486" ]]; then
-		make -C build32
+	elif [[ "${ARCH}" = "i486" ]]; then
+		sed -e 's|i586|i486|g' \
+			-i build32/Makefile
+		make -C build32 \
+			CC="gcc-multilib-wrapper"
 		install -Dvm644 build32/memtest.{bin,efi} \
 			../iso/boot/
 	fi
