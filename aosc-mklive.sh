@@ -6,6 +6,8 @@ mkdir iso to-squash
 export ARCH="${ARCH:-$(dpkg --print-architecture)}"
 
 if [[ "${RETRO}" != "1" ]]; then
+	echo "Generating mainline grub.cfg..."
+	sed 's/@@RETRO@@/0/g' boot/boot/grub/grub.cfg.in > boot/boot/grub/grub.cfg
 	echo "Generating LiveKit distribution ..."
 	    aoscbootstrap \
         	stable livekit ${REPO:-https://repo.aosc.io/debs} \
@@ -18,6 +20,8 @@ if [[ "${RETRO}" != "1" ]]; then
 	        -s "$PWD/scripts/livekit.sh" \
 	        --include-files "$PWD/recipes/livekit.lst"
 else
+	echo "Generating retro grub.cfg..."
+	sed 's/@@RETRO@@/1/g' boot/boot/grub/grub.cfg.in > boot/boot/grub/grub.cfg
 	echo "Generating Retro LiveKit distribution ..."
 	    aoscbootstrap \
 	        stable livekit ${REPO:-https://repo.aosc.io/debs-retro} \
