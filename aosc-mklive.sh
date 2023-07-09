@@ -126,6 +126,18 @@ menuentry 'Boot Default OS' {
 }
 EOF
 
+echo "Adding Reboot and Power Off options ..."
+cat >> iso/boot/grub/grub.cfg << "EOF"
+if [ "x$grub_platform" = "xpc" -o "x$grub_platform" = "xefi" ] ; then
+	menuentry 'Restart' {
+		reboot
+	}
+	menuentry 'Power Off' {
+		halt
+	}
+fi
+EOF
+
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
 	-o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
