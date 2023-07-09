@@ -1,0 +1,63 @@
+insmod part_gpt
+insmod part_msdos
+insmod all_video
+insmod iso9660
+insmod gfxterm
+insmod phymem
+insmod pause
+terminal_input console
+terminal_output gfxterm
+
+loadfont /boot/grub/fonts/unicode.pf2
+phymem
+
+set gfxmode=1024x768
+set gfxpayload=keep
+set menu_color_normal=white/black
+set menu_color_highlight=light-blue/black
+
+set pager=1
+set timeout=30
+set default=0
+
+set retro=@@RETRO@@
+
+# Set the minimum memory requirement to run the graphical environment.
+if [ "x$retro" = "x1" ] ; then
+	set memreq=128
+else
+	set memreq=2048
+fi
+
+function err_lowmem {
+	echo "Your system currently have $total_mem MiB of memory, but at least $memreq MiB is required to run the graphical environment."
+        echo "The graphical environment has been disabled."
+        echo " "
+        pause "Press any key to return to the main menu."
+}
+
+if [ $total_mem -gt 0 -a $total_mem -lt $memreq ] ; then
+	menuentry 'AOSC OS has detected that your system has less than 2GiB of RAM' {
+                err_lowmem
+        }
+        menuentry 'and has disabled the grahical environment.' {
+                err_lowmem
+        }
+	# Spacer
+        menuentry ' ' {
+                err_lowmem
+        }
+	# Set default menu entry to CLI
+        set default=livekit_cli
+else
+menuentry 'LiveKit' --class aosc --class gnu-linux --class gnu --class os --id livekit_gui --unrestricted {
+        insmod gzio
+	linux /boot/kernel root=live:CDLABEL=LiveKit rd.live.check quiet splash
+	initrd /boot/live-initramfs.img
+}
+fi
+menuentry 'LiveKit (command line only)' --class aosc --class gnu-linux --class gnu --class os --id livekit_cli --unrestricted {
+	insmod gzio
+	linux /boot/kernel root=live:CDLABEL=LiveKit rd.live.check quiet splash systemd.unit=multi-user.target
+	initrd /boot/live-initramfs.img
+}
