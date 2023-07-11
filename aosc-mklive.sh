@@ -67,10 +67,19 @@ echo "Copying boot template to ISO ..."
 cp -av boot/* iso/
 
 if [[ "$RETRO" = "1" ]]; then
-    echo "Tweaking GRUB menu to disable gfxterm, change color ..."
-    sed -e 's|terminal_output gfxterm|terminal_output console|g' \
-        -e 's|light-blue|light-red|g' \
-        -i iso/boot/grub/grub.cfg
+	echo "Tweaking GRUB menu to disable gfxterm, change color ..."
+	sed \
+		-e 's|terminal_output gfxterm|terminal_output console|g' \
+		-e 's|light-blue|light-red|g' \
+		-i iso/boot/grub/grub.cfg
+else
+	cat >> iso/boot/grub/grub.cfg << EOF
+menuentry 'LiveKit (command line only)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
+	insmod gzio
+	linux /boot/kernel root=live:CDLABEL=LiveKit rd.live.check quiet splash systemd.unit=multi-user.target
+	initrd /boot/live-initramfs.img
+}
+EOF
 fi
 
 if [[ "${ARCH}" = "amd64" || \
