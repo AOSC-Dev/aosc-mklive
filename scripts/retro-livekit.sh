@@ -6,9 +6,9 @@ dracut \
     $(ls /usr/lib/modules/)
 
 echo "Moving kernel image out ..."
-if [ ! -h /boot/vmlinuz-* ]; then
+if [ -f /boot/vmlinuz-* ]; then
     mv -v /boot/vmlinuz-* /kernel
-elif [ ! -h /boot/vmlinux-* ]; then
+elif [ -f /boot/vmlinux-* ]; then
     mv -v /boot/vmlinux-* /kernel
 else
     echo "No kernel installed, aborting ..."
