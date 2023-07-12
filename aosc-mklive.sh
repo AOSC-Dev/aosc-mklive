@@ -70,13 +70,6 @@ mksquashfs to-squash/ iso/LiveOS/squashfs.img \
 echo "Copying boot template to ISO ..."
 cp -av boot/* iso/
 
-if [[ "$RETRO" = "1" ]]; then
-    echo "Tweaking GRUB menu to disable gfxterm, change color ..."
-    sed -e 's|terminal_output gfxterm|terminal_output console|g' \
-        -e 's|light-blue|light-red|g' \
-        -i iso/boot/grub/grub.cfg
-fi
-
 if [[ "${ARCH}" = "amd64" || \
       "${ARCH}" = "i486" ]]; then
 	echo "Building and installing Memtest86+ ..."
@@ -97,46 +90,7 @@ if [[ "${ARCH}" = "amd64" || \
 			../iso/boot/
 	fi
 	cd ..
-
-	cat >> iso/boot/grub/grub.cfg << "EOF"
-grub_platform
-if [ "$grub_platform" = "efi" ]; then
-submenu 'Utilities >>' {
-	menuentry 'Memory Test' {
-		chainloader /boot/memtest.efi
-	}
-	menuentry 'UEFI Firmware Settings' $menuentry_id_option 'uefi-firmware' {
-		fwsetup
-	}
-}
-else
-submenu 'Utilities >>' {
-	menuentry 'Memory Test' {
-		linux16 /boot/memtest.bin
-	}
-}
 fi
-EOF
-fi
-
-echo "Adding a boot-from-hdd option ..."
-cat >> iso/boot/grub/grub.cfg << "EOF"
-menuentry 'Boot Default OS' {
-	exit 1
-}
-EOF
-
-echo "Adding Reboot and Power Off options ..."
-cat >> iso/boot/grub/grub.cfg << "EOF"
-if [ "x$grub_platform" = "xpc" -o "x$grub_platform" = "xefi" ] ; then
-	menuentry 'Restart' {
-		reboot
-	}
-	menuentry 'Power Off' {
-		halt
-	}
-fi
-EOF
 
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
