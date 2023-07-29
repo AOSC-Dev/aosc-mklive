@@ -1,3 +1,20 @@
+FONT_WEIGHTS_TO_STRIP=(
+	'*Condensed*'
+	'*Black*'
+	'*SemiBold*'
+	'*emiLight*'
+	'*ExtraLight*'
+	'*ExtraBold*'
+	'*ExtraBlack*'
+	'*Medium*'
+	'*Light*'
+)
+
+MANUALS_TO_STRIP=(
+	"/usr/share/man/man3"
+	"/usr/share/man/man3l"
+)
+
 echo "Customising Plymouth theme ..."
 sed -e 's|semaphore|livekit|g' \
     -i /etc/plymouth/plymouthd.conf
@@ -72,3 +89,14 @@ systemctl mask hibernation.target
 echo "Disabling open file handle limit ..."
 sed -e '/^fs.file-max/d' \
     -i /etc/sysctl.d/00-kernel.conf
+
+echo "Removing unnecessary fonts..."
+for weight in ${FONT_WEIGHTS_TO_STRIP[@]} ; do
+	find /usr/share/fonts -type f -not -type l -iname $weight -delete
+done
+
+echo "Removing unnecessary manual pages..."
+for mandir in ${MANUALS_TO_STRIP[@]} ; do
+	echo "Removing $mandir"
+	rm -r $mandir
+done
