@@ -1,3 +1,7 @@
+MANUALS_TO_STRIP=(
+	"/usr/share/man"
+)
+
 echo "Generating a LiveKit initramfs ..."
 dracut \
     --add "dmsquash-live drm" --omit "network dbus-daemon dbus network-manager btrfs crypt kernel-modules-extra kernel-network-modules multipath mdraid nvdimm nvmf lvm" \
@@ -48,3 +52,9 @@ If you have encountered any issue, please get in touch with us:
 Enjoy your stay!
 
 EOF
+
+echo "Removing unnecessary manual pages..."
+for mandir in ${MANUALS_TO_STRIP[@]} ; do
+        echo "Removing $mandir"
+        rm -rf $mandir
+done
