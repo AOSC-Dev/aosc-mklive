@@ -66,6 +66,17 @@ mksquashfs to-squash/ iso/LiveOS/squashfs.img \
 echo "Copying boot template to ISO ..."
 cp -av boot/* iso/
 
+if [[ "${ARCH}" = "loongarch64" ]]; then
+	echo "Adding an option to use discrete graphics (bypassing AST) ..."
+	cat >> iso/boot/grub/grub.cfg << EOF
+menuentry 'LiveKit (discrete graphics)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
+	insmod gzio
+	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash modprobe.blacklist=ast video=efifb:off
+	initrd /boot/live-initramfs.img
+}
+EOF
+fi
+
 if [[ "$RETRO" = "1" ]]; then
 	echo "Tweaking GRUB menu to disable gfxterm, change color ..."
 	sed \
