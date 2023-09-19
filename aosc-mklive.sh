@@ -133,16 +133,16 @@ EOF
 
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
-	-o aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
+	-o aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso \
 	iso -- -volid "LiveKit"
 
 echo "Implanting MD5 checksum for media check ..."
 implantisomd5 \
-	aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso
+	aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso
 
 echo "Generating checksum ..."
-sha256sum aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso \
-	>> aosc-os_livekit_$(date +%Y%m%d)_${ARCH:-$(dpkg --print-architecture)}.iso.sha256sum
+sha256sum aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso \
+	>> aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso.sha256sum
 
 echo "Cleaning up ..."
 rm -fr iso to-squash livekit memtest
