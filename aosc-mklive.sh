@@ -76,7 +76,7 @@ else
 	cat >> iso/boot/grub/grub.cfg << EOF
 menuentry 'LiveKit (command line only)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
 	insmod gzio
-	linux /boot/kernel root=live:CDLABEL=LiveKit rd.live.check quiet splash systemd.unit=multi-user.target
+	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash systemd.unit=multi-user.target
 	initrd /boot/live-initramfs.img
 }
 EOF
@@ -135,10 +135,6 @@ echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
 	-o aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso \
 	iso -- -volid "LiveKit"
-
-echo "Implanting MD5 checksum for media check ..."
-implantisomd5 \
-	aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso
 
 echo "Generating checksum ..."
 sha256sum aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso \
