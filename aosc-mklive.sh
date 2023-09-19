@@ -8,7 +8,7 @@ export ARCH="${ARCH:-$(dpkg --print-architecture)}"
 if [[ "${RETRO}" != "1" ]]; then
 	echo "Generating LiveKit distribution ..."
 	    aoscbootstrap \
-        	stable livekit ${REPO:-https://repo.aosc.io/debs} \
+        	${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
 	        --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
 	        -x \
 	        --arch ${ARCH:-$(dpkg --print-architecture)} \
@@ -20,7 +20,7 @@ if [[ "${RETRO}" != "1" ]]; then
 else
 	echo "Generating Retro LiveKit distribution ..."
 	    aoscbootstrap \
-	        stable livekit ${REPO:-https://repo.aosc.io/debs-retro} \
+	        ${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs-retro} \
 	        --config /usr/share/aoscbootstrap/config/aosc-retro.toml \
 	        -x \
 	        --arch ${ARCH:-$(dpkg --print-architecture)} \
