@@ -5,19 +5,7 @@ mkdir iso to-squash
 
 export ARCH="${ARCH:-$(dpkg --print-architecture)}"
 
-if [[ "${RETRO}" != "1" ]]; then
-	echo "Generating LiveKit distribution ..."
-	aoscbootstrap \
-        	${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
-	        --config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
-	        -x \
-	        --arch ${ARCH:-$(dpkg --print-architecture)} \
-	        -s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
-	        -s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
-	        -s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-	        -s "$PWD/scripts/livekit.sh" \
-	        --include-files "$PWD/recipes/livekit.lst"
-elif [[ "${ARCH}" = "loongarch64" ]]; then
+if [[ "${ARCH}" = "loongarch64" ]]; then
 	echo "Generating LiveKit distribution (loongarch64) ..."
 	aoscbootstrap \
 		${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
@@ -29,6 +17,18 @@ elif [[ "${ARCH}" = "loongarch64" ]]; then
 		-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
 		-s "$PWD/scripts/livekit.sh" \
 		-s "$PWD/scripts/loongarch64-tweaks.sh" \
+		--include-files "$PWD/recipes/livekit.lst"
+elif [[ "${RETRO}" != "1" ]]; then
+	echo "Generating LiveKit distribution ..."
+	aoscbootstrap \
+		${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
+		--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
+		-x \
+		--arch ${ARCH:-$(dpkg --print-architecture)} \
+		-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
+		-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
+		-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
+		-s "$PWD/scripts/livekit.sh" \
 		--include-files "$PWD/recipes/livekit.lst"
 else
 	echo "Generating Retro LiveKit distribution ..."
