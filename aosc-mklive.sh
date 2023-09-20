@@ -84,7 +84,7 @@ if [[ "${ARCH}" = "loongarch64" ]]; then
 	cat >> iso/boot/grub/grub.cfg << EOF
 menuentry 'LiveKit (discrete graphics)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
 	insmod gzio
-	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash modprobe.blacklist=ast video=efifb:off
+	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash modprobe.blacklist=ast
 	initrd /boot/live-initramfs.img
 }
 EOF
