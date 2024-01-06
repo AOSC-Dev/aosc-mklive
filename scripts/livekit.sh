@@ -100,3 +100,9 @@ for mandir in ${MANUALS_TO_STRIP[@]} ; do
 	echo "Removing $mandir"
 	rm -r $mandir
 done
+
+echo "Removing unnecessary services ..."
+rm -v \
+	/etc/xdg/autostart/user-dirs-update-gtk.desktop \
+	/etc/xdg/autostart/xdg-user-dirs.desktop \
+	/usr/lib/systemd/system/lightdm.service
