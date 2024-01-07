@@ -73,31 +73,18 @@ mksquashfs to-squash/ iso/LiveOS/squashfs.img \
 echo "Copying boot template to ISO ..."
 cp -av boot iso/
 
-if [[ "$RETRO" != "1" ]] ; then
-	echo "Adding fallback graphics entry ..."
-	cat >> iso/boot/grub/grub.cfg << EOF
-menuentry 'Install AOSC OS (basic graphics)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
-	insmod gzio
-	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash nomodeset
-	initrd /boot/live-initramfs.img
-}
-EOF
+if [[ "${ARCH}" = "loongarch64" ]]; then
+	echo "Adding an option to use discrete graphics (bypassing AST) ..."
+	sed \
+		-e 's|la64_quirk=0|la64_quirk=1|g' \
+		-i iso/boot/grub/grub.cfg
 fi
 
 if [[ "$RETRO" = "1" ]]; then
 	echo "Tweaking GRUB menu to disable gfxterm, change color ..."
 	sed \
-		-e 's|terminal_output gfxterm|terminal_output console|g' \
-		-e 's|light-blue|light-red|g' \
+		-e 's|retro=0|retro=1|g' \
 		-i iso/boot/grub/grub.cfg
-else
-	cat >> iso/boot/grub/grub.cfg << EOF
-menuentry 'Install AOSC OS (command line only)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
-	insmod gzio
-	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash systemd.unit=multi-user.target
-	initrd /boot/live-initramfs.img
-}
-EOF
 fi
 
 if [[ "${ARCH}" = "amd64" || \
@@ -121,33 +108,7 @@ if [[ "${ARCH}" = "amd64" || \
 	fi
 	cd ..
 
-	cat >> iso/boot/grub/grub.cfg << "EOF"
-grub_platform
-if [ "$grub_platform" = "efi" ]; then
-submenu 'Utilities >>' {
-	menuentry 'Memory Test' {
-		chainloader /boot/memtest.efi
-	}
-	menuentry 'UEFI Firmware Settings' $menuentry_id_option 'uefi-firmware' {
-		fwsetup
-	}
-}
-else
-submenu 'Utilities >>' {
-	menuentry 'Memory Test' {
-		linux16 /boot/memtest.bin
-	}
-}
 fi
-EOF
-fi
-
-echo "Adding a boot-from-hdd option ..."
-cat >> iso/boot/grub/grub.cfg << "EOF"
-menuentry 'Boot Default OS' {
-	exit 1
-}
-EOF
 
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
