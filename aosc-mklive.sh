@@ -107,7 +107,6 @@ if [[ "${ARCH}" = "amd64" || \
 			../iso/boot/
 	fi
 	cd ..
-
 fi
 
 echo "Generating ISO with grub-mkrescue ..."
