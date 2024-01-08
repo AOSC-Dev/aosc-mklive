@@ -113,34 +113,7 @@ if [[ "${ARCH}" = "amd64" || \
 			../iso/boot/
 	fi
 	cd ..
-
-	cat >> iso/boot/grub/grub.cfg << "EOF"
-grub_platform
-if [ "$grub_platform" = "efi" ]; then
-submenu 'Utilities >>' {
-	menuentry 'Memory Test' {
-		chainloader /boot/memtest.efi
-	}
-	menuentry 'UEFI Firmware Settings' $menuentry_id_option 'uefi-firmware' {
-		fwsetup
-	}
-}
-else
-submenu 'Utilities >>' {
-	menuentry 'Memory Test' {
-		linux16 /boot/memtest.bin
-	}
-}
 fi
-EOF
-fi
-
-echo "Adding a boot-from-hdd option ..."
-cat >> iso/boot/grub/grub.cfg << "EOF"
-menuentry 'Boot Default OS' {
-	exit 1
-}
-EOF
 
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
