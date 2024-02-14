@@ -106,6 +106,5 @@ rm -v \
 	/usr/lib/systemd/system/lightdm.service
 
 echo "Enabling language selection UI ..."
-mkdir -pv /usr/lib/systemd/system/{display-manager.service,multi-user.target}.wants/
+mkdir -pv /usr/lib/systemd/system/display-manager.service.wants
 ln -sfv ../select-language-gui.service /usr/lib/systemd/system/display-manager.service.wants/select-language-gui.service
-ln -sfv ../select-language-tui.service /usr/lib/systemd/system/multi-user.target.wants/select-language-tui.service
