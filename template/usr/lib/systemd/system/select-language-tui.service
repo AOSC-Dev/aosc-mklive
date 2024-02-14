@@ -1,0 +1,16 @@
+[Unit]
+Description=Language Selection Interface (TUI)
+Before=getty.service multi-user.target
+
+[Service]
+ExecStart=/usr/bin/select-language-tui.kmscond
+Type=oneshot
+KillMode=process
+IgnoreSIGPIPE=no
+KillSignal=SIGHUP
+StandardInput=tty-force
+StandardOutput=tty-force
+StandardError=tty-force
+
+[Install]
+WantedBy=multi-user.target

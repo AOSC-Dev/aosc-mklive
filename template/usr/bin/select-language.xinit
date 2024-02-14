@@ -1,0 +1,3 @@
+#!/bin/bash
+xsetroot -cursor_name left_ptr
+exec /usr/bin/select-language

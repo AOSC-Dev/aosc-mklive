@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/kmscon -l -- /usr/bin/bash -c /usr/bin/select-language-tui

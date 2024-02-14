@@ -1,3 +1,4 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Name[am]=ሜት ስርአት መቆጣጠሪያ 
 Name[ar]=مرقاب نظام متّة
@@ -182,3 +183,4 @@ X-MATE-Bugzilla-Product=system-monitor
 X-MATE-Bugzilla-Component=general
 X-MATE-Bugzilla-Version=1.26.0
 
+ 

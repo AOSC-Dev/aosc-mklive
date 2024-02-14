@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Exit LiveKit
 Name[zh_CN]=退出 LiveKit
+Name[zh_TW]=登出 LiveKit
 Icon=gnome-logout
 Exec=gdbus call -e -d org.gnome.SessionManager -o /org/gnome/SessionManager -m org.gnome.SessionManager.Shutdown
 Terminal=false
