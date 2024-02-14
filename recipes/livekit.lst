@@ -28,6 +28,7 @@ mate-settings-daemon
 mate-system-monitor
 mate-terminal
 network-manager-applet
+networkmanager
 noto-cjk-fonts
 noto-fonts
 openfwwf
@@ -35,7 +36,6 @@ pluma
 plymouth-livekit
 select-language-gui
 select-language-tui
-x11-base
-pluma
-networkmanager
 wimlib
+x11-base
+xinit
