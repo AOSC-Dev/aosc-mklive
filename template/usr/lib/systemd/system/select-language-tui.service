@@ -3,7 +3,7 @@ Description=Language Selection Interface (TUI)
 Before=getty.service multi-user.target
 
 [Service]
-ExecStart=/usr/bin/select-language-tui.kmscond
+ExecStart=/usr/bin/select-language-tui.kmscon
 Type=oneshot
 KillMode=process
 IgnoreSIGPIPE=no
