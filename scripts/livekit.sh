@@ -104,3 +104,8 @@ rm -v \
 	/etc/xdg/autostart/user-dirs-update-gtk.desktop \
 	/etc/xdg/autostart/xdg-user-dirs.desktop \
 	/usr/lib/systemd/system/lightdm.service
+
+echo "Enabling language selection UI ..."
+mkdir -pv /usr/lib/systemd/system/{display-manager.service,multi-user.target}.wants/
+ln -sfv ../select-language-gui.service /usr/lib/systemd/system/display-manager.service.wants/select-language-gui.service
+ln -sfv ../select-language-tui.service /usr/lib/systemd/system/multi-user.target.wants/select-language-tui.service
