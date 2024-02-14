@@ -22,6 +22,7 @@ mate-icon-theme
 mate-menus
 mate-panel
 mate-polkit
+mate-power-manager
 mate-session-manager
 mate-settings-daemon
 mate-system-monitor
@@ -32,6 +33,8 @@ noto-fonts
 openfwwf
 pluma
 plymouth-livekit
+select-language-gui
+select-language-tui
 x11-base
 pluma
 networkmanager
