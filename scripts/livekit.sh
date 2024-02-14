@@ -1,12 +1,10 @@
 FONT_WEIGHTS_TO_STRIP=(
 	'*Condensed*'
 	'*Black*'
-	'*SemiBold*'
 	'*emiLight*'
 	'*ExtraLight*'
 	'*ExtraBold*'
 	'*ExtraBlack*'
-	'*Medium*'
 	'*Light*'
 )
 
