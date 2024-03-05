@@ -4,6 +4,7 @@ rm -fr livekit iso to-squash memtest
 mkdir iso to-squash
 
 export ARCH="${ARCH:-$(dpkg --print-architecture)}"
+ISO_NAME="aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH}.iso"
 
 if [[ "${ARCH}" = "loongarch64" ]]; then
 	echo "Generating LiveKit distribution (loongarch64) ..."
@@ -62,14 +63,7 @@ mkdir -pv to-squash/LiveOS
 truncate -s "${ROOTFS_SIZE}M" to-squash/LiveOS/rootfs.img
 
 echo "Formatting rootfs ..."
-mkfs.ext4 -F -m 1 to-squash/LiveOS/rootfs.img
-
-echo "Filling rootfs ..."
-mkdir mountpoint
-mount -t ext4 -o loop to-squash/LiveOS/rootfs.img mountpoint/
-rsync --info=progress2 -a livekit/* mountpoint/
-umount mountpoint
-rmdir mountpoint
+mkfs.ext4 -F -m 1 -d livekit/ to-squash/LiveOS/rootfs.img
 
 echo "Generating squashfs for dracut dmsquash-live ..."
 mkdir -pv iso/LiveOS
@@ -157,12 +151,12 @@ EOF
 
 echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
-	-o aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso \
+	-o "$ISO_NAME" \
 	iso -- -volid "LiveKit"
 
 echo "Generating checksum ..."
-sha256sum aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso \
-	>> aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH:-$(dpkg --print-architecture)}.iso.sha256sum
+sha256sum "$ISO_NAME" \
+	>> "$ISO_NAME".sha256sum
 
 echo "Cleaning up ..."
 rm -fr iso to-squash livekit memtest
