@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-rm -fr livekit iso to-squash memtest
+rm -fr livekit iso to-squash memtest sb
 mkdir iso to-squash
 
 export ARCH="${ARCH:-$(dpkg --print-architecture)}"
@@ -154,9 +154,60 @@ grub-mkrescue \
 	-o "$ISO_NAME" \
 	iso -- -volid "LiveKit"
 
+if [[ "$ARCH" = "amd64" || "$ARCH" = "arm64" ]]; then
+	#Handle secure boot
+	arch_suffix=""
+	if [[ "$ARCH" = "amd64" ]]; then
+		arch_suffix="x64"
+	else
+		arch_suffix="aa64"
+	fi
+	files_to_extract=("boot/grub" "efi" ".disk")
+	if [[ "$ARCH" = "amd64" ]]; then
+		files_to_extract+=("System" "mach_kernel")
+	fi
+	xorriso -osirrox on -indev "$ISO_NAME" -extract_l / iso/ "${files_to_extract[@]}" --
+	mkdir -p sb
+	wget -O sb/grub.deb "https://deb.debian.org/debian/pool/main/g/grub-efi-${ARCH}-signed/grub-efi-${ARCH}-signed_1%2B2.06%2B13%2Bdeb12u1_${ARCH}.deb"
+	wget -O sb/shim.deb "https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.39%2B15.7-1_${ARCH}.deb"
+	dpkg-deb -x sb/grub.deb sb
+	dpkg-deb -x sb/shim.deb sb
+	mv "iso/efi/boot/boot${arch_suffix}.efi" "iso/efi/boot/grub${arch_suffix}.efi"
+	mv "sb/usr/lib/shim/shim${arch_suffix}.efi.signed" "iso/efi/boot/boot${arch_suffix}.efi"
+	mv "sb/usr/lib/grub/"*"-efi-signed/grub${arch_suffix}.efi.signed" "iso/efi/boot/mm${arch_suffix}.efi"
+	mkdir -p "iso/efi/debian"
+	cat > iso/efi/debian/grub.cfg <<EOF
+loadfont unicode
+menuentry 'Security Boot is enabled and NOT supported!' {
+	true
+}
+menuentry 'UEFI Firmware Settings' {
+	fwsetup
+}
+menuentry 'Boot Default OS' {
+	exit 1
+}
+fi
+EOF
+	mv iso/efi iso/efi2
+	mv iso/efi2 iso/EFI
+	mv iso/EFI/boot iso/EFI/boot2
+	mv iso/EFI/boot2 iso/EFI/BOOT
+	# 32.5MiB
+	mformat -C -F -i "iso/efi.img" -T 66650 -h 2 -s 32 -c 1 -F "::"
+	mcopy -i "iso/efi.img" -s "iso/EFI" "::/"
+	timestamp=$(basename iso/.disk/*.uuid | cut -d "." -f 1 | tr -d '-')
+	rm -f "$ISO_NAME"
+	additional_opts=()
+	if [[ "$ARCH" = "amd64" ]]; then
+		additional_opts+=(-b "boot/grub/i386-pc/eltorito.img" -no-emul-boot -boot-load-size 4 -boot-info-table --grub2-boot-info --grub2-mbr "/usr/lib/grub/i386-pc/boot_hybrid.img" -hfsplus -apm-block-size 2048 -hfsplus-file-creator-type chrp tbxj "/System/Library/CoreServices/.disk_label" -hfs-bless-by i "/System/Library/CoreServices/boot.efi")
+	fi
+	xorriso -as mkisofs -graft-points --modification-date="$timestamp" "${additional_opts[@]}" --efi-boot efi.img -efi-boot-part --efi-boot-image --protective-msdos-label -o "$ISO_NAME" --sort-weight 0 / --sort-weight 1 /boot iso --  -volid "LiveKit"
+fi
+
 echo "Generating checksum ..."
 sha256sum "$ISO_NAME" \
 	>> "$ISO_NAME".sha256sum
 
 echo "Cleaning up ..."
-rm -fr iso to-squash livekit memtest
+rm -fr iso to-squash livekit memtest sb
