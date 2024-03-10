@@ -178,7 +178,7 @@ if [[ "$ARCH" = "amd64" || "$ARCH" = "arm64" ]]; then
 	mkdir -p "iso/efi/debian"
 	cat > iso/efi/debian/grub.cfg <<EOF
 loadfont unicode
-menuentry 'Security Boot is enabled and NOT supported!' {
+menuentry 'Secure Boot is enabled and NOT supported!' {
 	true
 }
 menuentry 'UEFI Firmware Settings' {
