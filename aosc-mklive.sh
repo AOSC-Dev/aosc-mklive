@@ -82,6 +82,15 @@ menuentry 'LiveKit (discrete graphics)' --class aosc --class gnu-linux --class g
 	initrd /boot/live-initramfs.img
 }
 EOF
+elif [[ "$RETRO" != "1" ]] ; then
+	echo "Adding fallback graphics entry ..."
+	cat >> iso/boot/grub/grub.cfg << EOF
+menuentry 'LiveKit (fallback graphics)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
+	insmod gzio
+	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash nomodeset
+	initrd /boot/live-initramfs.img
+}
+EOF
 fi
 
 if [[ "$RETRO" = "1" ]]; then
