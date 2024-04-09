@@ -76,6 +76,10 @@ useradd live -m
 echo live:live | chpasswd
 usermod -a -G audio,cdrom,video,wheel live
 
+echo "Preparing for sysinstall ..."
+groupadd -r sysinstall
+usermod -a -G sysinstall live
+
 echo "Preparing for autologin ..."
 groupadd -r autologin
 usermod -a -G autologin live
