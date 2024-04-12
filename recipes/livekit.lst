@@ -4,6 +4,7 @@ adobe-source-sans
 aoscdk-rs
 arc-theme
 caja
+deploykit-gui
 dracut
 fcitx
 fcitx-anthy
@@ -35,7 +36,6 @@ noto-fonts
 openfwwf
 pluma
 plymouth-livekit
-select-language-gui
 select-language-tui
 wimlib
 x11-base
