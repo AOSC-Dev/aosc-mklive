@@ -109,7 +109,10 @@ rm -v \
 	/etc/xdg/autostart/xdg-user-dirs.desktop \
 	/usr/lib/systemd/system/lightdm.service
 
-echo "Enabling pre-desktop DeployKit GUI ..."
+echo "Enabling DeployKit backend service ..."
+systemctl enable deploykit-backend
+
+echo "Enabling pre-desktop DeployKit GUI service ..."
 mkdir -pv /usr/lib/systemd/system/display-manager.service.wants
 ln -sfv ../deploykit-gui.service \
 	/usr/lib/systemd/system/display-manager.service.wants/deploykit-gui.service
