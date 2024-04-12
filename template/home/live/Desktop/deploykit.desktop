@@ -6,6 +6,6 @@ Comment=Install AOSC OS on your computer
 Comment[zh_CN]=在您的电脑上安装 AOSC OS
 Comment[zh_TW]=在您的電腦上安裝 AOSC OS
 Icon=deploykit
-Exec=mate-terminal --geometry="120x40" -t "DeployKit" -e deploykit.sudo
-Terminal=true
+Exec=deploykit-gui -s -d /usr/share/deploykit-gui/bgm
+Terminal=false
 Type=Application
