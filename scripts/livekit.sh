@@ -95,7 +95,8 @@ rm -v \
 	/usr/lib/systemd/system/lightdm.service
 
 echo "Enabling DeployKit backend service ..."
-systemctl enable deploykit-backend
+ln -sfv ../deploykit-backend.service \
+	/usr/lib/systemd/system/multi-user.target.wants/deploykit-backend.service
 
 echo "Enabling pre-desktop DeployKit GUI service ..."
 mkdir -pv /usr/lib/systemd/system/display-manager.service.wants
