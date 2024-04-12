@@ -109,6 +109,7 @@ rm -v \
 	/etc/xdg/autostart/xdg-user-dirs.desktop \
 	/usr/lib/systemd/system/lightdm.service
 
-echo "Enabling language selection UI ..."
+echo "Enabling pre-desktop DeployKit GUI ..."
 mkdir -pv /usr/lib/systemd/system/display-manager.service.wants
-ln -sfv ../select-language-gui.service /usr/lib/systemd/system/display-manager.service.wants/select-language-gui.service
+ln -sfv ../deploykit-gui.service \
+	/usr/lib/systemd/system/display-manager.service.wants/deploykit-gui.service

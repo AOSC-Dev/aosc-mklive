@@ -1,11 +1,11 @@
 [Unit]
 Description=Language Selection Interface (GUI)
 Before=display-manager.service
-After=multi-user.target
+After=multi-user.target deploykit-backend.service
 Conflicts=select-language-tui.service
 
 [Service]
-ExecStart=/usr/bin/xinit /usr/bin/select-language.xinit
+ExecStart=/usr/bin/xinit /usr/bin/deploykit-gui.xinit
 Type=oneshot
 KillMode=process
 IgnoreSIGPIPE=no
