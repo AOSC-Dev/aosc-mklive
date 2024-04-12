@@ -73,19 +73,10 @@ mksquashfs to-squash/ iso/LiveOS/squashfs.img \
 echo "Copying boot template to ISO ..."
 cp -av boot/* iso/
 
-if [[ "${ARCH}" = "loongarch64" ]]; then
-	echo "Adding an option to use discrete graphics (bypassing AST) ..."
-	cat >> iso/boot/grub/grub.cfg << EOF
-menuentry 'LiveKit (discrete graphics)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
-	insmod gzio
-	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash modprobe.blacklist=ast
-	initrd /boot/live-initramfs.img
-}
-EOF
-elif [[ "$RETRO" != "1" ]] ; then
+if [[ "$RETRO" != "1" ]] ; then
 	echo "Adding fallback graphics entry ..."
 	cat >> iso/boot/grub/grub.cfg << EOF
-menuentry 'LiveKit (fallback graphics)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
+menuentry 'Install AOSC OS (basic graphics)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
 	insmod gzio
 	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash nomodeset
 	initrd /boot/live-initramfs.img
@@ -101,7 +92,7 @@ if [[ "$RETRO" = "1" ]]; then
 		-i iso/boot/grub/grub.cfg
 else
 	cat >> iso/boot/grub/grub.cfg << EOF
-menuentry 'LiveKit (command line only)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
+menuentry 'Install AOSC OS (command line only)' --class aosc --class gnu-linux --class gnu --class os --unrestricted {
 	insmod gzio
 	linux /boot/kernel root=live:CDLABEL=LiveKit quiet splash systemd.unit=multi-user.target
 	initrd /boot/live-initramfs.img
