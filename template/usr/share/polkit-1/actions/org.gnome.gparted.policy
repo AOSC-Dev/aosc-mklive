@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN" "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>The GParted Project</vendor>
+  <vendor_url>https://gparted.org</vendor_url>
+  <icon_name>gparted</icon_name>
+  <action id="org.gnome.gparted">
+    <description>Run GParted as root</description>
+    <description xml:lang="zh_TW">以 root 執行 GParted</description>
+    <description xml:lang="zh_CN">以 root 身份运行 GParted</description>
+    <description xml:lang="vi">Chạy GParted với tư cách siêu quản trị</description>
+    <description xml:lang="uk">Запуск GParted від імені root</description>
+    <description xml:lang="tr">GPartedʼi kök olarak çalıştır</description>
+    <description xml:lang="sv">Kör GParted som root</description>
+    <description xml:lang="sr@latin">Pokrenite Gparted kao administrator</description>
+    <description xml:lang="sr">Покрените Гпартед као администратор</description>
+    <description xml:lang="sl">Zaženi prrogram GParted kot skrbnik</description>
+    <description xml:lang="sk">Spustiť GParted ako správca</description>
+    <description xml:lang="ru">Запустить GParted с правами root</description>
+    <description xml:lang="ro">Rulează GParted ca root</description>
+    <description xml:lang="pt_BR">Execute GParted como root</description>
+    <description xml:lang="pt">Executar o Gparted como root</description>
+    <description xml:lang="pl">Uruchomienie programu GParted jako administrator</description>
+    <description xml:lang="pa">ਜੀਪਾਰਟਡ ਨੂੰ ਰੂਟ ਵਜੋਂ ਚਲਾਓ</description>
+    <description xml:lang="nl">GParted uitvoeren als systeembeheerder (root)</description>
+    <description xml:lang="nb">Kjør GParted som root</description>
+    <description xml:lang="lv">Palaist GParted kā root</description>
+    <description xml:lang="lt">Vykdyti GParted root teisėmis</description>
+    <description xml:lang="ko">루트 권한으로 GParted 실행</description>
+    <description xml:lang="kk">GParted қолданбасын әкімші ретінде жөнелту</description>
+    <description xml:lang="ka">GParted-ი root-ით უნდა გაუშვათ</description>
+    <description xml:lang="it">Esegui GParted come root</description>
+    <description xml:lang="is">Keyra GParted sem kerfisstjóri/root</description>
+    <description xml:lang="ie">Lansar GParted quam li superusator</description>
+    <description xml:lang="id">Jalankan GParted sebagai root</description>
+    <description xml:lang="hu">GParted futtatása rendszergazdaként</description>
+    <description xml:lang="hr">Pokreni GParted kao korijenskog korisnika</description>
+    <description xml:lang="he">יש להפעיל את GParted כמשתמש על (root)</description>
+    <description xml:lang="gl">Executar GParted como administrador</description>
+    <description xml:lang="fur">Eseguìs GParted come root</description>
+    <description xml:lang="fr">Lancer GParted en tant qu’utilisateur root</description>
+    <description xml:lang="fi">Suorita GParted root-käyttäjänä</description>
+    <description xml:lang="fa">اجرای GParted با ریشه</description>
+    <description xml:lang="eu">Exekutatu GParted 'root' gisa</description>
+    <description xml:lang="es">Ejecutar GParted como root</description>
+    <description xml:lang="eo">Ruli GParted kiel root</description>
+    <description xml:lang="en_GB">Run GParted as root</description>
+    <description xml:lang="el">Εκτέλεση GParted ως root</description>
+    <description xml:lang="de">GParted als Root-Benutzer ausführen</description>
+    <description xml:lang="da">Kør GParted som root</description>
+    <description xml:lang="cs">Spouštět GParted pod uživatelem root</description>
+    <description xml:lang="ca">Executa GParted com a root</description>
+    <description xml:lang="be">Запусціць GParted ад імя суперкарыстальніка</description>
+    <description xml:lang="ar">شغّل مُقسِّم‌ج بصلاحية الجذر</description>
+    <message>Authentication is required to run the GParted Partition Editor as root</message>
+    <message xml:lang="zh_TW">需要核對身份才能以 root 執行 GParted 分割區編輯器</message>
+    <message xml:lang="zh_CN">以 root 身份运行 GParted 分区编辑器需要授权</message>
+    <message xml:lang="vi">Cần xác thực để chạy bộ Sửa phân vùng đĩa GParted dưới tư cách siêu quản trị root</message>
+    <message xml:lang="uk">Щоб запустити редактор розділів GParted від імені root, слід пройти розпізнавання</message>
+    <message xml:lang="tr">GParted Disk Bölümü Düzenleyicisiʼni kök olarak çalıştırmak için kimlik doğrulama gereklidir</message>
+    <message xml:lang="sv">Autentisering krävs för att köra GParted partitionsredigerare som root</message>
+    <message xml:lang="sr@latin">Potrebno je potvrđivanje identiteta za pokretanje Gparteda kao administrator</message>
+    <message xml:lang="sr">Потребно је потврђивање идентитета за покретање Гпартеда као администратор</message>
+    <message xml:lang="sl">Za zagon programa je zahtevano posebno skrbniško dovoljenje.</message>
+    <message xml:lang="sk">Na spustenie editora oddielov GParted ako správca sa vyžaduje overenie totožnosti</message>
+    <message xml:lang="ru">Требуется авторизация для запуска редактора разделов GParted с правами root</message>
+    <message xml:lang="ro">Autentificarea este necesară pentru a rula Editorul de partiții GParted ca root</message>
+    <message xml:lang="pt_BR">A autenticação é necessária para executar o Gerenciador de Partições GParted como ‘root’ ou administrador</message>
+    <message xml:lang="pt">É necessária autenticação para executar o Editor de partições GParted como root</message>
+    <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby uruchomić edytora partycji GParted jako administrator</message>
+    <message xml:lang="pa">ਜੀਪਾਰਟਡ ਪਾਰਟੀਸ਼ਨ ਐਡੀਟਰ ਨੂੰ ਰੂਟ ਵਜੋਂ ਚਲਾਣਉ ਲਈ ਪਰਮਾਣਕਿਤਾ ਦੀ ਲੋੜ ਹੈ</message>
+    <message xml:lang="nl">Authenticatie is vereist om GParted partitiebewerker uit te voeren als systeembeheerder (root)</message>
+    <message xml:lang="nb">Autentisering kreves for å kjøre GParted partisjonsredigering som root</message>
+    <message xml:lang="lv">Nepieciešama autentificēšana, lai palaistu GParted nodalījumu redaktoru ar root tiesībām</message>
+    <message xml:lang="lt">Reikia patvirtinti tapatybę norint vykdyti GParted skirsnių redaktorių root teisėmis</message>
+    <message xml:lang="ko">GParted 분할 영역 편집기를 루트 권한으로 실행하려면 인증이 필요합니다</message>
+    <message xml:lang="kk">GParted бөлімдер түзеткішін әкімші ретінде жөнелту үшін аутентификация керек</message>
+    <message xml:lang="ka">დანაყოფების რედაქტორ GParted-ის root-ით გასაშვებად ავთენტიკაცია გჭირდებათ</message>
+    <message xml:lang="it">È richiesto autenticarsi per eseguire «Editor di partizioni GParted» come root</message>
+    <message xml:lang="is">Auðkenningar er krafist til að keyra GParted disksneiðingarstjórann sem kerfisstjóri (root)</message>
+    <message xml:lang="id">Otentikasi diperlukan untuk menjalankan Penyunting Partisi GParted sebagai root</message>
+    <message xml:lang="hu">Hitelesítés szükséges a GParted partíciószerkesztő rendszergazdaként való futtatásához</message>
+    <message xml:lang="hr">Potrebna je ovjera za pokretanje GParted uređivača particija kao korijenskog korisnika</message>
+    <message xml:lang="he">נדרש אימות כדי להריץ את עורך המחיצות GParted בתור משתמש על (root)</message>
+    <message xml:lang="gl">Requírese autenticación para executar o Editor de Particións GParted como administrador</message>
+    <message xml:lang="fur">La autenticazion e je necessarie par eseguî come root l'editôr di partizions GParted</message>
+    <message xml:lang="fr">Il est nécessaire de s’authentifier pour lancer l’éditeur de partitions GParted en tant qu’utilisateur root</message>
+    <message xml:lang="fi">Tunnistautuminen vaaditaa GParted-osiomuokkaimen suorittamiseksi root-käyttäjänä</message>
+    <message xml:lang="eu">GParted partizioen editorea 'root' pribilegiorekin exekutatzeko beharrezkoa da autentifikatzea</message>
+    <message xml:lang="es">Se necesita autenticación para ejecutar el editor de particiones GParted como root</message>
+    <message xml:lang="eo">Necesas aŭtentigo por ruli GParted Subdiskoredaktilo kiel root</message>
+    <message xml:lang="en_GB">Authentication is required to run the GParted Partition Editor as root</message>
+    <message xml:lang="de">Legitimierung ist erforderlich, um GParted als Root-Benutzer auszuführen</message>
+    <message xml:lang="da">Godkendelse er krævet for at køre partitioneringsprogrammet GParted som root</message>
+    <message xml:lang="cs">Ke spuštění editoru oddílů GParted pod uživatelem root je vyžadováno ověření</message>
+    <message xml:lang="ca">Es requereix autenticació per a executar l'editor de particions GParted com a root</message>
+    <message xml:lang="be">Для запуску GParted ад імя суперкарыстальніка патрабуецца аўтэнтыфікацыя</message>
+    <message xml:lang="ar">الاستيثاق مطلوب لتشغيل محرر الأقسام مُقسِّم‌ج بصلاحية الجذر</message>
+    <defaults>
+      <allow_any>yes</allow_any>
+      <allow_active>yes</allow_active>
+      <allow_inactive>yes</allow_inactive>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/gparted</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+</policyconfig>
