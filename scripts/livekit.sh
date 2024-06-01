@@ -102,3 +102,17 @@ echo "Enabling pre-desktop DeployKit GUI service ..."
 mkdir -pv /usr/lib/systemd/system/display-manager.service.wants
 ln -sfv ../deploykit-gui.service \
 	/usr/lib/systemd/system/display-manager.service.wants/deploykit-gui.service
+
+echo "Removing a problematic library ..."
+# FIXME: Causes crashes on unaccelerated platforms (i.e. VMs).
+rm -v /usr/lib/gstreamer-1.0/libgstvaapi.so
+
+echo "Removing unused CJK fonts ..."
+rm -v \
+	/usr/share/fonts/TTF/NotoSerifCJK*.ttc \
+	/usr/share/fonts/OTF/NotoSansMonoCJK*.otf
+
+echo "Allowing any user to run localectl ..."
+sed \
+	-e 's|auth_admin_keep|yes|g' \
+	-i /usr/share/polkit-1/actions/org.freedesktop.locale1.policy
