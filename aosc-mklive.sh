@@ -71,7 +71,7 @@ mksquashfs to-squash/ iso/LiveOS/squashfs.img \
     -comp lz4 -no-recovery
 
 echo "Copying boot template to ISO ..."
-cp -av boot/* iso/
+cp -av boot iso/
 
 if [[ "$RETRO" != "1" ]] ; then
 	echo "Adding fallback graphics entry ..."
