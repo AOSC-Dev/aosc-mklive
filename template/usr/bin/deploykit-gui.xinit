@@ -1,3 +1,0 @@
-#!/bin/bash
-marco &
-sudo -Eu live /usr/bin/deploykit-gui -d /usr/share/deploykit-gui/bgm
