@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Start a "minimal session" for DeployKit, before launching MATE.
+marco &
+fcitx &
+alsactl init &
+start-pulseaudio-x11 &
+deploykit-gui -d /usr/share/deploykit-gui/bgm
+
+# Process clean-up.
+killall marco fcitx alsactl pulseaudio
+
+# Source the language setting that we have just set.
+source /etc/locale.conf
+
+# After "exiting" DeployKit (by selecting "Rescue & Recovery"), launch a full
+# MATE desktop session.
+mate-session
