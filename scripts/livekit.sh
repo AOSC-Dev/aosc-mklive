@@ -109,8 +109,8 @@ rm -v /usr/lib/gstreamer-1.0/libgstvaapi.so
 
 echo "Removing unused CJK fonts ..."
 rm -v \
-	/usr/share/fonts/TTF/NotoSerifCJK*.ttc \
-	/usr/share/fonts/OTF/NotoSansMonoCJK*.otf
+	/usr/share/fonts/TTF/NotoSerif* \
+	/usr/share/fonts/OTF/NotoSansMonoCJK*
 
 echo "Allowing any user to run localectl ..."
 sed \
