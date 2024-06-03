@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # Start a "minimal session" for DeployKit, before launching MATE.
+feh --bg-fill /usr/share/backgrounds/livekit.jpg
+start-pulseaudio-x11 &
 marco &
 fcitx &
 alsactl init &
-start-pulseaudio-x11 &
+# Set volume to a lower value.
+pactl set-sink-volume '@DEFAULT_SINK@' '30%'
 deploykit-gui -d /usr/share/deploykit-gui/bgm
 
 # Process clean-up.
