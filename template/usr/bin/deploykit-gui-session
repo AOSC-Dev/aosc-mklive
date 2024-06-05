@@ -7,7 +7,7 @@ marco &
 fcitx &
 alsactl init &
 # Set volume to a lower value.
-pactl set-sink-volume '@DEFAULT_SINK@' '30%'
+pactl set-sink-volume '@DEFAULT_SINK@' '60%'
 deploykit-gui -d /usr/share/deploykit-gui/bgm
 
 # Process clean-up.
