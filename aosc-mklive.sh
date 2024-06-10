@@ -115,7 +115,7 @@ grub-mkrescue \
 	iso -- -volid "LiveKit"
 
 if [[ "$ARCH" = "amd64" || "$ARCH" = "arm64" ]]; then
-	#Handle secure boot
+	# Handle Secure Boot: Add a warning for unsupported feature.
 	arch_suffix=""
 	if [[ "$ARCH" = "amd64" ]]; then
 		arch_suffix="x64"
