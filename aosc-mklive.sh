@@ -117,26 +117,36 @@ grub-mkrescue \
 if [[ "$ARCH" = "amd64" || "$ARCH" = "arm64" ]]; then
 	# Handle Secure Boot: Add a warning for unsupported feature.
 	arch_suffix=""
+	arch_suffix_upper=""
+	have_sb=0
 	if [[ "$ARCH" = "amd64" ]]; then
 		arch_suffix="x64"
-	else
+		arch_suffix_upper="x64"
+		have_sb="1"
+	elif [[ "$ARCH" = "arm64" ]]; then
 		arch_suffix="aa64"
+		arch_suffix_upper="AA64"
+		have_sb="1"
+	else
+		arch_suffix="loongarch64"
+		arch_suffix_upper="LOONGARCH64"
 	fi
-	files_to_extract=("boot/grub" "efi" ".disk")
+	files_to_extract=("boot/grub" "EFI" ".disk")
 	if [[ "$ARCH" = "amd64" ]]; then
 		files_to_extract+=("System" "mach_kernel")
 	fi
 	xorriso -osirrox on -indev "$ISO_NAME" -extract_l / iso/ "${files_to_extract[@]}" --
-	mkdir -p sb
-	wget -O sb/grub.deb "https://deb.debian.org/debian/pool/main/g/grub-efi-${ARCH}-signed/grub-efi-${ARCH}-signed_1%2B2.06%2B13%2Bdeb12u1_${ARCH}.deb"
-	wget -O sb/shim.deb "https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.39%2B15.7-1_${ARCH}.deb"
-	dpkg-deb -x sb/grub.deb sb
-	dpkg-deb -x sb/shim.deb sb
-	mv "iso/efi/boot/boot${arch_suffix}.efi" "iso/efi/boot/grub${arch_suffix}.efi"
-	mv "sb/usr/lib/shim/shim${arch_suffix}.efi.signed" "iso/efi/boot/boot${arch_suffix}.efi"
-	mv "sb/usr/lib/grub/"*"-efi-signed/grub${arch_suffix}.efi.signed" "iso/efi/boot/mm${arch_suffix}.efi"
-	mkdir -p "iso/efi/debian"
-	cat > iso/efi/debian/grub.cfg <<EOF
+	if [[ "$have_sb" = "1" ]]; then
+		mkdir -p sb
+		wget -O sb/grub.deb "https://deb.debian.org/debian/pool/main/g/grub-efi-${ARCH}-signed/grub-efi-${ARCH}-signed_1%2B2.06%2B13%2Bdeb12u1_${ARCH}.deb"
+		wget -O sb/shim.deb "https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.39%2B15.7-1_${ARCH}.deb"
+		dpkg-deb -x sb/grub.deb sb
+		dpkg-deb -x sb/shim.deb sb
+		mv "iso/EFI/BOOT/BOOT${arch_suffix_upper}.EFI" "iso/EFI/BOOT/grub${arch_suffix}.efi"
+		mv "sb/usr/lib/shim/shim${arch_suffix}.efi.signed" "iso/EFI/BOOT/BOOT${arch_suffix_upper}.EFI"
+		mv "sb/usr/lib/grub/"*"-efi-signed/grub${arch_suffix}.efi.signed" "iso/EFI/BOOT/mm${arch_suffix}.efi"
+		mkdir -p "iso/EFI/debian"
+		cat > iso/EFI/debian/grub.cfg <<EOF
 loadfont unicode
 menuentry 'Secure Boot is enabled and NOT supported!' {
 	true
@@ -149,10 +159,7 @@ menuentry 'Boot Default OS' {
 }
 fi
 EOF
-	mv iso/efi iso/efi2
-	mv iso/efi2 iso/EFI
-	mv iso/EFI/boot iso/EFI/boot2
-	mv iso/EFI/boot2 iso/EFI/BOOT
+	fi
 	# 32.5MiB
 	mformat -C -F -i "iso/efi.img" -T 66650 -h 2 -s 32 -c 1 -F "::"
 	mcopy -i "iso/efi.img" -s "iso/EFI" "::/"
