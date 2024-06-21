@@ -1,0 +1,4 @@
+[submodule "dracut"]
+	path = dracut
+	url = https://github.com/AOSC-Dev/dracut-livekit-loader.git
+	branch = master
