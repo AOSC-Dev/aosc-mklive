@@ -1,7 +1,8 @@
 OUTPUT/
-iso/
-livekit/
-to-squash/
+/work/
+/iso/
+/livekit/
+/to-squash/
 sb/
 *.iso*
 *.tar.*
