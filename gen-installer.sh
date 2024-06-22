@@ -2,6 +2,8 @@
 
 [ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
 
+set -e
+
 # aosc-mkinstaller: Generate an offline AOSC Installer image
 # TODO usage
 
@@ -9,12 +11,14 @@
 export LANG=C.UTF-8
 export LC_ALL=C.UTF-8
 
+# Path to aoscbootstrap scripts and recipes
+AOSCBOOTSTRAP=${AOSCBOOTSTRAP:-/usr/share/aoscbootstrap}
 # Package repository to download packages from.
 REPO=${REPO:-https://repo.aosc.io/debs}
 # Where we put temorary files.
 WORKDIR=${WORKDIR:-$PWD/work}
 # Output directory.
-OUTDIR=${OUTDIR:-$PWD/out}
+OUTDIR=${OUTDIR:-$PWD/iso}
 # Layers.
 LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "server")
 # Layers that requires desktop.
@@ -24,39 +28,39 @@ LAYERS_desktop_common=("desktop" "desktop-nvidia" "livekit")
 # desktop-common packages.
 PKGS_desktop_common=("adobe-source-code-pro" "firefox" "noto-fonts" "noto-cjk-fonts" "x11-base")
 
-RECIPE_livekit="$PWD/aosc-mklive/recipes/livekit.lst"
-RECIPE_desktop_nvidia="$PWD/aoscbootstrap/recipes/desktop+nvidia.lst"
+RECIPE_livekit="$PWD/recipes/livekit.lst"
+RECIPE_desktop_nvidia="$AOSCBOOTSTRAP/recipes/desktop+nvidia.lst"
 
 SCRIPTS=(
-	"aoscbootstrap/scripts/reset-repo.sh"
-	"aoscbootstrap/assets/cleanup.sh"
+	"$AOSCBOOTSTRAP/scripts/reset-repo.sh"
+	"$AOSCBOOTSTRAP/assets/cleanup.sh"
 )
 
 SCRIPTS_base=(
-	"aoscbootstrap/scripts/enable-dkms.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_livekit=(
-	"aosc-mklive/scripts/livekit.sh"
+	"${PWD}/scripts/livekit.sh"
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_desktop_common=(
-	"aoscbootstrap/scripts/enable-nvidia-drivers.sh"
-	"aoscbootstrap/scripts/enable-dkms.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-nvidia-drivers.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_desktop=(
-	"aoscbootstrap/scripts/enable-nvidia-drivers.sh"
-	"aoscbootstrap/scripts/enable-dkms.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-nvidia-drivers.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_desktop_nvidia=(
-	"aoscbootstrap/scripts/enable-nvidia-drivers.sh"
-	"aoscbootstrap/scripts/enable-dkms.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-nvidia-drivers.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_server=(
-	"aoscbootstrap/scripts/enable-dkms.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
 
@@ -148,16 +152,16 @@ bootstrap_base() {
 	info "Bootstrapping base tarball ..."
 	aoscbootstrap \
 	${BRANCH:-stable} $_dir ${REPO} \
-	--config "${PWD}/aoscbootstrap/config/aosc-mainline.toml" \
+	--config "$AOSCBOOTSTRAP/config/aosc-mainline.toml" \
 		-x \
 		--arch ${ARCH:-$(dpkg --print-architecture)} \
 		-s \
-			"${PWD}/aoscbootstrap/scripts/reset-repo.sh" \
+			"$AOSCBOOTSTRAP/scripts/reset-repo.sh" \
 		-s \
-			"${PWD}/aoscbootstrap/scripts/enable-nvidia-drivers.sh" \
+			"$AOSCBOOTSTRAP/scripts/enable-nvidia-drivers.sh" \
 		-s \
-			"${PWD}/aoscbootstrap/scripts/enable-dkms.sh" \
-		--include-files "${PWD}/aoscbootstrap/recipes/base.lst"
+			"$AOSCBOOTSTRAP/scripts/enable-dkms.sh" \
+		--include-files "$AOSCBOOTSTRAP/recipes/base.lst"
 }
 
 mount_layer() {
@@ -217,7 +221,7 @@ install_layer() {
 	elif [ "${!var1}" ] ; then
 		pkgs="${!var1}"
 	else
-		pkgs=$(read_lst $PWD/aoscbootstrap/recipes/$tgt.lst)
+		pkgs=$(read_lst $AOSCBOOTSTRAP/recipes/$tgt.lst)
 	fi
 	echo "deb ${REPO} stable main" > $WORKDIR/merged/etc/apt/sources.list
 	systemd-run --wait -M isobuild -t -- \
@@ -287,7 +291,7 @@ pack_templates() {
 	if [ -e "${PWD}"/templates/$tgt.sh ] ; then
 		info "Running template script ..."
 		# this script needs to be executed outside.
-		env WORKDIR="$WORKDIR" OUTDIR="$OUTDIR" TOP="$PWD" \
+		env WORKDIR="$WORKDIR" OUTDIR="$OUTDIR" TOP="$PWD" TGT=${WORKDIR}/$tgt-template-merged \
 			bash "$PWD"/templates/$tgt.sh
 	fi
 	info "Applying templates ..."
