@@ -26,7 +26,6 @@ call_gen_installer() {
 [ "x$EUID" = "x0" ] || { echo "Please run me as root." ; exit 1 ; }
 
 export ARCH="${ARCH:-$(dpkg --print-architecture)}"
-ISO_NAME="aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH}.iso"
 
 gen_livekit() {
 	rm -fr livekit iso to-squash memtest sb
@@ -70,15 +69,16 @@ gen_livekit() {
 	
 	if [[ "${RETRO}" != "1" ]]; then
 		echo "Copying LiveKit template ..."
-		chown -vR 0:0 template/*
-	        cp -av template/* livekit/
-		chown -vR 1000:1000 livekit/home/live
+		chown -vR 0:0 templates/livekit/*
+	        cp -av templates/livekit/* livekit/
+		chown -vR 1000:1001 livekit/home/live
 	fi
 	
 	echo "Extracting LiveKit kernel/initramfs ..."
 	mkdir -pv iso/boot
 	cp -v livekit/kernel iso/boot/kernel
 	cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
+	rm -v livekit/kernel livekit/live-initramfs.img
 	
 	echo "Evaluating size of generated rootfs ..."
 	ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
@@ -118,9 +118,11 @@ tgt=$1
 case "$tgt" in
 	livekit)
 		gen_livekit
+		ISO_NAME="aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH}.iso"
 		;;
 	installer)
 		call_gen_installer
+		ISO_NAME="aosc-os_installer_$(date +%Y%m%d)${REV:+.$REV}_${ARCH}.iso"
 		;;
 	*)
 		usage
@@ -220,4 +222,4 @@ sha256sum "$ISO_NAME" \
 	>> "$ISO_NAME".sha256sum
 
 echo "Cleaning up ..."
-rm -fr iso to-squash livekit memtest sb
+rm -fr to-squash livekit memtest sb
