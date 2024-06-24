@@ -8,11 +8,20 @@ sed -e 's|semaphore|livekit|g' \
     -i /etc/plymouth/plymouthd.conf
 
 echo "Generating a LiveKit initramfs ..."
-dracut \
-    --add "dmsquash-live drm" --omit "network dbus-daemon dbus network-manager btrfs crypt kernel-modules-extra kernel-network-modules multipath mdraid nvdimm nvmf lvm" \
-    --xz --no-early-microcode \
-    "/live-initramfs.img" \
-    $(ls /usr/lib/modules/)
+if [ "x$INSTALLER" != "x1" ] ; then
+	dracut \
+		--add "dmsquash-live drm" --omit "network dbus-daemon dbus network-manager btrfs crypt kernel-modules-extra kernel-network-modules multipath mdraid nvdimm nvmf lvm" \
+		--xz --no-early-microcode \
+		"/live-initramfs.img" \
+		$(ls /usr/lib/modules/)
+else
+	cp -av /run/mklive/dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
+	dracut \
+		--add "aosc-livekit-loader drm" \
+		--xz --no-early-microcode \
+		"/live-initramfs.img" \
+		$(ls /usr/lib/modules/)
+fi
 
 echo "Moving kernel image out ..."
 if [ -f /boot/vmlinuz-* ]; then

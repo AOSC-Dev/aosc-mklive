@@ -1,91 +1,132 @@
 #!/bin/bash
 set -e
-rm -fr livekit iso to-squash memtest sb
-mkdir iso to-squash
+
+usage() {
+	cat << EOF
+Usage: $0 livekit|installer
+
+Positional arguments:
+	livekit		Generate an AOSC OS LiveKit image.
+	installer	Generate an AOSC OS offline installer image.
+
+Environment variables:
+	REPO	URL to the AOSC OS package repository.
+	BRANCH	Which topic to install.
+	RETRO	Whether to generate a Retro LiveKit.
+EOF
+}
+
+call_gen_installer() {
+	echo "Calling gen-installer.sh ..."
+	env REPO=$REPO ${PWD}/gen-installer.sh || { echo "Failed to generate an installer image!" ; exit 1 ; }
+	echo "Copying desktop template as desktop-nvidia template ..."
+	cp $PWD/iso/squashfs/templates/desktop{,-nvidia}.squashfs
+}
+
+[ "x$EUID" = "x0" ] || { echo "Please run me as root." ; exit 1 ; }
 
 export ARCH="${ARCH:-$(dpkg --print-architecture)}"
 ISO_NAME="aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH}.iso"
 
-if [[ "${ARCH}" = "loongarch64" ]]; then
-	echo "Generating LiveKit distribution (loongarch64) ..."
-	aoscbootstrap \
-		${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
-		--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
-		-x \
-		--arch ${ARCH:-$(dpkg --print-architecture)} \
-		-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
-		-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
-		-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-		-s "$PWD/scripts/livekit.sh" \
-		-s "$PWD/scripts/loongarch64-tweaks.sh" \
-		--include-files "$PWD/recipes/livekit.lst"
-elif [[ "${RETRO}" != "1" ]]; then
-	echo "Generating LiveKit distribution ..."
-	aoscbootstrap \
-		${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
-		--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
-		-x \
-		--arch ${ARCH:-$(dpkg --print-architecture)} \
-		-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
-		-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
-		-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-		-s "$PWD/scripts/livekit.sh" \
-		--include-files "$PWD/recipes/livekit.lst"
-else
-	echo "Generating Retro LiveKit distribution ..."
-	aoscbootstrap \
-	        ${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs-retro} \
-	        --config /usr/share/aoscbootstrap/config/aosc-retro.toml \
-	        -x \
-	        --arch ${ARCH:-$(dpkg --print-architecture)} \
-	        -s "$PWD/scripts/retro-livekit.sh" \
-	        --include-files "$PWD/recipes/retro-livekit.lst"
-fi
+gen_livekit() {
+	rm -fr livekit iso to-squash memtest sb
+	mkdir iso to-squash	
+	
+	if [[ "${ARCH}" = "loongarch64" ]]; then
+		echo "Generating LiveKit distribution (loongarch64) ..."
+		aoscbootstrap \
+			${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
+			--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
+			-x \
+			--arch ${ARCH:-$(dpkg --print-architecture)} \
+			-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
+			-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
+			-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
+			-s "$PWD/scripts/livekit.sh" \
+			-s "$PWD/scripts/loongarch64-tweaks.sh" \
+			--include-files "$PWD/recipes/livekit.lst"
+	elif [[ "${RETRO}" != "1" ]]; then
+		echo "Generating LiveKit distribution ..."
+		aoscbootstrap \
+			${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
+			--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
+			-x \
+			--arch ${ARCH:-$(dpkg --print-architecture)} \
+			-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
+			-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
+			-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
+			-s "$PWD/scripts/livekit.sh" \
+			--include-files "$PWD/recipes/livekit.lst"
+	else
+		echo "Generating Retro LiveKit distribution ..."
+		aoscbootstrap \
+		        ${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs-retro} \
+		        --config /usr/share/aoscbootstrap/config/aosc-retro.toml \
+		        -x \
+		        --arch ${ARCH:-$(dpkg --print-architecture)} \
+		        -s "$PWD/scripts/retro-livekit.sh" \
+		        --include-files "$PWD/recipes/retro-livekit.lst"
+	fi
+	
+	if [[ "${RETRO}" != "1" ]]; then
+		echo "Copying LiveKit template ..."
+		chown -vR 0:0 template/*
+	        cp -av template/* livekit/
+		chown -vR 1000:1000 livekit/home/live
+	fi
+	
+	echo "Extracting LiveKit kernel/initramfs ..."
+	mkdir -pv iso/boot
+	cp -v livekit/kernel iso/boot/kernel
+	cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
+	
+	echo "Evaluating size of generated rootfs ..."
+	ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
+	ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/2))"
+	
+	echo "Generating empty back storage for rootfs ..."
+	mkdir -pv to-squash/LiveOS
+	truncate -s "${ROOTFS_SIZE}M" to-squash/LiveOS/rootfs.img
+	
+	echo "Formatting rootfs ..."
+	mkfs.ext4 -F -m 1 -d livekit/ to-squash/LiveOS/rootfs.img
+	
+	echo "Generating squashfs for dracut dmsquash-live ..."
+	mkdir -pv iso/LiveOS
+	mksquashfs to-squash/ iso/LiveOS/squashfs.img \
+	    -comp lz4 -no-recovery
+	
+	echo "Copying boot template to ISO ..."
+	cp -av boot iso/
+	
+	if [[ "${ARCH}" = "loongarch64" ]]; then
+		echo "Adding an option to use discrete graphics (bypassing AST) ..."
+		sed \
+			-e 's|la64_quirk=0|la64_quirk=1|g' \
+			-i iso/boot/grub/grub.cfg
+	fi
+	
+	if [[ "$RETRO" = "1" ]]; then
+		echo "Tweaking GRUB menu to disable gfxterm, change color ..."
+		sed \
+			-e 's|retro=0|retro=1|g' \
+			-i iso/boot/grub/grub.cfg
+	fi
+}
 
-if [[ "${RETRO}" != "1" ]]; then
-	echo "Copying LiveKit template ..."
-	chown -vR 0:0 template/*
-        cp -av template/* livekit/
-	chown -vR 1000:1000 livekit/home/live
-fi
-
-echo "Extracting LiveKit kernel/initramfs ..."
-mkdir -pv iso/boot
-cp -v livekit/kernel iso/boot/kernel
-cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
-
-echo "Evaluating size of generated rootfs ..."
-ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
-ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/2))"
-
-echo "Generating empty back storage for rootfs ..."
-mkdir -pv to-squash/LiveOS
-truncate -s "${ROOTFS_SIZE}M" to-squash/LiveOS/rootfs.img
-
-echo "Formatting rootfs ..."
-mkfs.ext4 -F -m 1 -d livekit/ to-squash/LiveOS/rootfs.img
-
-echo "Generating squashfs for dracut dmsquash-live ..."
-mkdir -pv iso/LiveOS
-mksquashfs to-squash/ iso/LiveOS/squashfs.img \
-    -comp lz4 -no-recovery
-
-echo "Copying boot template to ISO ..."
-cp -av boot iso/
-
-if [[ "${ARCH}" = "loongarch64" ]]; then
-	echo "Adding an option to use discrete graphics (bypassing AST) ..."
-	sed \
-		-e 's|la64_quirk=0|la64_quirk=1|g' \
-		-i iso/boot/grub/grub.cfg
-fi
-
-if [[ "$RETRO" = "1" ]]; then
-	echo "Tweaking GRUB menu to disable gfxterm, change color ..."
-	sed \
-		-e 's|retro=0|retro=1|g' \
-		-i iso/boot/grub/grub.cfg
-fi
+tgt=$1
+case "$tgt" in
+	livekit)
+		gen_livekit
+		;;
+	installer)
+		call_gen_installer
+		;;
+	*)
+		usage
+		exit 1
+		;;
+esac
 
 if [[ "${ARCH}" = "amd64" || \
       "${ARCH}" = "i486" ]]; then
@@ -113,6 +154,8 @@ echo "Generating ISO with grub-mkrescue ..."
 grub-mkrescue \
 	-o "$ISO_NAME" \
 	iso -- -volid "LiveKit"
+
+cp "$ISO_NAME" ${ISO_NAME%%.iso}-1.iso
 
 if [[ "$ARCH" = "amd64" || "$ARCH" = "arm64" ]]; then
 	# Handle Secure Boot: Add a warning for unsupported feature.
@@ -169,7 +212,7 @@ EOF
 	if [[ "$ARCH" = "amd64" ]]; then
 		additional_opts+=(-b "boot/grub/i386-pc/eltorito.img" -no-emul-boot -boot-load-size 4 -boot-info-table --grub2-boot-info --grub2-mbr "/usr/lib/grub/i386-pc/boot_hybrid.img" -hfsplus -apm-block-size 2048 -hfsplus-file-creator-type chrp tbxj "/System/Library/CoreServices/.disk_label" -hfs-bless-by i "/System/Library/CoreServices/boot.efi")
 	fi
-	xorriso -as mkisofs -graft-points --modification-date="$timestamp" "${additional_opts[@]}" --efi-boot efi.img -efi-boot-part --efi-boot-image --protective-msdos-label -o "$ISO_NAME" --sort-weight 0 / --sort-weight 1 /boot iso --  -volid "LiveKit"
+	xorriso -as mkisofs -graft-points --modification-date="$timestamp" "${additional_opts[@]}" --iso-level 3 --efi-boot efi.img -efi-boot-part --efi-boot-image --protective-msdos-label -o "$ISO_NAME" --sort-weight 0 / --sort-weight 1 /boot iso --  -volid "LiveKit"
 fi
 
 echo "Generating checksum ..."

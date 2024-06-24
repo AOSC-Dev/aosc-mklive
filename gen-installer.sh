@@ -3,7 +3,6 @@
 [ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
 
 set -e
-
 # aosc-mkinstaller: Generate an offline AOSC Installer image
 # TODO usage
 
@@ -33,7 +32,7 @@ RECIPE_desktop_nvidia="$AOSCBOOTSTRAP/recipes/desktop+nvidia.lst"
 
 SCRIPTS=(
 	"$AOSCBOOTSTRAP/scripts/reset-repo.sh"
-	"$AOSCBOOTSTRAP/assets/cleanup.sh"
+	"$PWD/scripts/cleanup.sh"
 )
 
 SCRIPTS_base=(
@@ -242,7 +241,7 @@ postinst_layer() {
 		_name=$(basename $script)
 		info "Running script $_name ..."
 		install -vm755 $script ${WORKDIR}/merged/
-		systemd-nspawn -D ${WORKDIR}/merged -- bash /$_name
+		systemd-nspawn -D ${WORKDIR}/merged --bind-ro $PWD:/run/mklive -- env INSTALLER=1 bash /$_name
 		info "Finished running $_name ."
 		rm -v ${WORKDIR}/merged/$_name
 		done
@@ -347,6 +346,11 @@ for l in ${LAYERS[@]} ; do
 	umount_layer $l
 	squash_layer $l
 done
+
+info "Copying boot template ..."
+cp -av ${PWD}/boot ${OUTDIR}/
+mv ${OUTDIR}/boot/grub/installer.cfg ${OUTDIR}/boot/grub/grub.cfg
+
 info "Build successful!"
 tree -h ${OUTDIR}
 info "Total image size: $(du -sh ${OUTDIR}/squashfs | awk '{ print $1 }')"
