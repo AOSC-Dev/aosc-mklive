@@ -10,6 +10,8 @@ set -e
 export LANG=C.UTF-8
 export LC_ALL=C.UTF-8
 
+# Architecture of the target.
+ARCH=${ARCH:-$(dpkg --print-architecture)}
 # Path to aoscbootstrap scripts and recipes
 AOSCBOOTSTRAP=${AOSCBOOTSTRAP:-/usr/share/aoscbootstrap}
 # Package repository to download packages from.
@@ -20,6 +22,14 @@ WORKDIR=${WORKDIR:-$PWD/work}
 OUTDIR=${OUTDIR:-$PWD/iso}
 # Layers.
 LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "server")
+LAYERS_NONVIDIA=("desktop-common" "desktop" "livekit" "server")
+# Available layers for different archs.
+LAYERS_amd64=("${LAYERS[@]}")
+LAYERS_arm64=("${LAYERS[@]}")
+LAYERS_loongarch64=("${LAYERS_NONVIDIA[@]}")
+LAYERS_loongson3=("${LAYERS_NONVIDIA[@]}")
+LAYERS_ppc64el=("${LAYERS_NONVIDIA[@]}")
+LAYERS_riscv64=("${LAYERS_NONVIDIA[@]}")
 # Layers that requires desktop.
 LAYERS_desktop=("desktop-nvidia")
 # Layers that requires desktop-common.
@@ -296,7 +306,7 @@ pack_templates() {
 	info "Applying templates ..."
 	chown -vR 0:0 $PWD/templates/$tgt
 	cp -av $PWD/templates/$tgt/* ${WORKDIR}/$tgt-template-merged/
-	chown -vR 1000:1000 ${WORKDIR}/$tgt-template-merged/home/live
+	chown -vR 1000:1001 ${WORKDIR}/$tgt-template-merged/home/live
 	info "Umounting template layer ..."
 	umount ${WORKDIR}/$tgt-template-merged
 	info "Squashing template layer ..."
@@ -332,11 +342,14 @@ prepare() {
 	mkdir -pv ${OUTDIR}/squashfs/templates
 }
 
+_var="LAYERS_$ARCH[@]"
+AVAIL_LAYERS=(${!_var})
+info "Available layers for $ARCH: ${AVAIL_LAYERS[@]}"
 pre_cleanup
 prepare
 bootstrap_base
 squash_layer base
-for l in ${LAYERS[@]} ; do
+for l in ${AVAIL_LAYERS[@]} ; do
 	mount_layer $l
 	start_container
 	install_layer $l
