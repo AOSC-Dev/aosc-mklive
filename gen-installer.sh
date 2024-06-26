@@ -37,6 +37,19 @@ LAYERS_desktop_common=("desktop" "desktop-nvidia" "livekit")
 # desktop-common packages.
 PKGS_desktop_common=("adobe-source-code-pro" "firefox" "noto-fonts" "noto-cjk-fonts" "x11-base")
 
+# Sysroots that layers combined to.
+# It does noting to the behaviour to this script.
+# NOTE livekit must not present in this array. It will be added later.
+# NOTE base must not present in this array, as base will get mounted automatically.
+SYSROOTS=("desktop" "desktop-nvidia" "server")
+SYSROOTS_NONVIDIA=("desktop" "server")
+SYSROOTS_amd64=("${SYSROOTS[@]}")
+SYSROOTS_arm64=("${SYSROOTS[@]}")
+SYSROOTS_loongarch64=("${SYSROOTS_NONVIDIA[@]}")
+SYSROOTS_loongson3=("${SYSROOTS_NONVIDIA[@]}")
+SYSROOTS_ppc64el=("${SYSROOTS_NONVIDIA[@]}")
+SYSROOTS_riscv64=("${SYSROOTS_NONVIDIA[@]}")
+
 RECIPE_livekit="$PWD/recipes/livekit.lst"
 RECIPE_desktop_nvidia="$AOSCBOOTSTRAP/recipes/desktop+nvidia.lst"
 
@@ -344,9 +357,36 @@ prepare() {
 
 _var="LAYERS_$ARCH[@]"
 AVAIL_LAYERS=(${!_var})
+_var="SYSROOTS_$ARCH[@]"
+# livekit should not present in recipe.json.
+AVAIL_SYSROOTS=(${!_var})
+# Make a clone, to make base appear in the recipe.json.
+AVAIL_SYSROOTS1=("${AVAIL_SYSROOTS[@]}" "base")
+# Add livekit back.
+AVAIL_SYSROOTS+=("livekit")
+if [ "${#AVAIL_LAYERS[@]}" -lt 1 ] || \
+	[ "${#AVAIL_SYSROOTS[@]}" -lt 1 ] ; then
+	die "There is no layers and sysroots defined for $ARCH. Check the script."
+fi
+
 info "Available layers for $ARCH: ${AVAIL_LAYERS[@]}"
+info "Available sysroots for $ARCH: ${AVAIL_SYSROOTS[@]}"
 pre_cleanup
 prepare
+cat > ${OUTDIR}/sysroots.ini << EOF
+[installer]
+sysroots=${AVAIL_SYSROOTS1[@]}
+
+EOF
+cat > ${OUTDIR}/squashfs/layers.conf << EOF
+LAYERS=$(dump_array AVAIL_LAYERS)
+SYSROOT_LAYERS=$(dump_array AVAIL_SYSROOTS)
+LAYER_DEP_desktop=("base" "desktop-common")
+LAYER_DEP_livekit=("base" "desktop-common")
+LAYER_DEP_server=("base")
+# it does nothing to the loader's behaviour, even if nvidia is not supported.
+LAYER_DEP_desktop_nvidia=("base" "desktop-common" "desktop")
+EOF
 bootstrap_base
 squash_layer base
 for l in ${AVAIL_LAYERS[@]} ; do
