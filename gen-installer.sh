@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-[ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
+# [ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
 
 set -e
 # aosc-mkinstaller: Generate an offline AOSC Installer image
@@ -330,6 +330,25 @@ pack_templates() {
 	popd
 }
 
+get_info() {
+	local inodes installedsize tgt dir
+	tgt=$1
+	info "$tgt: Getting information for recipe ..."
+	if [ "x$tgt" = "xbase" ] ; then
+		dir=${WORKDIR}/base
+	else
+		dir=${WORKDIR}/merged
+	fi
+	inodes=$(du -s --inodes $dir | awk '{ print $1 }')
+	installedsize=$(du -sb $dir | awk '{ print $1 }')
+	cat >> ${OUTDIR}/sysroots.ini << EOF
+[$tgt]
+inodes=$inodes
+installedsize=$installedsize
+
+EOF
+}
+
 pre_cleanup() {
 	info "Cleaning up before generating ..."
 	machinectl terminate isobuild &>/dev/null || true
@@ -351,8 +370,30 @@ prepare() {
 		mkdir -pv ${WORKDIR}/$layer
 	done
 	mkdir -pv ${WORKDIR}/merged
+	mkdir -pv ${OUTDIR}/manifest
 	mkdir -pv ${OUTDIR}/squashfs/layers
 	mkdir -pv ${OUTDIR}/squashfs/templates
+	# File for gen-recipe.py to read. Contains recipe information.
+	touch ${OUTDIR}/sysroots.ini
+	# File for the dracut loader to read. Contains layers and their dependencies.
+	touch ${OUTDIR}/squashfs/layers.conf
+}
+
+dump_array() {
+	# declare -p will print a command. We don't want that.
+	local arrname arr str
+	arrname=$1
+	str="("
+	if [ "x$arrname" = x ] ; then
+		echo ""
+	fi
+	arrname="$arrname[@]"
+	arr=(${!arrname})
+	for e in "${arr[@]}" ; do
+		str+="\"$e\" "
+	done
+	str="${str%% })"
+	echo "$str"
 }
 
 _var="LAYERS_$ARCH[@]"
@@ -388,6 +429,7 @@ LAYER_DEP_server=("base")
 LAYER_DEP_desktop_nvidia=("base" "desktop-common" "desktop")
 EOF
 bootstrap_base
+get_info base
 squash_layer base
 for l in ${AVAIL_LAYERS[@]} ; do
 	mount_layer $l
@@ -395,6 +437,7 @@ for l in ${AVAIL_LAYERS[@]} ; do
 	install_layer $l
 	kill_container
 	postinst_layer $l
+	get_info $l
 	pack_templates $l
 	umount_layer $l
 	squash_layer $l
@@ -403,6 +446,12 @@ done
 info "Copying boot template ..."
 cp -av ${PWD}/boot ${OUTDIR}/
 mv ${OUTDIR}/boot/grub/installer.cfg ${OUTDIR}/boot/grub/grub.cfg
+
+info "Generating recipe ..."
+$PWD/gen-recipe.py ${OUTDIR}/sysroots.ini ${OUTDIR}/manifest/recipe.json
+
+info "Downloading translated recipe ..."
+curl -Lo "$OUTDIR"/manifest/recipe-i18n.json https://releases.aosc.io/manifest/recipe-i18n.json
 
 info "Build successful!"
 tree -h ${OUTDIR}
