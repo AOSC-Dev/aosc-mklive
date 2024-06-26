@@ -21,6 +21,7 @@ class AOSCRecipe:
 		self.ver: int = 1
 		self.bulletin: 'AOSCRecipeBulletin' = AOSCRecipeBulletin()
 		self.variants: list['AOSCRecipeVariant'] = []
+		self.mirrors: list = []
 
 
 class AOSCRecipeBulletin:
