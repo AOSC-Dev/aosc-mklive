@@ -365,6 +365,10 @@ pre_cleanup() {
 prepare() {
 	info "Preparing to build ..."
 	# aoscbootstrap won't run in existing directories.
+	if [ ! -d "$PWD"/dracut/90aosc-livekit-loader ] ; then
+		# We can not run this command as root.
+		die "dracut module seems not cloned yet. Please run \`git submodule update --init --recursive\`."
+	fi
 	mkdir -pv ${WORKDIR}/work
 	for layer in ${LAYERS[@]} ; do
 		mkdir -pv ${WORKDIR}/$layer
