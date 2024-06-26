@@ -1,5 +1,8 @@
 [[ -d "$TGT" ]] || { echo "TGT is not set." ; exit 1 ; }
 
+echo "Removing problematic files ..."
+rm $TGT/usr/lib/gstreamer-1.0/libgstvaapi.so
+
 echo "Creating a live user ... "
 useradd -R $TGT -m -s /bin/bash live
 usermod -R $TGT -aG audio,video,plugdev,tty,wheel live
