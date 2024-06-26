@@ -1,0 +1,15 @@
+[Unit]
+Description=Language Selection Interface (GUI)
+Before=sddm.service
+After=multi-user.target
+Conflicts=select-language-tui.service
+
+[Service]
+ExecStart=/usr/bin/xinit /usr/bin/select-language.xinit
+Type=oneshot
+KillMode=process
+IgnoreSIGPIPE=no
+KillSignal=SIGHUP
+
+[Install]
+WantedBy=sddm.service
