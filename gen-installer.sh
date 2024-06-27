@@ -26,17 +26,18 @@ LAYERS_NONVIDIA=("desktop-common" "desktop" "livekit" "server")
 # Available layers for different archs.
 LAYERS_amd64=("${LAYERS[@]}")
 LAYERS_arm64=("${LAYERS[@]}")
-LAYERS_loongarch64=("${LAYERS_NONVIDIA[@]}")
+LAYERS_loongarch64=("${LAYERS_NONVIDIA[@]}" "desktop-latx")
 LAYERS_loongson3=("${LAYERS_NONVIDIA[@]}")
 LAYERS_ppc64el=("${LAYERS_NONVIDIA[@]}")
 LAYERS_riscv64=("${LAYERS_NONVIDIA[@]}")
 # Layers that requires desktop.
 LAYERS_desktop=("desktop-nvidia")
 # Layers that requires desktop-common.
-LAYERS_desktop_common=("desktop" "desktop-nvidia" "livekit")
+LAYERS_desktop_common=("desktop" "desktop-nvidia" "livekit" "desktop-latx")
 # desktop-common packages.
 PKGS_desktop_common=("adobe-source-code-pro" "firefox" "noto-fonts" "noto-cjk-fonts" "x11-base")
-
+# desktop-latx packages, which is exclusive for loongarch64.
+PKGS_desktop_latx=("latx" "wine")
 # Sysroots that layers combined to.
 # It does noting to the behaviour to this script.
 # NOTE livekit must not present in this array. It will be added later.
@@ -45,7 +46,7 @@ SYSROOTS=("desktop" "desktop-nvidia" "server")
 SYSROOTS_NONVIDIA=("desktop" "server")
 SYSROOTS_amd64=("${SYSROOTS[@]}")
 SYSROOTS_arm64=("${SYSROOTS[@]}")
-SYSROOTS_loongarch64=("${SYSROOTS_NONVIDIA[@]}")
+SYSROOTS_loongarch64=("${SYSROOTS_NONVIDIA[@]}" "desktop-latx")
 SYSROOTS_loongson3=("${SYSROOTS_NONVIDIA[@]}")
 SYSROOTS_ppc64el=("${SYSROOTS_NONVIDIA[@]}")
 SYSROOTS_riscv64=("${SYSROOTS_NONVIDIA[@]}")
@@ -73,6 +74,10 @@ SCRIPTS_desktop_common=(
 )
 SCRIPTS_desktop=(
 	"$AOSCBOOTSTRAP/scripts/enable-nvidia-drivers.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
+	"${SCRIPTS[@]}"
+)
+SCRIPTS_desktop_latx=(
 	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
@@ -436,6 +441,7 @@ LAYER_DEP_livekit=("base" "desktop-common")
 LAYER_DEP_server=("base")
 # it does nothing to the loader's behaviour, even if nvidia is not supported.
 LAYER_DEP_desktop_nvidia=("base" "desktop-common" "desktop")
+LAYER_DEP_desktop_latx=("base" "desktop-common" "desktop")
 EOF
 bootstrap_base
 get_info base
