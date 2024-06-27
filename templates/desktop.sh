@@ -24,12 +24,6 @@ echo "live:live" | chpasswd -R $TGT
 echo "Bypassing sudo password ..."
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" > $TGT/etc/sudoers.d/livekit
 
-echo "Enabling automatic login for SDDM ..."
-sed -e 's/Relogin=false/Relogin=true/g' \
-	-e 's/User=/User=live/g' \
-	-e 's/Session=/Session=plasma/g' \
-	-i ${WORKDIR}/merged/etc/sddm.conf
-
 echo "Installing Installation tools ..."
 systemd-nspawn -D $TGT -- oma --no-check-dbus install -y \
 	deploykit-gui deploykit-backend gparted select-language-gui xinit
