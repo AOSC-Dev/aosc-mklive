@@ -363,6 +363,7 @@ pre_cleanup() {
 	umount -R ${WORKDIR}/base &>/dev/null || true
 	umount -R ${WORKDIR}/*-template-merged &>/dev/null || true
 	rm -rf ${WORKDIR} &>/dev/null
+	rm -rf ${OUTDIR} &>/dev/null
 	info "Finished cleaning up."
 }
 
