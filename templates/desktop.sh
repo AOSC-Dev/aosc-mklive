@@ -24,6 +24,10 @@ echo "live:live" | chpasswd -R $TGT
 echo "Bypassing sudo password ..."
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" > $TGT/etc/sudoers.d/livekit
 
+echo "Disabling suspend and hibernation ..."
+systemd-nspawn -D $TGT systemctl mask suspend.target
+systemd-nspawn -D $TGT systemctl mask hibernation.target
+
 echo "Installing Installation tools ..."
 systemd-nspawn -D $TGT -- oma --no-check-dbus install -y \
 	deploykit-gui deploykit-backend gparted select-language-gui xinit
