@@ -320,6 +320,9 @@ pack_templates() {
 	chown -vR 0:0 $PWD/templates/$tgt
 	cp -av $PWD/templates/$tgt/* ${WORKDIR}/$tgt-template-merged/
 	chown -vR 1000:1001 ${WORKDIR}/$tgt-template-merged/home/live
+	if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
+		chown -vR "$SUDO_UID:$SUDO_GID" $PWD/templates
+	fi
 	info "Umounting template layer ..."
 	umount ${WORKDIR}/$tgt-template-merged
 	info "Squashing template layer ..."

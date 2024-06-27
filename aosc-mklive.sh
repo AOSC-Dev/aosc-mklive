@@ -219,5 +219,10 @@ echo "Generating checksum ..."
 sha256sum "$ISO_NAME" \
 	>> "$ISO_NAME".sha256sum
 
+if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
+       echo "Changing owner of generated iso ..."
+       chown -v "$SUDO_UID:$SUDO_GID" $ISONAME $ISONAME.sha256sum
+fi
+
 echo "Cleaning up ..."
 rm -fr to-squash livekit memtest sb
