@@ -21,7 +21,7 @@ WORKDIR=${WORKDIR:-$PWD/work}
 # Output directory.
 OUTDIR=${OUTDIR:-$PWD/iso}
 # Layers.
-LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "server")
+LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "livekit-nvidia" "server")
 LAYERS_NONVIDIA=("desktop-common" "desktop" "livekit" "server")
 # Available layers for different archs.
 LAYERS_amd64=("${LAYERS[@]}")
@@ -34,6 +34,8 @@ LAYERS_riscv64=("${LAYERS_NONVIDIA[@]}")
 LAYERS_desktop=("desktop-nvidia")
 # Layers that requires desktop-common.
 LAYERS_desktop_common=("desktop" "desktop-nvidia" "livekit" "desktop-latx")
+# Layers that requires livekit.
+LAYERS_livekit=("livekit-nvidia")
 # desktop-common packages.
 PKGS_desktop_common=("adobe-source-code-pro" "firefox" "noto-fonts" "noto-cjk-fonts" "x11-base")
 # desktop-latx packages, which is exclusive for loongarch64.
@@ -65,6 +67,12 @@ SCRIPTS_base=(
 )
 SCRIPTS_livekit=(
 	"${PWD}/scripts/livekit.sh"
+	"${SCRIPTS[@]}"
+)
+SCRIPTS_livekit_nvidia=(
+	"${PWD}/scripts/livekit.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-nvidia-drivers.sh"
+	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_desktop_common=(
