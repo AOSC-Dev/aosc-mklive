@@ -19,8 +19,6 @@ EOF
 call_gen_installer() {
 	echo "Calling gen-installer.sh ..."
 	env REPO=$REPO ${PWD}/gen-installer.sh || { echo "Failed to generate an installer image!" ; exit 1 ; }
-	echo "Copying desktop template as desktop-nvidia template ..."
-	cp $PWD/iso/squashfs/templates/desktop{,-nvidia}.squashfs
 }
 
 [ "x$EUID" = "x0" ] || { echo "Please run me as root." ; exit 1 ; }
@@ -221,7 +219,7 @@ sha256sum "$ISO_NAME" \
 
 if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
        echo "Changing owner of generated iso ..."
-       chown -v "$SUDO_UID:$SUDO_GID" $ISONAME $ISONAME.sha256sum
+       chown -v "$SUDO_UID:$SUDO_GID" $ISONAME $ISO_NAME.sha256sum
 fi
 
 echo "Cleaning up ..."

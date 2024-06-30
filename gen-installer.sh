@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# [ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
+[ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
 
 set -e
 # aosc-mkinstaller: Generate an offline AOSC Installer image
@@ -21,7 +21,7 @@ WORKDIR=${WORKDIR:-$PWD/work}
 # Output directory.
 OUTDIR=${OUTDIR:-$PWD/iso}
 # Layers.
-LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "livekit-nvidia" "server")
+LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "server")
 LAYERS_NONVIDIA=("desktop-common" "desktop" "livekit" "server")
 # Available layers for different archs.
 LAYERS_amd64=("${LAYERS[@]}")
@@ -34,8 +34,6 @@ LAYERS_riscv64=("${LAYERS_NONVIDIA[@]}")
 LAYERS_desktop=("desktop-nvidia")
 # Layers that requires desktop-common.
 LAYERS_desktop_common=("desktop" "desktop-nvidia" "livekit" "desktop-latx")
-# Layers that requires livekit.
-LAYERS_livekit=("livekit-nvidia")
 # desktop-common packages.
 PKGS_desktop_common=("adobe-source-code-pro" "firefox" "noto-fonts" "noto-cjk-fonts" "x11-base")
 # desktop-latx packages, which is exclusive for loongarch64.
@@ -427,6 +425,9 @@ AVAIL_SYSROOTS=(${!_var})
 AVAIL_SYSROOTS1=("${AVAIL_SYSROOTS[@]}" "base")
 # Add livekit back.
 AVAIL_SYSROOTS+=("livekit")
+if [ "x$ARCH" = "xamd64" ] || [ "$xARCH" = "xarm64" ] ; then
+	AVAIL_SYSROOTS+=("livekit-nvidia")
+fi
 if [ "${#AVAIL_LAYERS[@]}" -lt 1 ] || \
 	[ "${#AVAIL_SYSROOTS[@]}" -lt 1 ] ; then
 	die "There is no layers and sysroots defined for $ARCH. Check the script."
@@ -442,14 +443,23 @@ sysroots=${AVAIL_SYSROOTS1[@]}
 
 EOF
 cat > ${OUTDIR}/squashfs/layers.conf << EOF
+# All available layers.
 LAYERS=$(dump_array AVAIL_LAYERS)
+# All possible sysroots these layers combine to.
 SYSROOT_LAYERS=$(dump_array AVAIL_SYSROOTS)
-LAYER_DEP_desktop=("base" "desktop-common")
-LAYER_DEP_livekit=("base" "desktop-common")
-LAYER_DEP_server=("base")
+# What layers combine into a sysroot.
+# Only dashes are allowed in the layer names - they are converted into
+# underscores.
+SYSROOT_DEP_desktop=("base" "desktop-common" "desktop")
+SYSROOT_DEP_livekit=("base" "desktop-common" "livekit")
+SYSROOT_DEP_livekit_nvidia=("base" "desktop-common" "livekit" "desktop-nvidia")
+SYSROOT_DEP_server=("base" "server")
 # it does nothing to the loader's behaviour, even if nvidia is not supported.
-LAYER_DEP_desktop_nvidia=("base" "desktop-common" "desktop")
-LAYER_DEP_desktop_latx=("base" "desktop-common" "desktop")
+SYSROOT_DEP_desktop_nvidia=("base" "desktop-common" "desktop" "desktop-nvidia")
+SYSROOT_DEP_desktop_latx=("base" "desktop-common" "desktop" "desktop-latx")
+
+TEMPLATE_desktop_nvidia="desktop.squashfs"
+TEMPLATE_livekit_nvidia="livekit.squashfs"
 EOF
 bootstrap_base
 get_info base
