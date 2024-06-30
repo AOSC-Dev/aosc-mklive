@@ -35,12 +35,13 @@ class AOSCRecipeBulletin:
 
 class AOSCRecipeVariant:
 	def __init__(self, name: str, name_tr: str, retro: bool,
-		     desc: str, desc_tr: str):
+		     desc: str, desc_tr: str, dir_name: str):
 		self.name: str = name
 		self.name_tr: str = name_tr
 		self.retro: bool = retro
 		self.description: str = desc
 		self.description_tr: str = desc_tr
+		self.dir_name: str = dir_name
 		self.tarballs: list = []
 		self.squashfs: list['AOSCSquashfsSpec'] = []
 
@@ -106,7 +107,7 @@ def main():
 			f'/run/livekit/sysroots/{variant}', int(cur_sysroot['inodes']))
 		cur_variant_obj = AOSCRecipeVariant(cur_variant['name'], cur_variant['name-tr'],
 				True if cur_variant['retro'] == 'true' else False,
-				cur_variant['desc'], cur_variant['desc-tr'])
+				cur_variant['desc'], cur_variant['desc-tr'], cur_variant['dir-name'])
 		cur_variant_obj.squashfs.append(sysroot_obj)
 		recipe.variants.append(cur_variant_obj)
 	print("Generated JSON:")
