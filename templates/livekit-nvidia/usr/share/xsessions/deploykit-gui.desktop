@@ -1,5 +1,0 @@
-[Desktop Entry]
-Name=DeployKit Graphcial Session
-Comment=This session logs you into DeployKit (AOSC OS Installer)
-Exec=deploykit-gui-session
-Type=Application
