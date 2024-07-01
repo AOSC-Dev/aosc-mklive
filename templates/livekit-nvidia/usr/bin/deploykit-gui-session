@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Start a "minimal session" for DeployKit, before launching MATE.
+feh --bg-fill /usr/share/backgrounds/livekit.jpg
+start-pulseaudio-x11 &
+marco &
+fcitx &
+alsactl init &
+# Set volume to a lower value.
+pactl set-sink-volume '@DEFAULT_SINK@' '60%'
+env LIBGL_ALWAYS_SOFTWARE=true deploykit-gui -d /usr/share/deploykit-gui/bgm
+
+# Process clean-up.
+killall marco fcitx alsactl pulseaudio
+
+# Source the language setting that we have just set.
+source /etc/locale.conf
+
+# After "exiting" DeployKit (by selecting "Rescue & Recovery"), launch a full
+# MATE desktop session.
+mate-session

@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon=emblem-package
+Name=Accessories
+Name[zh_CN]=附件
+Exec=caja /home/live/Desktop/.accessories
+Comment=Extra tools for LiveKit
+Name=Accessories
+Comment=Extra tools for LiveKit
