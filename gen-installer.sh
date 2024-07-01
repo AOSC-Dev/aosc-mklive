@@ -21,7 +21,7 @@ WORKDIR=${WORKDIR:-$PWD/work}
 # Output directory.
 OUTDIR=${OUTDIR:-$PWD/iso}
 # Layers.
-LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "server")
+LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "server" "livekit-nvidia")
 LAYERS_NONVIDIA=("desktop-common" "desktop" "livekit" "server")
 # Available layers for different archs.
 LAYERS_amd64=("${LAYERS[@]}")
@@ -30,14 +30,19 @@ LAYERS_loongarch64=("${LAYERS_NONVIDIA[@]}" "desktop-latx")
 LAYERS_loongson3=("${LAYERS_NONVIDIA[@]}")
 LAYERS_ppc64el=("${LAYERS_NONVIDIA[@]}")
 LAYERS_riscv64=("${LAYERS_NONVIDIA[@]}")
+# Layer dependencies.
 # Layers that requires desktop.
-LAYERS_desktop=("desktop-nvidia")
+LAYERS_desktop=("desktop-nvidia" "desktop-latx")
 # Layers that requires desktop-common.
-LAYERS_desktop_common=("desktop" "desktop-nvidia" "livekit" "desktop-latx")
+LAYERS_desktop_common=("desktop" "desktop-nvidia" "livekit" "livekit-nvidia" "desktop-latx")
+# Layers that requires livekit.
+LAYERS_livekit=("livekit-nvidia")
 # desktop-common packages.
 PKGS_desktop_common=("adobe-source-code-pro" "firefox" "noto-fonts" "noto-cjk-fonts" "x11-base")
 # desktop-latx packages, which is exclusive for loongarch64.
 PKGS_desktop_latx=("latx" "wine")
+# livekit-nvidia packages.
+PKGS_livekit_nvidia=("nvidia")
 # Sysroots that layers combined to.
 # It does noting to the behaviour to this script.
 # NOTE livekit must not present in this array. It will be added later.
@@ -68,7 +73,6 @@ SCRIPTS_livekit=(
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_livekit_nvidia=(
-	"${PWD}/scripts/livekit.sh"
 	"$AOSCBOOTSTRAP/scripts/enable-nvidia-drivers.sh"
 	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
@@ -125,6 +129,9 @@ generate_overlay_opts() {
 		die "Layer $tgt is not found in LAYERS."
 	fi
 	_opts="lowerdir="
+	if [[ "${LAYERS_livekit[@]}" =~ $_cmp ]] && [ "$tgt" != "livekit" ] ; then
+		_opts="${_opts}${WORKDIR}/livekit:"
+	fi
 	if [[ "${LAYERS_desktop[@]}" =~ $_cmp ]] && [ "$tgt" != "desktop" ] ; then
 		_opts="${_opts}${WORKDIR}/desktop:"
 	fi
@@ -452,14 +459,13 @@ SYSROOT_LAYERS=$(dump_array AVAIL_SYSROOTS)
 # underscores.
 SYSROOT_DEP_desktop=("base" "desktop-common" "desktop")
 SYSROOT_DEP_livekit=("base" "desktop-common" "livekit")
-SYSROOT_DEP_livekit_nvidia=("base" "desktop-common" "livekit" "desktop-nvidia")
 SYSROOT_DEP_server=("base" "server")
 # it does nothing to the loader's behaviour, even if nvidia is not supported.
 SYSROOT_DEP_desktop_nvidia=("base" "desktop-common" "desktop" "desktop-nvidia")
 SYSROOT_DEP_desktop_latx=("base" "desktop-common" "desktop" "desktop-latx")
+SYSROOT_DEP_livekit_nvidia=("base" "desktop-common" "livekit" "livekit-nvidia")
 
 TEMPLATE_desktop_nvidia="desktop.squashfs"
-TEMPLATE_livekit_nvidia="livekit.squashfs"
 EOF
 bootstrap_base
 get_info base

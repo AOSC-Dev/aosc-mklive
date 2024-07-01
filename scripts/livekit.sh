@@ -44,9 +44,11 @@ ExecStart=
 ExecStart=/usr/bin/kmscon "--vt=%I" --seats=seat0 --no-switchvt --login -- /usr/bin/login -f root
 EOF
 
-echo "Cutting out unwanted files ..."
-rm -rf /usr/{include,src,share/{clc,doc,gir-1.0,gtk-doc,ri}}
-rm `find /usr/lib -name '*.a'`
+if [ "x$INSTALLER" != "x1" ] ; then
+	echo "Cutting out unwanted files ..."
+	rm -rf /usr/{include,src,share/{clc,doc,gir-1.0,gtk-doc,ri}}
+	rm `find /usr/lib -name '*.a'`
+fi
 
 echo "Generating /etc/motd ..."
 cat > /etc/motd << EOF
