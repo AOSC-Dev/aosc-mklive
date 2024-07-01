@@ -14,10 +14,6 @@ for file in $(ls -A ${WORKDIR}/merged/etc/skel/) ; do
 	chown -R 1000:1000 $TGT/home/live/$file
 done
 
-echo "Preparing sysinstall ..."
-groupadd -R $TGT -r sysinstall
-usermod -R $TGT -aG sysinstall live
-
 echo "Setting password for the live user ..."
 echo "live:live" | chpasswd -R $TGT
 
@@ -30,11 +26,7 @@ systemd-nspawn -D $TGT systemctl mask hibernation.target
 
 echo "Installing Installation tools ..."
 systemd-nspawn -D $TGT -- oma --no-check-dbus install -y \
-	deploykit-gui deploykit-backend gparted select-language-gui xinit
-
-echo "Making deploykit-backend start on boot ..."
-ln -sfv ../deploykit-backend.service \
-	$TGT/usr/lib/systemd/system/multi-user.target.wants/deploykit-backend.service
+	gparted select-language-gui xinit
 
 echo "Enabling language selection UI ..."
 mkdir -pv $TGT/usr/lib/systemd/system/sddm.service.wants
