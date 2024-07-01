@@ -219,7 +219,7 @@ sha256sum "$ISO_NAME" \
 
 if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
        echo "Changing owner of generated iso ..."
-       chown -v "$SUDO_UID:$SUDO_GID" $ISONAME $ISO_NAME.sha256sum
+       chown -v "$SUDO_UID:$SUDO_GID" $ISO_NAME $ISO_NAME.sha256sum
 fi
 
 echo "Cleaning up ..."
