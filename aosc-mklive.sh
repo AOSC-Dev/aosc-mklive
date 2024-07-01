@@ -19,6 +19,8 @@ EOF
 call_gen_installer() {
 	echo "Calling gen-installer.sh ..."
 	env REPO=$REPO ${PWD}/gen-installer.sh || { echo "Failed to generate an installer image!" ; exit 1 ; }
+	echo "Ditching unneeded desktop+nvidia template ..."
+	rm "$PWD"/iso/squashfs/templates/desktop-nvidia.squashfs
 }
 
 [ "x$EUID" = "x0" ] || { echo "Please run me as root." ; exit 1 ; }

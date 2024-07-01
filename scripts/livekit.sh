@@ -72,6 +72,12 @@ Enjoy your stay!
 
 EOF
 
+if [ "x$INSTALLER" = "x1" ] ; then
+	echo "Adding a user for NVIDIA ..."
+	groupadd -g 143 nvidia-persistenced
+	useradd -c 'NVIDIA Persistence Daemon' -u 143 -g nvidia-persistenced -d '/' -s /sbin/nologin nvidia-persistenced
+fi
+
 echo "Creating a default live user ..."
 useradd live -m
 echo live:live | chpasswd
