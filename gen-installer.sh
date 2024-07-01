@@ -313,7 +313,7 @@ pack_templates() {
 		die "The container is still running."
 	fi
 	tgt=$1
-	if ! [ -e "${PWD}/templates/$tgt" ] ; then
+	if ! [ -d "${PWD}/templates/$tgt" ] && [ ! -e "$PWD/templates/$tgt.sh" ] ; then
 		info "No template detected for $tgt."
 		return
 	fi
@@ -330,12 +330,14 @@ pack_templates() {
 		env WORKDIR="$WORKDIR" OUTDIR="$OUTDIR" TOP="$PWD" TGT=${WORKDIR}/$tgt-template-merged \
 			bash "$PWD"/templates/$tgt.sh
 	fi
-	info "Applying templates ..."
-	chown -vR 0:0 $PWD/templates/$tgt
-	cp -av $PWD/templates/$tgt/* ${WORKDIR}/$tgt-template-merged/
-	chown -vR 1000:1001 ${WORKDIR}/$tgt-template-merged/home/live
-	if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
-		chown -vR "$SUDO_UID:$SUDO_GID" $PWD/templates
+	if [ -d "${PWD}/templates/$tgt" ] ; then
+		info "Applying templates ..."
+		chown -vR 0:0 $PWD/templates/$tgt
+		cp -av $PWD/templates/$tgt/* ${WORKDIR}/$tgt-template-merged/
+		chown -vR 1000:1001 ${WORKDIR}/$tgt-template-merged/home/live
+		if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
+			chown -vR "$SUDO_UID:$SUDO_GID" $PWD/templates
+		fi
 	fi
 	info "Umounting template layer ..."
 	umount ${WORKDIR}/$tgt-template-merged
