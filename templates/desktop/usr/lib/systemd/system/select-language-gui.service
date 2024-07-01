@@ -10,6 +10,7 @@ Type=oneshot
 KillMode=process
 IgnoreSIGPIPE=no
 KillSignal=SIGHUP
+Environment=LIBGL_ALWAYS_SOFTWARE=true
 
 [Install]
 WantedBy=sddm.service
