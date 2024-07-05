@@ -10,7 +10,7 @@ Type=oneshot
 KillMode=process
 IgnoreSIGPIPE=no
 KillSignal=SIGHUP
-Environment=LIBGL_ALWAYS_SOFTWARE=true
+Environment=WEBKIT_DISABLE_DMABUF_RENDERER=1
 
 [Install]
 WantedBy=sddm.service
