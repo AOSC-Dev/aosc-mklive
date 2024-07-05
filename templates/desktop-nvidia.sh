@@ -8,6 +8,9 @@ sed -e 's|semaphore|livekit|g' \
 echo "Generating a LiveKit initramfs image with NVIDIA driver ..."
 cp -a ${TOP}/dracut/90aosc-livekit-loader \
 	$TGT/usr/lib/dracut/modules.d/
-systemd-nspawn -D $TGT -- dracut /live-initramfs-nvidia.img --add "aosc-livekit-loader" --add-drivers "nvidia nvidia-modeset nvidia-uvm nvidia-drm"
+systemd-nspawn -D $TGT -- dracut /live-initramfs-nvidia.img \
+	--add "aosc-livekit-loader" \
+	--add-drivers "nvidia nvidia-modeset nvidia-uvm nvidia-drm" \
+	$(ls $TGT/usr/lib/modules/)
 install -Dvm644 $TGT/live-initramfs-nvidia.img $OUTDIR/boot/live-initramfs-nvidia.img
 rm -v $TGT/live-initramfs-nvidia.img
