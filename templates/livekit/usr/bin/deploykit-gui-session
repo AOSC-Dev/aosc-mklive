@@ -8,7 +8,7 @@ fcitx &
 alsactl init &
 # Set volume to a lower value.
 pactl set-sink-volume '@DEFAULT_SINK@' '60%'
-env LIBGL_ALWAYS_SOFTWARE=true deploykit-gui -d /usr/share/deploykit-gui/bgm
+env WEBKIT_DISABLE_DMABUF_RENDERER=1 deploykit-gui -d /usr/share/deploykit-gui/bgm
 
 # Process clean-up.
 killall marco fcitx alsactl pulseaudio
