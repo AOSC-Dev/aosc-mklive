@@ -19,6 +19,7 @@ else
 	dracut \
 		--add "aosc-livekit-loader drm" \
 		--xz --no-early-microcode \
+		--omit "crypt mdraid lvm" \
 		"/live-initramfs.img" \
 		$(ls /usr/lib/modules/)
 fi
