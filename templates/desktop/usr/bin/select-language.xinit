@@ -1,3 +1,9 @@
 #!/bin/bash
 xsetroot -cursor_name left_ptr
-exec /usr/bin/env WEBKIT_DISABLE_DMABUF_RENDERER=1 /usr/bin/select-language
+
+# Start a window manager to make this app fullscreen.
+kwin_x11 &
+export WEBKIT_DISABLE_DMABUF_RENDERER=1
+/usr/bin/select-language
+
+killall kwin_x11
