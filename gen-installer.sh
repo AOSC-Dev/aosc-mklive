@@ -21,8 +21,8 @@ WORKDIR=${WORKDIR:-$PWD/work}
 # Output directory.
 OUTDIR=${OUTDIR:-$PWD/iso}
 # Layers.
-LAYERS=("desktop-common" "desktop" "desktop-nvidia" "livekit" "server")
-LAYERS_NONVIDIA=("desktop-common" "desktop" "livekit" "server")
+LAYERS=("desktop-common" "livekit" "desktop" "desktop-nvidia" "server")
+LAYERS_NONVIDIA=("desktop-common" "livekit" "desktop" "server")
 # Available layers for different archs.
 LAYERS_amd64=("${LAYERS[@]}")
 LAYERS_arm64=("${LAYERS[@]}")
