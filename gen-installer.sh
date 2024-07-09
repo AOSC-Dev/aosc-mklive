@@ -84,7 +84,6 @@ SCRIPTS_desktop=(
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_desktop_latx=(
-	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
 SCRIPTS_desktop_nvidia=(
@@ -116,13 +115,18 @@ sigint_hdl() {
 }
 
 generate_overlay_opts() {
-	local _opts _var _cmp tgt
+	local _opts _var _cmp tgt var arr
 	# $1: layer name, e.g. livekit, desktop, desktop-nvidia.
 	tgt=$1
 	dir=${tgt}
 	_cmp="\<${tgt}\>"
-	if ! [[ "${LAYERS[@]}" =~ $_cmp ]] ; then
-		die "Layer $tgt is not found in LAYERS."
+	var="LAYERS_$ARCH[@]"
+	arr=("${!var}")
+	if [ "${#arr[@]}" -lt 1 ] ; then
+		die "Missing configuration for layer $tgt."
+	fi
+	if ! [[ "${arr[@]}" =~ $_cmp ]] ; then
+		die "Layer $tgt is not found in \$$var."
 	fi
 	_opts="lowerdir="
 	if [[ "${LAYERS_livekit[@]}" =~ $_cmp ]] && [ "$tgt" != "livekit" ] ; then
