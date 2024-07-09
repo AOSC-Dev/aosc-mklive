@@ -50,7 +50,7 @@ if [ "x$INSTALLER" != "x1" ] ; then
 	rm -rf /usr/{include,src,share/{clc,doc,gir-1.0,gtk-doc,ri}}
 	rm `find /usr/lib -name '*.a'`
 else
-	rm -rf /usr/share/{clc,doc,gtk-doc}
+	rm -rf /usr/share/{clc,doc,gir-1.0,gtk-doc,ri}
 	rm `find /usr/lib -name '*.a'`
 fi
 
