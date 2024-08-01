@@ -1,5 +1,5 @@
 %include /usr/share/aoscbootstrap/recipes/retro-base.lst
-aoscdk-rs
+dkcli
 dracut
 firmware-free
 firmware-nonfree
