@@ -1,10 +1,10 @@
 %include /usr/share/aoscbootstrap/recipes/base.lst
 adobe-source-code-pro
 adobe-source-sans
-aoscdk-rs
 arc-theme
 caja
 deploykit-gui
+dkcli
 dracut
 fcitx
 fcitx-anthy
