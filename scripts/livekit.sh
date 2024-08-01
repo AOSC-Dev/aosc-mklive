@@ -62,7 +62,7 @@ Here you may find basic tools to install AOSC OS, or rescue other operating
 systems installed on your computer. Here below is a basic guide to preinstalled
 applications (in the form of commands) on LiveKit:
 
-- deploykit: AOSC OS installer.
+- dkcli: AOSC OS installer.
 - cfdisk: Disk partition manager.
 - nmtui: Network (Ethernet, Wi-Fi, etc.) connection manager.
 - w3m: Web browser.
