@@ -29,8 +29,8 @@ export ARCH="${ARCH:-$(dpkg --print-architecture)}"
 
 gen_livekit() {
 	rm -fr livekit iso to-squash memtest sb
-	mkdir iso to-squash	
-	
+	mkdir iso to-squash
+
 	if [[ "${ARCH}" = "loongarch64" ]]; then
 		echo "Generating LiveKit distribution (loongarch64) ..."
 		aoscbootstrap \
@@ -66,46 +66,46 @@ gen_livekit() {
 		        -s "$PWD/scripts/retro-livekit.sh" \
 		        --include-files "$PWD/recipes/retro-livekit.lst"
 	fi
-	
+
 	if [[ "${RETRO}" != "1" ]]; then
 		echo "Copying LiveKit template ..."
 		chown -vR 0:0 templates/livekit/*
 	        cp -av templates/livekit/* livekit/
 		chown -vR 1000:1001 livekit/home/live
 	fi
-	
+
 	echo "Extracting LiveKit kernel/initramfs ..."
 	mkdir -pv iso/boot
 	cp -v livekit/kernel iso/boot/kernel
 	cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
 	rm -v livekit/kernel livekit/live-initramfs.img
-	
+
 	echo "Evaluating size of generated rootfs ..."
 	ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
 	ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/2))"
-	
+
 	echo "Generating empty back storage for rootfs ..."
 	mkdir -pv to-squash/LiveOS
 	truncate -s "${ROOTFS_SIZE}M" to-squash/LiveOS/rootfs.img
-	
+
 	echo "Formatting rootfs ..."
 	mkfs.ext4 -F -m 1 -d livekit/ to-squash/LiveOS/rootfs.img
-	
+
 	echo "Generating squashfs for dracut dmsquash-live ..."
 	mkdir -pv iso/LiveOS
 	mksquashfs to-squash/ iso/LiveOS/squashfs.img \
 	    -comp lz4 -no-recovery
-	
+
 	echo "Copying boot template to ISO ..."
 	cp -av boot iso/
-	
+
 	if [[ "${ARCH}" = "loongarch64" ]]; then
 		echo "Adding an option to use discrete graphics (bypassing AST) ..."
 		sed \
 			-e 's|la64_quirk=0|la64_quirk=1|g' \
 			-i iso/boot/grub/grub.cfg
 	fi
-	
+
 	if [[ "$RETRO" = "1" ]]; then
 		echo "Tweaking GRUB menu to disable gfxterm, change color ..."
 		sed \
