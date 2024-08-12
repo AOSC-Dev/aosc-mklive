@@ -135,7 +135,7 @@ if [[ "${ARCH}" = "amd64" || \
 	echo "Building and installing Memtest86+ ..."
 	mkdir memtest && cd memtest
 	wget https://www.memtest.org/download/v${MT86VER:-6.20}/mt86plus_${MT86VER:-6.20}.src.zip
-	unzip mt86plus_${MT86VER:-6.20}.src.zip
+	unzip mt86plus_${MT86VER:-7.00}.src.zip
 
 	if [[ "${ARCH}" = "amd64" ]]; then
 		make -C build64
