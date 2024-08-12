@@ -170,9 +170,6 @@ if [[ "$ARCH" = "amd64" || "$ARCH" = "arm64" ]]; then
 		arch_suffix="aa64"
 		arch_suffix_upper="AA64"
 		have_sb="1"
-	else
-		arch_suffix="loongarch64"
-		arch_suffix_upper="LOONGARCH64"
 	fi
 	files_to_extract=("boot/grub" "EFI" ".disk")
 	if [[ "$ARCH" = "amd64" ]]; then
@@ -202,6 +199,11 @@ menuentry 'Boot Default OS' {
 }
 fi
 EOF
+	fi
+	if [[ "$ARCH" = "loongarch64" ]]; then
+		# Some old-world firmware only recognizes BOOTLOONGARCH.EFI.
+		cp iso/EFI/BOOT/BOOTLOONGARCH64.EFI \
+			iso/EFI/BOOT/BOOTLOONGARCH.EFI
 	fi
 	# 32.5MiB
 	mformat -C -F -i "iso/efi.img" -T 66650 -h 2 -s 32 -c 1 -F "::"
