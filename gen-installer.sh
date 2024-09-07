@@ -468,6 +468,7 @@ SYSROOT_DEP_desktop_latx=("base" "desktop-common" "desktop" "desktop-latx")
 SYSROOT_DEP_livekit_nvidia=("base" "desktop-common" "desktop-nvidia" "livekit")
 
 TEMPLATE_desktop_nvidia="desktop.squashfs"
+TEMPLATE_desktop_latx="desktop.squashfs"
 TEMPLATE_livekit_nvidia="livekit.squashfs"
 EOF
 bootstrap_base
