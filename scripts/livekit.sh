@@ -137,3 +137,6 @@ echo "Allowing any user to run localectl ..."
 sed \
 	-e 's|auth_admin_keep|yes|g' \
 	-i /usr/share/polkit-1/actions/org.freedesktop.locale1.policy
+
+echo "Making way for a dkcli warpper ..."
+mv -v /usr/bin/dkcli{,.bin}

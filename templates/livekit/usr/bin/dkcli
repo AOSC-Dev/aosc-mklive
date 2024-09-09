@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo \
+	-u live \
+	/usr/bin/dkcli.bin "$@"
