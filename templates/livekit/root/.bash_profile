@@ -35,7 +35,7 @@ if [ ! -n "$DISPLAY" ]; then
 	source /etc/locale.conf
 fi
 
-# Disable console and VESA blanking.
-setterm -blank 0 -powerdown 0 -powersave off
+# Disable console powerdown.
+setterm -powerdown
 
 # End ~/.bash_profile
