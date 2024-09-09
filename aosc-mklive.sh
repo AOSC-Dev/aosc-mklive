@@ -134,7 +134,7 @@ if [[ "${ARCH}" = "amd64" || \
       "${ARCH}" = "i486" ]]; then
 	echo "Building and installing Memtest86+ ..."
 	mkdir memtest && cd memtest
-	wget https://www.memtest.org/download/v${MT86VER:-6.20}/mt86plus_${MT86VER:-6.20}.src.zip
+	wget https://www.memtest.org/download/v${MT86VER:-7.00}/mt86plus_${MT86VER:-7.00}.src.zip
 	unzip mt86plus_${MT86VER:-7.00}.src.zip
 
 	if [[ "${ARCH}" = "amd64" ]]; then
@@ -178,7 +178,7 @@ xorriso -osirrox on -indev "$ISO_NAME" -extract_l / iso/ "${files_to_extract[@]}
 if [[ "$have_sb" = "1" ]]; then
 	mkdir -p sb
 	wget -O sb/grub.deb "https://deb.debian.org/debian/pool/main/g/grub-efi-${ARCH}-signed/grub-efi-${ARCH}-signed_1%2B2.06%2B13%2Bdeb12u1_${ARCH}.deb"
-	wget -O sb/shim.deb "https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.39%2B15.7-1_${ARCH}.deb"
+	wget -O sb/shim.deb "https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.44~1+deb12u1+15.8-1~deb12u1_${ARCH}.deb"
 	dpkg-deb -x sb/grub.deb sb
 	dpkg-deb -x sb/shim.deb sb
 	mv "iso/EFI/BOOT/BOOT${arch_suffix_upper}.EFI" "iso/EFI/BOOT/grub${arch_suffix}.efi"
