@@ -148,7 +148,7 @@ mkfs_erofs() {
 	fi
 	info "Creating an EROFS image \"$outfile\" from \"$srcdir\" ..."
 	mkfs.erofs "$outfile" "$srcdir" \
-		-C 16384 -z lzma,level=9 --worker $(nproc)
+		-C 16384 -z lzma,level=9 --worker $(nproc) -E ztailpacking
 }
 
 mkfs_squashfs() {
