@@ -131,6 +131,7 @@ die() {
 sigint_hdl() {
 	warn "Received Interrupt."
 	info "Shutting down containers ..."
+	pre_cleanup
 }
 
 mkfs_erofs() {
@@ -167,6 +168,35 @@ mkfs_squashfs() {
 		mksquashfs . ${outfile} \
 			-noappend -comp xz -processors $(nproc)
 	popd
+}
+
+build_erofsutils() {
+	EROFSUTILS_VER="1.8.1"
+	EROFSUTILS_URL="https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot/erofs-utils-${EROFSUTILS_VER}.tar.gz"
+	pushd ${WORKDIR}
+	exec 3<> $WORKDIR/build.log
+	info "Build log: $WORKDIR/build.log"
+	info "Downloading erofs-utils ${EROFSUTILS_VER} ..."
+	wget -O "erofs-utils-$EROFSUTILS_VER.tar.gz" "$EROFSUTILS_URL" >&3
+	info "Building erofs-utils ..."
+	tar xf "erofs-utils-$EROFSUTILS_VER.tar.gz"
+	pushd erofs-utils-$EROFSUTILS_VER
+	info "Preparing the build ..."
+	$PWD/autogen.sh >&3
+	info "Configuring the build ..."
+	mkdir build
+	pushd build
+	$PWD/../configure --prefix=$WORKDIR/tools --enable-multithreading >&3
+	info "Building ..."
+	make -j $(nproc) >&3
+	make install >&3
+	popd
+	popd
+	popd
+	# Close the fd
+	exec 3>&-
+	info "Build complete. Appending the program to PATH ..."
+	export PATH="$WORKDIR/tools/bin:$PATH"
 }
 
 generate_overlay_opts() {
@@ -485,6 +515,9 @@ prepare() {
 	touch ${CFGDIR}/sysroots.ini
 	# File for the dracut loader to read. Contains layers and their dependencies.
 	touch ${CFG}
+	if [ "x$FSTYPE" = "xerofs" ] ; then
+		build_erofsutils
+	fi
 }
 
 dump_array() {
