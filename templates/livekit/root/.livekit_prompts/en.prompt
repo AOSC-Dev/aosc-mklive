@@ -1,0 +1,29 @@
+Welcome to AOSC OS!
+===================
+
+You have logged onto AOSC OS's rescue console.
+
+Here you may find basic tools to install and repair AOSC OS or other operating
+systems installed on your device. Below is a guide to the basic commands
+available in the rescue worksapce:
+
+- dkcli: AOSC OS installer.
+- cfdisk: Storage partition manager.
+- nmtui: Network (Ethernet, Wi-Fi, etc.) connection manager.
+- w3m: Web browser.
+
+Should you encounter any issue, please get in touch with us:
+
+- Telegram: https://t.me/aosc_main
+- Discord: https://discord.gg/VYPHgt9
+- Matrix: #aosc:matrix.aosc.io
+- IRC: #aosc on Libera.Chat
+- Tencent QQ: 875059676
+- WeChat: Contact KexyBiscuit_Assist with message "Join AOSC channel"
+
+For other channels of contact, please refer to our contact information page:
+
+https://aosc.io/contact/
+
+Good luck!
+

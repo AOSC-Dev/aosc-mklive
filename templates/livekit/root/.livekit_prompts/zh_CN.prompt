@@ -1,0 +1,28 @@
+欢迎使用 AOSC OS！
+=================
+
+您已登录 AOSC OS 救援与恢复控制台。
+
+本控制台提供一系列用于安装、修复 AOSC OS 及其他操作系统的工具。本控制台提供
+如下几个基本工具（命令）：
+
+- dkcli：AOSC OS 安装程序
+- cfdisk：分区管理器
+- nmtui：网络（以太网、Wi-Fi 等）连接管理器
+- w3m：网页浏览器
+
+如果您在使用本控制台时遇到任何问题，欢迎与我们联系：
+
+- QQ 群: 875059676
+- 微信群：添加 KexyBiscuit_Assist 为好友，并发送“加入 AOSC 社区频道”
+- Telegram: https://t.me/aosc_main
+- Discord: https://discord.gg/VYPHgt9
+- Matrix: #aosc:matrix.aosc.io
+- IRC: #aosc on Libera.Chat
+
+有关我们提供的其他联系方式，请参阅如下页面：
+
+https://aosc.io/contact/
+
+祝您使用愉快！
+

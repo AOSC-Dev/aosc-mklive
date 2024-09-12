@@ -54,28 +54,6 @@ else
 	rm `find /usr/lib -name '*.a'`
 fi
 
-echo "Generating /etc/motd ..."
-cat > /etc/motd << EOF
-Welcome to AOSC OS LiveKit!
-
-Here you may find basic tools to install AOSC OS, or rescue other operating
-systems installed on your computer. Here below is a basic guide to preinstalled
-applications (in the form of commands) on LiveKit:
-
-- dkcli: AOSC OS installer.
-- cfdisk: Disk partition manager.
-- nmtui: Network (Ethernet, Wi-Fi, etc.) connection manager.
-- w3m: Web browser.
-
-If you have encountered any issue, please get in touch with us:
-
-- IRC: #aosc on Libera.Chat
-- GitHub: https://github.com/AOSC-Dev/aosc-os-abbs/issues/new/
-
-Enjoy your stay!
-
-EOF
-
 if [ "x$INSTALLER" = "x1" ] ; then
 	echo "Adding a user for NVIDIA ..."
 	groupadd -g 143 nvidia-persistenced

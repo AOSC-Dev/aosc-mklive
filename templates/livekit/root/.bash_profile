@@ -35,6 +35,13 @@ if [ ! -n "$DISPLAY" ]; then
 	source /etc/locale.conf
 fi
 
+# Display startup guide.
+if [[ -e "$HOME"/.livekit_prompts/${LANG%%.*}.prompt ]]; then
+    cat "$HOME"/.livekit_prompts/${LANG%%.*}.prompt
+else
+    cat "$HOME"/.livekit_prompts/en.prompt
+fi
+
 # Disable console powerdown.
 setterm -powerdown
 
