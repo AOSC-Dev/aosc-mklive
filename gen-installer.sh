@@ -2,6 +2,17 @@
 
 [ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
 
+get_squash_fstype() {
+	case "$ARCH" in
+		amd64|arm64)
+			echo "erofs"
+			;;
+		*)
+			echo "squashfs"
+			;;
+	esac
+}
+
 set -e
 # aosc-mkinstaller: Generate an offline AOSC Installer image
 # TODO usage
@@ -12,6 +23,8 @@ export LC_ALL=C.UTF-8
 
 # Architecture of the target.
 ARCH=${ARCH:-$(dpkg --print-architecture)}
+# Type of the filesystem image, determined by architecture
+FSTYPE=$(get_squash_fstype)
 # Path to aoscbootstrap scripts and recipes
 AOSCBOOTSTRAP=${AOSCBOOTSTRAP:-/usr/share/aoscbootstrap}
 # Package repository to download packages from.
@@ -20,6 +33,12 @@ REPO=${REPO:-https://repo.aosc.io/debs}
 WORKDIR=${WORKDIR:-$PWD/work}
 # Output directory.
 OUTDIR=${OUTDIR:-$PWD/iso}
+# Directory containing the layers and templates.
+FSDIR=$OUTDIR/$FSTYPE
+# Path to the config file.
+CFGDIR=$OUTDIR/livekit
+CFG=$CFGDIR/layers.conf
+MANIFESTDIR=$OUTDIR/manifest
 # Layers.
 LAYERS=("desktop-common" "livekit" "desktop" "desktop-nvidia" "server")
 LAYERS_NONVIDIA=("desktop-common" "livekit" "desktop" "server")
@@ -112,6 +131,42 @@ die() {
 sigint_hdl() {
 	warn "Received Interrupt."
 	info "Shutting down containers ..."
+}
+
+mkfs_erofs() {
+	local outfile srcdir
+	# $1: output file.
+	# $2: source.
+	outfile=$1
+	srcdir=$2
+	if [ "x${outfile##*.}" != "xerofs" ] ; then
+		die "Output file must have the .erofs extension."
+	fi
+	if [ ! -d "$srcdir" ] ; then
+		die "$srcdir is either not exist or not a directory!"
+	fi
+	info "Creating an EROFS image \"$outfile\" from \"$srcdir\" ..."
+	mkfs.erofs "$outfile" "$srcdir" \
+		-C 16384 -z lzma,level=9 --worker $(nproc)
+}
+
+mkfs_squashfs() {
+	local outfile srcdir
+	# $1: output file.
+	# $2: source.
+	outfile=$1
+	srcdir=$2
+	if [ "x${outfile##*.}" != "xsquashfs" ] ; then
+		die "Output file must have the .squashfs extension."
+	fi
+	if [ ! -d "$srcdir" ] ; then
+		die "$srcdir is either not exist or not a directory!"
+	fi
+	info "Creating an SquashFS image \"$outfile\" from \"$srcdir\" ..."
+	pushd $srcdir
+		mksquashfs . ${outfile} \
+			-noappend -comp xz -processors $(nproc)
+	popd
 }
 
 generate_overlay_opts() {
@@ -300,15 +355,30 @@ squash_layer() {
 		return
 	fi
 	info "Squashing layer $tgt ..."
-	pushd "$WORKDIR/$tgt"
-	if [ "x$1" = "xbase" ] ; then
-		outfile="${OUTDIR}/squashfs/$tgt.squashfs"
-	else
-		outfile="${OUTDIR}/squashfs/layers/$tgt.squashfs"
-	fi
-	mksquashfs . ${outfile} \
-		-noappend -comp xz -processors $(nproc)
-	popd
+	case "$FSTYPE" in
+		erofs)
+			# use EROFS instead of squashfs
+			info "Using EROFS as the backend storage ..."
+			if [ "x$1" = "xbase" ] ; then
+				outfile="${FSDIR}/$tgt.erofs"
+			else
+				outfile="${FSDIR}/layers/$tgt.erofs"
+			fi
+			mkfs_erofs "$outfile" "$WORKDIR/$tgt"
+			;;
+		squashfs)
+			info "Using SquashFS as the backend storage ..."
+			if [ "x$1" = "xbase" ] ; then
+				outfile="${OUTDIR}/squashfs/$tgt.squashfs"
+			else
+				outfile="${OUTDIR}/squashfs/layers/$tgt.squashfs"
+			fi
+			mkfs_squashfs "$outfile" "$WORKDIR/$tgt"
+			;;
+		*)
+			die "Unknown filesystem $FSTYPE".
+			;;
+	esac
 }
 
 pack_templates() {
@@ -346,11 +416,19 @@ pack_templates() {
 	info "Umounting template layer ..."
 	umount ${WORKDIR}/$tgt-template-merged
 	info "Squashing template layer ..."
-	outfile=${OUTDIR}/squashfs/templates/$tgt.squashfs
-	pushd ${WORKDIR}/$tgt-template
-	mksquashfs . ${outfile} \
-		-noappend -comp xz -processors $(nproc)
-	popd
+	case "$FSTYPE" in
+		erofs)
+			mkfs_erofs ${FSDIR}/templates/$tgt.erofs \
+				${WORKDIR}/$tgt-template
+			;;
+		squashfs)
+			mkfs_squashfs ${FSDIR}/templates/$tgt.squashfs \
+				${WORKDIR}/$tgt-template
+			;;
+		*)
+			die "Unknown filesystem type $FSTYPE".
+			;;
+	esac
 }
 
 get_info() {
@@ -364,7 +442,7 @@ get_info() {
 	fi
 	inodes=$(du -s --inodes $dir | awk '{ print $1 }')
 	installedsize=$(du -sb $dir | awk '{ print $1 }')
-	cat >> ${OUTDIR}/sysroots.ini << EOF
+	cat >> ${CFGDIR}/sysroots.ini << EOF
 [$tgt]
 inodes=$inodes
 installedsize=$installedsize
@@ -399,13 +477,14 @@ prepare() {
 		mkdir -pv ${WORKDIR}/$layer
 	done
 	mkdir -pv ${WORKDIR}/merged
-	mkdir -pv ${OUTDIR}/manifest
-	mkdir -pv ${OUTDIR}/squashfs/layers
-	mkdir -pv ${OUTDIR}/squashfs/templates
+	mkdir -pv ${CFGDIR}
+	mkdir -pv ${MANIFESTDIR}
+	mkdir -pv ${FSDIR}/layers
+	mkdir -pv ${FSDIR}/templates
 	# File for gen-recipe.py to read. Contains recipe information.
-	touch ${OUTDIR}/sysroots.ini
+	touch ${CFGDIR}/sysroots.ini
 	# File for the dracut loader to read. Contains layers and their dependencies.
-	touch ${OUTDIR}/squashfs/layers.conf
+	touch ${CFG}
 }
 
 dump_array() {
@@ -444,14 +523,17 @@ fi
 
 info "Available layers for $ARCH: ${AVAIL_LAYERS[@]}"
 info "Available sysroots for $ARCH: ${AVAIL_SYSROOTS[@]}"
+info "Using $FSTYPE as the backing filesystem."
 pre_cleanup
 prepare
-cat > ${OUTDIR}/sysroots.ini << EOF
+cat > ${CFGDIR}/sysroots.ini << EOF
 [installer]
 sysroots=${AVAIL_SYSROOTS1[@]}
 
 EOF
-cat > ${OUTDIR}/squashfs/layers.conf << EOF
+cat > ${CFG} << EOF
+# Type of the filesystem we are using.
+FSTYPE=$FSTYPE
 # All available layers.
 LAYERS=$(dump_array AVAIL_LAYERS)
 # All possible sysroots these layers combine to.
@@ -467,9 +549,9 @@ SYSROOT_DEP_desktop_nvidia=("base" "desktop-common" "desktop" "desktop-nvidia")
 SYSROOT_DEP_desktop_latx=("base" "desktop-common" "desktop" "desktop-latx")
 SYSROOT_DEP_livekit_nvidia=("base" "desktop-common" "desktop-nvidia" "livekit")
 
-TEMPLATE_desktop_nvidia="desktop.squashfs"
-TEMPLATE_desktop_latx="desktop.squashfs"
-TEMPLATE_livekit_nvidia="livekit.squashfs"
+TEMPLATE_desktop_nvidia="desktop.$FSTYPE"
+TEMPLATE_desktop_latx="desktop.$FSTYPE"
+TEMPLATE_livekit_nvidia="livekit.$FSTYPE"
 EOF
 bootstrap_base
 get_info base
@@ -491,11 +573,11 @@ cp -av ${PWD}/boot ${OUTDIR}/
 mv ${OUTDIR}/boot/grub/installer.cfg ${OUTDIR}/boot/grub/grub.cfg
 
 info "Generating recipe ..."
-$PWD/gen-recipe.py ${OUTDIR}/sysroots.ini ${OUTDIR}/manifest/recipe.json
+$PWD/gen-recipe.py ${CFGDIR}/sysroots.ini ${OUTDIR}/manifest/recipe.json
 
 info "Downloading translated recipe ..."
 curl -Lo "$OUTDIR"/manifest/recipe-i18n.json https://releases.aosc.io/manifest/recipe-i18n.json
 
 info "Build successful!"
 tree -h ${OUTDIR}
-info "Total image size: $(du -sh ${OUTDIR}/squashfs | awk '{ print $1 }')"
+info "Total image size: $(du -sh ${FSDIR} | awk '{ print $1 }')"
