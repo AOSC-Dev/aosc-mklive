@@ -6,6 +6,7 @@ Terminal=false
 Icon=emblem-package
 Name=Accessories
 Name[zh_CN]=附件
+Name[zh_TW]=附屬應用程式
 Exec=caja /home/live/Desktop/.accessories
 Comment=Extra tools for LiveKit
 Name=Accessories
