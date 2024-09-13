@@ -97,11 +97,11 @@ SCRIPTS_server=(
 )
 
 info() {
-	echo -e "\033[1;37m[\033[36mINFO\033[37m]: $@\033[0m" 
+	echo -e "\033[1;37m[\033[36mINFO\033[37m]: $@\033[0m"
 }
 
 warn() {
-	echo -e "\033[1;37m[\033[33mWARN\033[37m]: $@\033[0m" 
+	echo -e "\033[1;37m[\033[33mWARN\033[37m]: $@\033[0m"
 }
 
 die() {
@@ -266,6 +266,13 @@ install_layer() {
 	echo "deb ${REPO} stable main" > $WORKDIR/merged/etc/apt/sources.list
 	systemd-run --wait -M isobuild -t -- \
 		oma install --yes $pkgs
+
+	if [ "$tgt" != "desktop" ]; then
+		echo "Removing plasma-workspace-wallpapers (installed as recommendation) ..."
+		systemd-run --wait -M isobuild -t -- \
+			dpkg --purge plasma-workspace-wallpapers
+	fi
+
 	info "Installation complete."
 }
 
