@@ -6,6 +6,8 @@ start-pulseaudio-x11 &
 marco &
 fcitx &
 alsactl init &
+# Disable X screen saver (blanking).
+xset s off &
 # Set volume to a lower value.
 pactl set-sink-volume '@DEFAULT_SINK@' '60%'
 env WEBKIT_DISABLE_DMABUF_RENDERER=1 deploykit-gui -d /usr/share/deploykit-gui/bgm
