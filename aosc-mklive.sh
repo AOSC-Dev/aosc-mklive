@@ -199,7 +199,6 @@ menuentry 'UEFI Firmware Settings' {
 menuentry 'Boot Default OS' {
 	exit 1
 }
-fi
 EOF
 	fi
 	if [[ "$ARCH" = "loongarch64" ]]; then
