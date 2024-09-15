@@ -267,7 +267,7 @@ install_layer() {
 	systemd-run --wait -M isobuild -t -- \
 		oma install --yes $pkgs
 
-	if [ "$tgt" != "desktop" ]; then
+	if [ "$tgt" = "desktop" ]; then
 		echo "Removing plasma-workspace-wallpapers (installed as recommendation) ..."
 		systemd-run --wait -M isobuild -t -- \
 			dpkg --purge plasma-workspace-wallpapers
