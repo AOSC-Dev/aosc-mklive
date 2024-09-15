@@ -14,9 +14,6 @@ for file in $(ls -A ${WORKDIR}/merged/etc/skel/) ; do
 	chown -R 1000:1000 $TGT/home/live/$file
 done
 
-echo "Setting password for the live user ..."
-echo "live:live" | chpasswd -R $TGT
-
 echo "Bypassing sudo password ..."
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" > $TGT/etc/sudoers.d/livekit
 

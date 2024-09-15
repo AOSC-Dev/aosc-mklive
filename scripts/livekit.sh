@@ -62,7 +62,6 @@ fi
 
 echo "Creating a default live user ..."
 useradd live -m
-echo live:live | chpasswd
 usermod -a -G audio,cdrom,video,wheel live
 
 echo "Preparing for sysinstall ..."
