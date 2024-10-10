@@ -38,6 +38,7 @@ gen_livekit() {
 			--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
 			-x \
 			--arch ${ARCH:-$(dpkg --print-architecture)} \
+			--topics ${TOPICS} \
 			-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
 			-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
 			-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
@@ -51,6 +52,7 @@ gen_livekit() {
 			--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
 			-x \
 			--arch ${ARCH:-$(dpkg --print-architecture)} \
+			--topics ${TOPICS} \
 			-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
 			-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
 			-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
@@ -63,6 +65,7 @@ gen_livekit() {
 		        --config /usr/share/aoscbootstrap/config/aosc-retro.toml \
 		        -x \
 		        --arch ${ARCH:-$(dpkg --print-architecture)} \
+			--topics ${TOPICS} \
 		        -s "$PWD/scripts/retro-livekit.sh" \
 		        --include-files "$PWD/recipes/retro-livekit.lst"
 	fi
