@@ -191,10 +191,11 @@ bootstrap_base() {
 	_dir="${WORKDIR}"/base
 	info "Bootstrapping base tarball ..."
 	aoscbootstrap \
-	${BRANCH:-stable} $_dir ${REPO} \
-	--config "$AOSCBOOTSTRAP/config/aosc-mainline.toml" \
+		${BRANCH:-stable} $_dir ${REPO} \
+		--config "$AOSCBOOTSTRAP/config/aosc-mainline.toml" \
 		-x \
 		--arch ${ARCH:-$(dpkg --print-architecture)} \
+		--topics ${TOPICS} \
 		-s \
 			"$AOSCBOOTSTRAP/scripts/reset-repo.sh" \
 		-s \
