@@ -1,0 +1,115 @@
+# AOSC OS LiveKit/Installer Boot Menu Translation Template.
+# Copyright (C) 2024 AOSC OS Maintainers
+# This file is distributed under the same license as the GRUB package.
+# Cyan <cyan@cyano.uk>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-07 15:38+0800\n"
+"PO-Revision-Date: 2024-11-07 10:34+0800\n"
+"Last-Translator: Cyan <cyan@cyano.uk>\n"
+"Language-Team: English\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: installer.cfg:73
+msgid "Install AOSC OS (Command-line Only)"
+msgstr "Install AOSC OS (Command-line Only)"
+
+#: installer.cfg:75 installer.cfg:110 livekit.cfg:101
+msgid "Install AOSC OS"
+msgstr "Install AOSC OS"
+
+#: installer.cfg:80 livekit.cfg:71
+#, sh-format
+msgid ""
+"Your system currently have $memsize MiB of memory, but at least $memreq MiB "
+"is required to run LiveKit/Retro."
+msgstr ""
+"Your system currently have $memsize MiB of memory, but at least $memreq MiB "
+"is required to run LiveKit/Retro."
+
+#: installer.cfg:81 livekit.cfg:72
+msgid "The requirement is not fullfilled, thus LiveKit has been disabled.."
+msgstr "The requirement is not fullfilled, thus LiveKit has been disabled.."
+
+#: installer.cfg:83 livekit.cfg:74
+#, sh-format
+msgid ""
+"Your system currently have $memsize MiB of memory, but at least $memreq MiB "
+"is required to run the graphical environment."
+msgstr ""
+"Your system currently have $memsize MiB of memory, but at least $memreq MiB "
+"is required to run the graphical environment."
+
+#: installer.cfg:84 livekit.cfg:75
+msgid "The graphical environment has been disabled."
+msgstr "The graphical environment has been disabled."
+
+#: installer.cfg:87 livekit.cfg:78
+msgid "Press any key to return to the main menu."
+msgstr "Press any key to return to the main menu."
+
+#: installer.cfg:92 livekit.cfg:83
+msgid "LiveKit has detected that your system has insufficient memory"
+msgstr "LiveKit has detected that your system has insufficient memory"
+
+#: installer.cfg:96 livekit.cfg:87
+msgid "to run the LiveKit and has disabled the live environment."
+msgstr "to run the LiveKit and has disabled the live environment."
+
+#: installer.cfg:100 livekit.cfg:91
+msgid "and has disabled the graphical environment."
+msgstr "and has disabled the graphical environment."
+
+#: installer.cfg:116
+msgid "Install AOSC OS (With NVIDIA graphics)"
+msgstr "Install AOSC OS (With NVIDIA graphics)"
+
+#: installer.cfg:122
+msgid "Try AOSC OS Desktop"
+msgstr "Try AOSC OS Desktop"
+
+#: installer.cfg:128
+msgid "Try AOSC OS Desktop (With NVIDIA graphics)"
+msgstr "Try AOSC OS Desktop (With NVIDIA graphics)"
+
+#: installer.cfg:146
+msgid "Troubleshooting Options >>"
+msgstr "Troubleshooting Options >>"
+
+#: installer.cfg:147 livekit.cfg:107
+msgid "Install AOSC OS (Basic graphics)"
+msgstr "Install AOSC OS (Basic graphics)"
+
+#: installer.cfg:157 installer.cfg:169 livekit.cfg:124 livekit.cfg:136
+msgid "Utilities >>"
+msgstr "Utilities >>"
+
+#: installer.cfg:159 installer.cfg:170 livekit.cfg:126 livekit.cfg:137
+msgid "Memory Test"
+msgstr "Memory Test"
+
+#: installer.cfg:163 livekit.cfg:130
+msgid "UEFI Firmware Settings"
+msgstr "UEFI Firmware Settings"
+
+#: installer.cfg:177 livekit.cfg:144
+msgid "Boot Default OS"
+msgstr "Boot Default OS"
+
+#: installer.cfg:182 livekit.cfg:149
+msgid "Restart"
+msgstr "Restart"
+
+#: installer.cfg:185 livekit.cfg:152
+msgid "Power Off"
+msgstr "Power Off"
+
+#~ msgid "Install AOSC OS (Command Line Only)"
+#~ msgstr "Install AOSC OS (Command Line Only)"
