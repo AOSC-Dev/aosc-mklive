@@ -97,6 +97,8 @@ define gen_menuentry
 	$(eval include langs/$(1).mk)
 	echo -e 'menuentry "$(DISPNAME)" --id lang-$(1) {
 	\tset lang=$(1)
+	\tset kernel_lang_param='LANG=$(1).UTF-8'
+	\texport kernel_lang_param
 	\tconfigfile $$prefix/$(TARGET).cfg
 	}' >> langsel.cfg
 	count=$$(($$count +1))
