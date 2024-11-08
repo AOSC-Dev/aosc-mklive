@@ -87,6 +87,15 @@ POT := $(PODIR)/aosc-live-media-menu.pot
 # GRUB script which contains translatable strings
 MENUS := installer.cfg livekit.cfg
 
+# Other GRUB config files.
+OTHERCFGS := grub.cfg
+
+# Generated language selection menu.
+LANGSEL := langsel.cfg
+
+# Other files
+OTHERFILES := fonts/unicode.pf2
+
 # PO files
 PO = $(wildcard po/*.po)
 
@@ -100,8 +109,14 @@ define gen_menuentry
 	\tset kernel_lang_param='LANG=$(1).UTF-8'
 	\texport kernel_lang_param
 	\tconfigfile $$prefix/$(TARGET).cfg
-	}' >> langsel.cfg
+	}' >> $(LANGSEL)
 	count=$$(($$count +1))
+endef
+
+# Procedure to install other files.
+define install-other-files
+	install -Dvm644 $(1) $(DESTDIR)$(PREFIX)/$(1)
+
 endef
 
 .PHONY: all
@@ -111,16 +126,16 @@ all: langsel.cfg $(foreach l,$(foreach f,$(PO),$(notdir $(f))),po/$(basename $(l
 langsel.cfg:
 	@echo -e "\033[1;36m>>> \033[0;1mGenerating language selection menu ...\033[0m"
 	@count=0
-	@echo    "set default=lang-$(DEFAULT_LANG)" > langsel.cfg
+	@echo    "set default=lang-$(DEFAULT_LANG)" > $(LANGSEL)
 	@echo -e 'if [ "x$$init_done" = "x" ] ; then
 		\tconfigfile init.cfg	
-	fi' >> langsel.cfg
+	fi' >> $(LANGSEL)
 	@echo -e "menuentry 'Welcome to AOSC OS - Select your language:' {
 	\ttrue
-	}" >> langsel.cfg
+	}" >> $(LANGSEL)
 	@echo -e "menuentry ' ' {
 	\ttrue
-	}" >> langsel.cfg
+	}" >> $(LANGSEL)
 	@$(foreach l,$(LANGS),$(call gen_menuentry,$(l)))
 	@echo -e "\033[1;36m>>> \033[0;1mMenu contains $$count languages.\033[0m"
 
@@ -165,12 +180,13 @@ clean:
 install: all
 	install -dv $(DESTDIR)$(PREFIX)/locales-aosc
 	install -Dvm644 -t $(DESTDIR)$(PREFIX)/locales-aosc $(wildcard po/*.mo)
+	install -Dvm644 -t $(DESTDIR)$(PREFIX) $(MENUS) $(OTHERCFGS) $(LANGSEL)
+	$(foreach f,$(OTHERFILES),$(call install-other-files,$(f)))
 
 TESTISO ?= /tmp/test.iso
 
 testiso: install
 	pushd $(TOP)/../..
-	install -t $(DESTDIR)$(PREFIX) -Dvm644 $(wildcard $(TOP)/*.cfg)
 	grub-mkrescue -o $(TESTISO) iso -- -volid LiveKit
 	echo -e "\033[1;36m>>> \033[0;1mSueccessfully generated test ISO file at $(TESTISO)."
 
