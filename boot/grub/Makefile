@@ -124,14 +124,13 @@ langsel.cfg:
 	@$(foreach l,$(LANGS),$(call gen_menuentry,$(l)))
 	@echo -e "\033[1;36m>>> \033[0;1mMenu contains $$count languages.\033[0m"
 
-.SILENT: newlang
 .PHONY: newlang
 newlang: $(POT)
 	if [ "x$(NEWLANG)" = "x" ] ; then
 		echo -e "\033[1;31m!!! \033[0;1mPlease set a language code via NEWLANG= .\033[0m"
 		exit 1
 	fi
-	msginit -i po/$(POT) -o po/$(NEWLANG).po
+	msginit -i $(POT) -o po/$(NEWLANG).po
 	echo -e "\033[1;36m>>> \033[0;1mNow you can edit po/$(NEWLANG).po to add translations."
 
 .PHONY: update-pot
