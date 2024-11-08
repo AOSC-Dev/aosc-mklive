@@ -231,4 +231,4 @@ if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
 fi
 
 echo "Cleaning up ..."
-rm -fr to-squash livekit memtest sb
+rm -fr iso to-squash livekit memtest sb
