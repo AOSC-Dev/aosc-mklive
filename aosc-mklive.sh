@@ -18,7 +18,7 @@ EOF
 
 call_gen_installer() {
 	echo "Calling gen-installer.sh ..."
-	env REPO=$REPO ${PWD}/gen-installer.sh || { echo "Failed to generate an installer image!" ; exit 1 ; }
+	env REPO=$REPO TOPICS="$TOPICS" ${PWD}/gen-installer.sh || { echo "Failed to generate an installer image!" ; exit 1 ; }
 	echo "Ditching unneeded desktop+nvidia template ..."
 	rm -f "$PWD"/iso/squashfs/templates/desktop-nvidia.squashfs
 }
@@ -30,15 +30,19 @@ export ARCH="${ARCH:-$(dpkg --print-architecture)}"
 gen_livekit() {
 	rm -fr livekit iso to-squash memtest sb
 	mkdir iso to-squash
-
+	if [ "x$TOPICS" != "x" ] ; then
+		for t in $TOPICS ; do
+			TOPIC_OPT="$TOPIC_OPT --topics $t"
+		done
+	fi
 	if [[ "${ARCH}" = "loongarch64" ]]; then
 		echo "Generating LiveKit distribution (loongarch64) ..."
 		aoscbootstrap \
 			${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
 			--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
 			-x \
+			$TOPIC_OPT \
 			--arch ${ARCH:-$(dpkg --print-architecture)} \
-			--topics ${TOPICS} \
 			-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
 			-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
 			-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
@@ -52,7 +56,7 @@ gen_livekit() {
 			--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
 			-x \
 			--arch ${ARCH:-$(dpkg --print-architecture)} \
-			--topics ${TOPICS} \
+			$TOPIC_OPT \
 			-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
 			-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
 			-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
@@ -65,7 +69,7 @@ gen_livekit() {
 		        --config /usr/share/aoscbootstrap/config/aosc-retro.toml \
 		        -x \
 		        --arch ${ARCH:-$(dpkg --print-architecture)} \
-			--topics ${TOPICS} \
+			$TOPIC_OPT \
 		        -s "$PWD/scripts/retro-livekit.sh" \
 		        --include-files "$PWD/recipes/retro-livekit.lst"
 	fi
