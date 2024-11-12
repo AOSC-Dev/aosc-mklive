@@ -6,6 +6,7 @@ Conflicts=select-language-tui.service
 
 [Service]
 ExecStart=/usr/bin/xinit /usr/bin/select-language.xinit
+ExecCondition=/usr/bin/langdetect
 Type=oneshot
 KillMode=process
 IgnoreSIGPIPE=no

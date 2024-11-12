@@ -30,9 +30,13 @@ if [ -f "$HOME/.bashrc" ] ; then
   source $HOME/.bashrc
 fi
 
-if [ ! -n "$DISPLAY" ]; then
-	select-language-tui
-	source /etc/locale.conf
+# Start language selection menu only if we have not chosen one during GRUB.
+# NOTE langselect returns 1 if it is already chosen
+if /usr/bin/langdetect ; then
+	if [ ! -n "$DISPLAY" ]; then
+		select-language-tui
+		source /etc/locale.conf
+	fi
 fi
 
 # Display startup guide.

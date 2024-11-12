@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo "Determining if language is already chosen in the boot menu ..."
+if [ ! -e /etc/locale.conf ] ; then
+	echo "Warning! /etc/locale.conf does not exist."
+	LANG="C.UTF-8"
+else
+	source /etc/locale.conf
+fi
+
+if [ "x$LANG" = "xC.UTF-8" ] ; then
+	echo "Language is not chosen during GRUB menu, invoking language selection menu."
+	exit 0
+fi
+
+echo "Language is already chosen. Continuing without language selection menu."
+# Tell systemd we do not have to start the language selection menu unit.
+exit 1
