@@ -503,14 +503,18 @@ for l in ${AVAIL_LAYERS[@]} ; do
 done
 
 info "Copying boot template ..."
-cp -av ${PWD}/boot ${OUTDIR}/
-mv ${OUTDIR}/boot/grub/installer.cfg ${OUTDIR}/boot/grub/grub.cfg
+# cp -av ${PWD}/boot ${OUTDIR}/
+# mv ${OUTDIR}/boot/grub/installer.cfg ${OUTDIR}/boot/grub/grub.cfg
+make -C ${PWD}/boot/grub install
 
 info "Generating recipe ..."
 $PWD/gen-recipe.py ${OUTDIR}/sysroots.ini ${OUTDIR}/manifest/recipe.json
 
 info "Downloading translated recipe ..."
 curl -Lo "$OUTDIR"/manifest/recipe-i18n.json https://releases.aosc.io/manifest/recipe-i18n.json
+
+info "Copying hooks ..."
+cp -av ${PWD}/hooks ${OUTDIR}/squashfs/
 
 info "Build successful!"
 tree -h ${OUTDIR}
