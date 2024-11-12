@@ -12,6 +12,8 @@ export LC_ALL=C.UTF-8
 
 # Architecture of the target.
 ARCH=${ARCH:-$(dpkg --print-architecture)}
+# Topic parameter to pass to aoscbootstrap
+TOPIC_OPT=
 # Path to aoscbootstrap scripts and recipes
 AOSCBOOTSTRAP=${AOSCBOOTSTRAP:-/usr/share/aoscbootstrap}
 # Package repository to download packages from.
@@ -194,8 +196,8 @@ bootstrap_base() {
 		${BRANCH:-stable} $_dir ${REPO} \
 		--config "$AOSCBOOTSTRAP/config/aosc-mainline.toml" \
 		-x \
+		$TOPIC_OPT \
 		--arch ${ARCH:-$(dpkg --print-architecture)} \
-		--topics ${TOPICS} \
 		-s \
 			"$AOSCBOOTSTRAP/scripts/reset-repo.sh" \
 		-s \
@@ -414,6 +416,12 @@ prepare() {
 	touch ${OUTDIR}/sysroots.ini
 	# File for the dracut loader to read. Contains layers and their dependencies.
 	touch ${OUTDIR}/squashfs/layers.conf
+	if [ "x$TOPICS" != "x" ] ; then
+		for t in $TOPICS ; do
+			info "Will opt in topic '$t'."
+			TOPIC_OPT="$TOPIC_OPT --topics $t"
+		done
+	fi
 }
 
 dump_array() {
