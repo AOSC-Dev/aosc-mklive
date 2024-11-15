@@ -88,7 +88,7 @@ POT := $(PODIR)/aosc-live-media-menu.pot
 MENUS := installer.cfg livekit.cfg
 
 # Other GRUB config files.
-OTHERCFGS := grub.cfg
+OTHERCFGS := grub.cfg init.cfg installer-flat.cfg livekit-flat.cfg
 
 # Generated language selection menu.
 LANGSEL := langsel.cfg
@@ -116,7 +116,6 @@ endef
 # Procedure to install other files.
 define install-other-files
 	install -Dvm644 $(1) $(DESTDIR)$(PREFIX)/$(1)
-
 endef
 
 .PHONY: all
@@ -182,6 +181,7 @@ install: all
 	install -Dvm644 -t $(DESTDIR)$(PREFIX)/locales-aosc $(wildcard po/*.mo)
 	install -Dvm644 -t $(DESTDIR)$(PREFIX) $(MENUS) $(OTHERCFGS) $(LANGSEL)
 	$(foreach f,$(OTHERFILES),$(call install-other-files,$(f)))
+	sed -i -e 's|set tgt=installer|set tgt=$(TARGET)|g' $(DESTDIR)$(PREFIX)/grub.cfg
 
 TESTISO ?= /tmp/test.iso
 
