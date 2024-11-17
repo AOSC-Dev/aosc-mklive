@@ -268,7 +268,7 @@ install_layer() {
 	fi
 	echo "deb ${REPO} stable main" > $WORKDIR/merged/etc/apt/sources.list
 	systemd-run --wait -M isobuild -t -- \
-		oma install --yes $pkgs
+		oma install --no-refresh-topics --yes $pkgs
 
 	if [ "$tgt" = "desktop" ]; then
 		echo "Removing plasma-workspace-wallpapers (installed as recommendation) ..."

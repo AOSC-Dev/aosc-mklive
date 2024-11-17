@@ -1,5 +1,7 @@
 echo "Installing plymouth-livekit ..."
-systemd-nspawn -D $TGT -- oma --no-check-dbus install --yes plymouth-livekit
+systemd-nspawn -D $TGT -- \
+	oma --no-check-dbus install \
+	--yes --no-refresh-topics plymouth-livekit
 
 echo "Customising Plymouth theme ..."
 sed -e 's|semaphore|livekit|g' \
