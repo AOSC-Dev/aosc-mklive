@@ -22,7 +22,8 @@ systemd-nspawn -D $TGT systemctl mask suspend.target
 systemd-nspawn -D $TGT systemctl mask hibernation.target
 
 echo "Installing Installation tools ..."
-systemd-nspawn -D $TGT -- oma --no-check-dbus install -y \
+systemd-nspawn -D $TGT -- oma --no-check-dbus install \
+	-y --no-refresh-topics \
 	gparted select-language-gui xinit
 
 echo "Enabling language selection UI ..."
