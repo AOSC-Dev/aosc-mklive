@@ -108,7 +108,7 @@ define gen_menuentry
 	\tset lang=$(1)
 	\tset kernel_lang_param='LANG=$(1).UTF-8'
 	\texport kernel_lang_param
-	\tconfigfile $$prefix/$(TARGET).cfg
+	\tconfigfile $$prefix/$$tgt.cfg
 	}' >> $(LANGSEL)
 	count=$$(($$count +1))
 endef
@@ -126,9 +126,6 @@ langsel.cfg:
 	@echo -e "\033[1;36m>>> \033[0;1mGenerating language selection menu ...\033[0m"
 	@count=0
 	@echo    "set default=lang-$(DEFAULT_LANG)" > $(LANGSEL)
-	@echo -e 'if [ "x$$init_done" = "x" ] ; then
-		\tconfigfile init.cfg	
-	fi' >> $(LANGSEL)
 	@echo -e "menuentry 'Welcome to AOSC OS - Select your language:' {
 	\ttrue
 	}" >> $(LANGSEL)
