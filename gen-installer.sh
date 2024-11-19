@@ -3,12 +3,10 @@
 [ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
 
 set -e
+source lib.bash
+
 # aosc-mkinstaller: Generate an offline AOSC Installer image
 # TODO usage
-
-# Reset to sanity
-export LANG=C.UTF-8
-export LC_ALL=C.UTF-8
 
 # Architecture of the target.
 ARCH=${ARCH:-$(dpkg --print-architecture)}
@@ -97,19 +95,6 @@ SCRIPTS_server=(
 	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
-
-info() {
-	echo -e "\033[1;37m[\033[36mINFO\033[37m]: $@\033[0m"
-}
-
-warn() {
-	echo -e "\033[1;37m[\033[33mWARN\033[37m]: $@\033[0m"
-}
-
-die() {
-	echo -e "\033[1;37m[\033[31mERROR\033[37m]: $@\033[0m"
-	exit 1
-}
 
 sigint_hdl() {
 	warn "Received Interrupt."
@@ -503,8 +488,6 @@ for l in ${AVAIL_LAYERS[@]} ; do
 done
 
 info "Copying boot template ..."
-# cp -av ${PWD}/boot ${OUTDIR}/
-# mv ${OUTDIR}/boot/grub/installer.cfg ${OUTDIR}/boot/grub/grub.cfg
 make -C ${PWD}/boot/grub install
 
 info "Generating recipe ..."
