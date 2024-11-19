@@ -8,21 +8,24 @@ msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-15 10:03+0800\n"
-"PO-Revision-Date: 2024-11-07 10:38+0800\n"
-"Last-Translator: 老嘟嘟 <cyan@cyano.uk>\n"
-"Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
+"PO-Revision-Date: 2024-11-19 03:00+0000\n"
+"Last-Translator: Kaiyang Wu <origincode@aosc.io>\n"
+"Language-Team: Chinese (Simplified Han script) <https://weblate.aosc.io/"
+"projects/aosc-mklive/grub-menu/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8.1\n"
 
 #: installer.cfg:4 livekit.cfg:4
 msgid "Install AOSC OS (Command-line Only)"
-msgstr "以命令行模式安裝 AOSC OS"
+msgstr "以命令行模式安装 AOSC OS"
 
 #: installer.cfg:11 installer.cfg:47 livekit.cfg:11 livekit.cfg:47
 msgid "Install AOSC OS"
-msgstr "安裝 AOSC OS"
+msgstr "安装 AOSC OS"
 
 #: installer.cfg:17 livekit.cfg:17
 #, sh-format
@@ -30,8 +33,8 @@ msgid ""
 "Your system currently have $memsize MiB of memory, but at least $memreq MiB "
 "is required to run LiveKit/Retro."
 msgstr ""
-"您的设备当前拥有 $memsize MiB 的內存，不足以运行 LiveKit/Retro。运行 LiveKit/"
-"Retro 需要至少 $memreq MiB 的內存。"
+"您的设备当前拥有 $memsize MiB 的内存，不足以运行 LiveKit/Retro。运行 LiveKit/"
+"Retro 需要至少 $memreq MiB 的内存。"
 
 #: installer.cfg:18 livekit.cfg:18
 msgid "The requirement is not fullfilled, thus LiveKit has been disabled.."
