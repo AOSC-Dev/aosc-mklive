@@ -9,8 +9,15 @@ sed -e 's|semaphore|livekit|g' \
 
 echo "Generating a LiveKit initramfs ..."
 if [ "x$INSTALLER" != "x1" ] ; then
+	tmpdir=$(mktemp -d)
+	pushd $tmpdir
+		tar xf /dracut.tar
+		rm /dracut.tar
+		cp -av dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
+	popd
+	rm -r $tmpdir
 	dracut \
-		--add "dmsquash-live drm" --omit "network dbus-daemon dbus network-manager btrfs crypt kernel-modules-extra kernel-network-modules multipath mdraid nvdimm nvmf lvm" \
+		--add "aosc-livekit-loader drm" --omit "crypt mdraid lvm" \
 		--xz --no-early-microcode \
 		"/live-initramfs.img" \
 		$(ls /usr/lib/modules/)
