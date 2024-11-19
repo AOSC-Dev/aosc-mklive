@@ -23,108 +23,19 @@ call_gen_installer() {
 	rm -f "$PWD"/iso/squashfs/templates/desktop-nvidia.squashfs
 }
 
+call_gen_livekit() {
+	echo "Calling gen-livekit.sh ..."
+	env REPO=$REPO TOPICS="$TOPICS" ${PWD}/gen-livekit.sh || { echo "Failed to generate a LiveKit distribution!" ; exit 1 ; }
+}
+
 [ "x$EUID" = "x0" ] || { echo "Please run me as root." ; exit 1 ; }
 
 export ARCH="${ARCH:-$(dpkg --print-architecture)}"
 
-gen_livekit() {
-	rm -fr livekit iso to-squash memtest sb
-	mkdir iso to-squash
-	if [ "x$TOPICS" != "x" ] ; then
-		for t in $TOPICS ; do
-			TOPIC_OPT="$TOPIC_OPT --topics $t"
-		done
-	fi
-	if [[ "${ARCH}" = "loongarch64" ]]; then
-		echo "Generating LiveKit distribution (loongarch64) ..."
-		aoscbootstrap \
-			${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
-			--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
-			-x \
-			$TOPIC_OPT \
-			--arch ${ARCH:-$(dpkg --print-architecture)} \
-			-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
-			-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
-			-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-			-s "$PWD/scripts/livekit.sh" \
-			-s "$PWD/scripts/loongarch64-tweaks.sh" \
-			--include-files "$PWD/recipes/livekit.lst"
-	elif [[ "${RETRO}" != "1" ]]; then
-		echo "Generating LiveKit distribution ..."
-		aoscbootstrap \
-			${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs} \
-			--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
-			-x \
-			--arch ${ARCH:-$(dpkg --print-architecture)} \
-			$TOPIC_OPT \
-			-s /usr/share/aoscbootstrap/scripts/reset-repo.sh \
-			-s /usr/share/aoscbootstrap/scripts/enable-nvidia-drivers.sh \
-			-s /usr/share/aoscbootstrap/scripts/enable-dkms.sh \
-			-s "$PWD/scripts/livekit.sh" \
-			--include-files "$PWD/recipes/livekit.lst"
-	else
-		echo "Generating Retro LiveKit distribution ..."
-		aoscbootstrap \
-		        ${BRANCH:-stable} livekit ${REPO:-https://repo.aosc.io/debs-retro} \
-		        --config /usr/share/aoscbootstrap/config/aosc-retro.toml \
-		        -x \
-		        --arch ${ARCH:-$(dpkg --print-architecture)} \
-			$TOPIC_OPT \
-		        -s "$PWD/scripts/retro-livekit.sh" \
-		        --include-files "$PWD/recipes/retro-livekit.lst"
-	fi
-
-	if [[ "${RETRO}" != "1" ]]; then
-		echo "Copying LiveKit template ..."
-		chown -vR 0:0 templates/livekit/*
-	        cp -av templates/livekit/* livekit/
-		chown -vR 1000:1001 livekit/home/live
-	fi
-
-	echo "Extracting LiveKit kernel/initramfs ..."
-	mkdir -pv iso/boot
-	cp -v livekit/kernel iso/boot/kernel
-	cp -v livekit/live-initramfs.img iso/boot/live-initramfs.img
-	rm -v livekit/kernel livekit/live-initramfs.img
-
-	echo "Evaluating size of generated rootfs ..."
-	ROOTFS_SIZE="$(du -sm "livekit" | awk '{print $1}')"
-	ROOTFS_SIZE="$((ROOTFS_SIZE+ROOTFS_SIZE/2))"
-
-	echo "Generating empty back storage for rootfs ..."
-	mkdir -pv to-squash/LiveOS
-	truncate -s "${ROOTFS_SIZE}M" to-squash/LiveOS/rootfs.img
-
-	echo "Formatting rootfs ..."
-	mkfs.ext4 -F -m 1 -d livekit/ to-squash/LiveOS/rootfs.img
-
-	echo "Generating squashfs for dracut dmsquash-live ..."
-	mkdir -pv iso/LiveOS
-	mksquashfs to-squash/ iso/LiveOS/squashfs.img \
-	    -comp lz4 -no-recovery
-
-	echo "Copying boot template to ISO ..."
-	cp -av boot iso/
-
-	if [[ "${ARCH}" = "loongarch64" ]]; then
-		echo "Adding an option to use discrete graphics (bypassing AST) ..."
-		sed \
-			-e 's|la64_quirk=0|la64_quirk=1|g' \
-			-i iso/boot/grub/grub.cfg
-	fi
-
-	if [[ "$RETRO" = "1" ]]; then
-		echo "Tweaking GRUB menu to disable gfxterm, change color ..."
-		sed \
-			-e 's|retro=0|retro=1|g' \
-			-i iso/boot/grub/grub.cfg
-	fi
-}
-
 tgt=$1
 case "$tgt" in
 	livekit)
-		gen_livekit
+		call_gen_livekit
 		ISO_NAME="aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH}.iso"
 		;;
 	installer)
