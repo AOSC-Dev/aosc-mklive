@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:51+0800\n"
-"PO-Revision-Date: 2024-11-19 03:00+0000\n"
-"Last-Translator: Kaiyang Wu <origincode@aosc.io>\n"
+"PO-Revision-Date: 2024-11-21 02:48+0000\n"
+"Last-Translator: 白铭骢 <jeffbai@aosc.io>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.aosc.io/"
 "projects/aosc-mklive/grub-menu/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -21,16 +21,15 @@ msgstr ""
 
 #: installer.cfg:4 livekit.cfg:4
 msgid "Install AOSC OS (Command-line Only)"
-msgstr "以命令行模式安装 AOSC OS"
+msgstr "安装 AOSC OS（命令行模式）"
 
 #: installer.cfg:11 installer.cfg:48 livekit.cfg:11 livekit.cfg:48
 msgid "Install AOSC OS"
 msgstr "安装 AOSC OS"
 
 #: installer.cfg:13 livekit.cfg:13
-#, fuzzy
 msgid "Install AOSC OS (Serial Console)"
-msgstr "以命令行模式安装 AOSC OS"
+msgstr "安装 AOSC OS（串口终端）"
 
 #: installer.cfg:18 livekit.cfg:18
 #, sh-format
@@ -64,7 +63,7 @@ msgstr "请按任意键返回主菜单。"
 
 #: installer.cfg:30 livekit.cfg:30
 msgid "LiveKit has detected that your system has insufficient memory"
-msgstr "LiveKit 检测到您的设备可用内存不足以运行 LiveKit 的"
+msgstr "LiveKit 检测到您的设备可用内存不足以运行 LiveKit  的"
 
 #: installer.cfg:34 livekit.cfg:34
 msgid "to run the LiveKit and has disabled the live environment."
@@ -76,7 +75,7 @@ msgstr "图形安装环境，因此您无法使用图形安装程序。"
 
 #: installer.cfg:54
 msgid "Install AOSC OS (With NVIDIA graphics)"
-msgstr "安装 AOSC OS（附带 NVIDIA 图形驱动程序）"
+msgstr "安装 AOSC OS（NVIDIA 显卡）"
 
 #: installer.cfg:60
 msgid "Try AOSC OS Desktop"
@@ -84,7 +83,7 @@ msgstr "试用 AOSC OS 桌面版"
 
 #: installer.cfg:66
 msgid "Try AOSC OS Desktop (With NVIDIA graphics)"
-msgstr "试用 AOSC OS 桌面版（附带 NVIDIA 图形驱动程序）"
+msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 
 #: installer.cfg:90
 msgid "Troubleshooting Options >>"
@@ -92,7 +91,7 @@ msgstr "故障排除选项 >>"
 
 #: installer.cfg:91 livekit.cfg:54
 msgid "Install AOSC OS (Basic graphics)"
-msgstr "以基本图形模式安装 AOSC OS"
+msgstr "安装 AOSC OS（基本图形）"
 
 #: installer.cfg:101 installer.cfg:113 livekit.cfg:77 livekit.cfg:89
 msgid "Utilities >>"
@@ -100,11 +99,11 @@ msgstr "实用工具 >>"
 
 #: installer.cfg:103 installer.cfg:114 livekit.cfg:79 livekit.cfg:90
 msgid "Memory Test"
-msgstr "内存检测工具"
+msgstr "内存测试工具"
 
 #: installer.cfg:107 livekit.cfg:83
 msgid "UEFI Firmware Settings"
-msgstr "进入 UEFI 固件设置"
+msgstr "UEFI 设置界面"
 
 #: installer.cfg:121 livekit.cfg:97
 msgid "Boot Default OS"
