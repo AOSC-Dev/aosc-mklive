@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:51+0800\n"
-"PO-Revision-Date: 2024-11-19 03:00+0000\n"
+"PO-Revision-Date: 2024-11-21 02:57+0000\n"
 "Last-Translator: Kaiyang Wu <origincode@aosc.io>\n"
 "Language-Team: Chinese (Traditional Han script) <https://weblate.aosc.io/"
 "projects/aosc-mklive/grub-menu/zh_Hant/>\n"
@@ -21,16 +21,15 @@ msgstr ""
 
 #: installer.cfg:4 livekit.cfg:4
 msgid "Install AOSC OS (Command-line Only)"
-msgstr "以命令列模式安裝 AOSC OS"
+msgstr "安裝 AOSC OS（命令列模式）"
 
 #: installer.cfg:11 installer.cfg:48 livekit.cfg:11 livekit.cfg:48
 msgid "Install AOSC OS"
 msgstr "安裝 AOSC OS"
 
 #: installer.cfg:13 livekit.cfg:13
-#, fuzzy
 msgid "Install AOSC OS (Serial Console)"
-msgstr "以命令列模式安裝 AOSC OS"
+msgstr "安裝 AOSC OS（序列埠終端）"
 
 #: installer.cfg:18 livekit.cfg:18
 #, sh-format
@@ -92,7 +91,7 @@ msgstr "故障排除選項 >>"
 
 #: installer.cfg:91 livekit.cfg:54
 msgid "Install AOSC OS (Basic graphics)"
-msgstr "以基本圖形模式安裝 AOSC OS"
+msgstr "安裝 AOSC OS（基本圖形）"
 
 #: installer.cfg:101 installer.cfg:113 livekit.cfg:77 livekit.cfg:89
 msgid "Utilities >>"
@@ -100,11 +99,11 @@ msgstr "實用工具 >>"
 
 #: installer.cfg:103 installer.cfg:114 livekit.cfg:79 livekit.cfg:90
 msgid "Memory Test"
-msgstr "記憶體檢測工具"
+msgstr "記憶體測試工具"
 
 #: installer.cfg:107 livekit.cfg:83
 msgid "UEFI Firmware Settings"
-msgstr "進入 UEFI 韌體設定"
+msgstr "UEFI 韌體設定"
 
 #: installer.cfg:121 livekit.cfg:97
 msgid "Boot Default OS"
