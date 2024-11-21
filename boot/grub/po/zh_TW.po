@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-18 18:19+0800\n"
+"POT-Creation-Date: 2024-11-21 09:51+0800\n"
 "PO-Revision-Date: 2024-11-19 03:00+0000\n"
 "Last-Translator: Kaiyang Wu <origincode@aosc.io>\n"
 "Language-Team: Chinese (Traditional Han script) <https://weblate.aosc.io/"
@@ -23,11 +23,16 @@ msgstr ""
 msgid "Install AOSC OS (Command-line Only)"
 msgstr "以命令列模式安裝 AOSC OS"
 
-#: installer.cfg:11 installer.cfg:47 livekit.cfg:11 livekit.cfg:47
+#: installer.cfg:11 installer.cfg:48 livekit.cfg:11 livekit.cfg:48
 msgid "Install AOSC OS"
 msgstr "安裝 AOSC OS"
 
-#: installer.cfg:17 livekit.cfg:17
+#: installer.cfg:13 livekit.cfg:13
+#, fuzzy
+msgid "Install AOSC OS (Serial Console)"
+msgstr "以命令列模式安裝 AOSC OS"
+
+#: installer.cfg:18 livekit.cfg:18
 #, sh-format
 msgid ""
 "Your system currently have $memsize MiB of memory, but at least $memreq MiB "
@@ -36,78 +41,79 @@ msgstr ""
 "您的裝置目前擁有 $memsize MiB 記憶體，不足以執行 LiveKit/Retro。執行 LiveKit/"
 "Retro 需要至少 $memreq MiB 的記憶體。"
 
-#: installer.cfg:18 livekit.cfg:18
+#: installer.cfg:19 livekit.cfg:19
 msgid "The requirement is not fullfilled, thus LiveKit has been disabled.."
 msgstr "未滿足記憶體需求，無法使用 LiveKit 環境。LiveKit 環境已被禁用。"
 
-#: installer.cfg:20 livekit.cfg:20
+#: installer.cfg:21 livekit.cfg:21
 #, sh-format
 msgid ""
 "Your system currently have $memsize MiB of memory, but at least $memreq MiB "
 "is required to run the graphical environment."
-msgstr "您的裝置當前可用記憶體為 $memsize MiB，不足以執行圖形化安裝環境。"
-"執行圖形化安裝環境需要至少 $memreq MiB 記憶體。"
+msgstr ""
+"您的裝置當前可用記憶體為 $memsize MiB，不足以執行圖形化安裝環境。執行圖形化安"
+"裝環境需要至少 $memreq MiB 記憶體。"
 
-#: installer.cfg:21 livekit.cfg:21
+#: installer.cfg:22 livekit.cfg:22
 msgid "The graphical environment has been disabled."
 msgstr "由於記憶體不足，圖形化安裝環境已被禁用。"
 
-#: installer.cfg:24 livekit.cfg:24
+#: installer.cfg:25 livekit.cfg:25
 msgid "Press any key to return to the main menu."
 msgstr "請按任意鍵返回主選單。"
 
-#: installer.cfg:29 livekit.cfg:29
+#: installer.cfg:30 livekit.cfg:30
 msgid "LiveKit has detected that your system has insufficient memory"
 msgstr "LiveKit 偵測到您的裝置可用記憶體不足以執行 LiveKit 的"
 
-#: installer.cfg:33 livekit.cfg:33
+#: installer.cfg:34 livekit.cfg:34
 msgid "to run the LiveKit and has disabled the live environment."
 msgstr "安裝環境，因此您無法使用 LiveKit。"
 
-#: installer.cfg:37 livekit.cfg:37
+#: installer.cfg:38 livekit.cfg:38
 msgid "and has disabled the graphical environment."
 msgstr "圖形化安裝環境，因此您無法使用圖形化安裝程式。"
 
-#: installer.cfg:53
+#: installer.cfg:54
 msgid "Install AOSC OS (With NVIDIA graphics)"
 msgstr "安裝 AOSC OS（附帶 NVIDIA 顯示卡驅動程式）"
 
-#: installer.cfg:59
+#: installer.cfg:60
 msgid "Try AOSC OS Desktop"
 msgstr "試用 AOSC OS 桌面版"
 
-#: installer.cfg:65
+#: installer.cfg:66
 msgid "Try AOSC OS Desktop (With NVIDIA graphics)"
 msgstr "試用 AOSC OS 桌面版（附帶 NVIDIA 顯示卡驅動程式）"
 
-#: installer.cfg:83
+#: installer.cfg:90
 msgid "Troubleshooting Options >>"
 msgstr "故障排除選項 >>"
 
-#: installer.cfg:84 livekit.cfg:53
+#: installer.cfg:91 livekit.cfg:54
 msgid "Install AOSC OS (Basic graphics)"
 msgstr "以基本圖形模式安裝 AOSC OS"
 
-#: installer.cfg:94 installer.cfg:106 livekit.cfg:70 livekit.cfg:82
+#: installer.cfg:101 installer.cfg:113 livekit.cfg:77 livekit.cfg:89
 msgid "Utilities >>"
 msgstr "實用工具 >>"
 
-#: installer.cfg:96 installer.cfg:107 livekit.cfg:72 livekit.cfg:83
+#: installer.cfg:103 installer.cfg:114 livekit.cfg:79 livekit.cfg:90
 msgid "Memory Test"
 msgstr "記憶體檢測工具"
 
-#: installer.cfg:100 livekit.cfg:76
+#: installer.cfg:107 livekit.cfg:83
 msgid "UEFI Firmware Settings"
 msgstr "進入 UEFI 韌體設定"
 
-#: installer.cfg:114 livekit.cfg:90
+#: installer.cfg:121 livekit.cfg:97
 msgid "Boot Default OS"
 msgstr "啟動預設系統"
 
-#: installer.cfg:119 livekit.cfg:95
+#: installer.cfg:126 livekit.cfg:102
 msgid "Restart"
 msgstr "重新啟動"
 
-#: installer.cfg:122 livekit.cfg:98
+#: installer.cfg:129 livekit.cfg:105
 msgid "Power Off"
 msgstr "關機"
