@@ -156,7 +156,7 @@ $(POT): $(MENUS)
 		2>/dev/null
 
 .PHONY: update-po
-update-po: po/%.po
+update-po: $(wildcard po/*.po)
 
 # msgmerge -U does not update the mtime of the PO file.
 # We must touch the PO file after msgmerge to make sure it is newer than POT.
