@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:51+0800\n"
-"PO-Revision-Date: 2024-11-21 02:48+0000\n"
-"Last-Translator: 白铭骢 <jeffbai@aosc.io>\n"
+"PO-Revision-Date: 2024-11-21 02:57+0000\n"
+"Last-Translator: Old Dodo <cyan@cyano.uk>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.aosc.io/"
 "projects/aosc-mklive/grub-menu/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -63,7 +63,7 @@ msgstr "请按任意键返回主菜单。"
 
 #: installer.cfg:30 livekit.cfg:30
 msgid "LiveKit has detected that your system has insufficient memory"
-msgstr "LiveKit 检测到您的设备可用内存不足以运行 LiveKit  的"
+msgstr "LiveKit 检测到您的设备可用内存不足以运行 LiveKit 的"
 
 #: installer.cfg:34 livekit.cfg:34
 msgid "to run the LiveKit and has disabled the live environment."
