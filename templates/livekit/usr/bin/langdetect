@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ ! -e /etc/locale.conf ] ; then
+	echo "Warning! /etc/locale.conf does not exist."
+	LANG="C.UTF-8"
+else
+	source /etc/locale.conf
+fi
+
+if [ "x$LANG" = "xC.UTF-8" ] ; then
+	exit 0
+fi
+
+exit 1

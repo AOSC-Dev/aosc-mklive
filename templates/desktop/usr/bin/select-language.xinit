@@ -1,9 +1,13 @@
 #!/bin/bash
-xsetroot -cursor_name left_ptr
 
-# Start a window manager to make this app fullscreen.
-kwin_x11 &
-export WEBKIT_DISABLE_DMABUF_RENDERER=1
-/usr/bin/select-language
+if [ "x$LANG" = "xC.UTF-8" ] ; then
+	echo "Language is not chosen during GRUB menu. Invoking language seleciton menu."
 
-killall kwin_x11
+	xsetroot -cursor_name left_ptr
+	# Start a window manager to make this app fullscreen.
+	kwin_x11 &
+	export WEBKIT_DISABLE_DMABUF_RENDERER=1
+	/usr/bin/select-language
+
+	killall kwin_x11
+fi

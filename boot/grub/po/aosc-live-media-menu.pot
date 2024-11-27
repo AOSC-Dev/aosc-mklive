@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR AOSC OS Maintainers <maintainers@aosc.io>
+# This file is distributed under the same license as the aosc-os-live-media-menu package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-21 10:07+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: installer.cfg:4 livekit.cfg:4
+msgid "Install AOSC OS (Command-line Only)"
+msgstr ""
+
+#: installer.cfg:11 installer.cfg:48 livekit.cfg:11 livekit.cfg:48
+msgid "Install AOSC OS"
+msgstr ""
+
+#: installer.cfg:13 livekit.cfg:13
+msgid "Install AOSC OS (Serial Console)"
+msgstr ""
+
+#: installer.cfg:18 livekit.cfg:18
+#, sh-format
+msgid ""
+"Your system currently have $memsize MiB of memory, but at least $memreq MiB "
+"is required to run LiveKit/Retro."
+msgstr ""
+
+#: installer.cfg:19 livekit.cfg:19
+msgid "The requirement is not fullfilled, thus LiveKit has been disabled.."
+msgstr ""
+
+#: installer.cfg:21 livekit.cfg:21
+#, sh-format
+msgid ""
+"Your system currently have $memsize MiB of memory, but at least $memreq MiB "
+"is required to run the graphical environment."
+msgstr ""
+
+#: installer.cfg:22 livekit.cfg:22
+msgid "The graphical environment has been disabled."
+msgstr ""
+
+#: installer.cfg:25 livekit.cfg:25
+msgid "Press any key to return to the main menu."
+msgstr ""
+
+#: installer.cfg:30 livekit.cfg:30
+msgid "LiveKit has detected that your system has insufficient memory"
+msgstr ""
+
+#: installer.cfg:34 livekit.cfg:34
+msgid "to run the LiveKit and has disabled the live environment."
+msgstr ""
+
+#: installer.cfg:38 livekit.cfg:38
+msgid "and has disabled the graphical environment."
+msgstr ""
+
+#: installer.cfg:54
+msgid "Install AOSC OS (With NVIDIA graphics)"
+msgstr ""
+
+#: installer.cfg:60
+msgid "Try AOSC OS Desktop"
+msgstr ""
+
+#: installer.cfg:66
+msgid "Try AOSC OS Desktop (With NVIDIA graphics)"
+msgstr ""
+
+#: installer.cfg:90
+msgid "Troubleshooting Options >>"
+msgstr ""
+
+#: installer.cfg:91 livekit.cfg:54
+msgid "Install AOSC OS (Basic graphics)"
+msgstr ""
+
+#: installer.cfg:101 installer.cfg:113 livekit.cfg:77 livekit.cfg:89
+msgid "Utilities >>"
+msgstr ""
+
+#: installer.cfg:103 installer.cfg:114 livekit.cfg:79 livekit.cfg:90
+msgid "Memory Test"
+msgstr ""
+
+#: installer.cfg:107 livekit.cfg:83
+msgid "UEFI Firmware Settings"
+msgstr ""
+
+#: installer.cfg:121 livekit.cfg:97
+msgid "Boot Default OS"
+msgstr ""
+
+#: installer.cfg:126 livekit.cfg:102
+msgid "Restart"
+msgstr ""
+
+#: installer.cfg:129 livekit.cfg:105
+msgid "Power Off"
+msgstr ""

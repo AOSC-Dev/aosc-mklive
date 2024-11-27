@@ -3,15 +3,15 @@
 [ "$EUID" = "0" ] || { echo "Please run me as root." ; exit 1 ; }
 
 set -e
+source lib.bash
+
 # aosc-mkinstaller: Generate an offline AOSC Installer image
 # TODO usage
 
-# Reset to sanity
-export LANG=C.UTF-8
-export LC_ALL=C.UTF-8
-
 # Architecture of the target.
 ARCH=${ARCH:-$(dpkg --print-architecture)}
+# Topic parameter to pass to aoscbootstrap
+TOPIC_OPT=
 # Path to aoscbootstrap scripts and recipes
 AOSCBOOTSTRAP=${AOSCBOOTSTRAP:-/usr/share/aoscbootstrap}
 # Package repository to download packages from.
@@ -95,19 +95,6 @@ SCRIPTS_server=(
 	"$AOSCBOOTSTRAP/scripts/enable-dkms.sh"
 	"${SCRIPTS[@]}"
 )
-
-info() {
-	echo -e "\033[1;37m[\033[36mINFO\033[37m]: $@\033[0m"
-}
-
-warn() {
-	echo -e "\033[1;37m[\033[33mWARN\033[37m]: $@\033[0m"
-}
-
-die() {
-	echo -e "\033[1;37m[\033[31mERROR\033[37m]: $@\033[0m"
-	exit 1
-}
 
 sigint_hdl() {
 	warn "Received Interrupt."
@@ -194,8 +181,8 @@ bootstrap_base() {
 		${BRANCH:-stable} $_dir ${REPO} \
 		--config "$AOSCBOOTSTRAP/config/aosc-mainline.toml" \
 		-x \
+		$TOPIC_OPT \
 		--arch ${ARCH:-$(dpkg --print-architecture)} \
-		--topics ${TOPICS} \
 		-s \
 			"$AOSCBOOTSTRAP/scripts/reset-repo.sh" \
 		-s \
@@ -266,7 +253,7 @@ install_layer() {
 	fi
 	echo "deb ${REPO} stable main" > $WORKDIR/merged/etc/apt/sources.list
 	systemd-run --wait -M isobuild -t -- \
-		oma install --yes $pkgs
+		oma install --no-refresh-topics --yes $pkgs
 
 	if [ "$tgt" = "desktop" ]; then
 		echo "Removing plasma-workspace-wallpapers (installed as recommendation) ..."
@@ -414,6 +401,12 @@ prepare() {
 	touch ${OUTDIR}/sysroots.ini
 	# File for the dracut loader to read. Contains layers and their dependencies.
 	touch ${OUTDIR}/squashfs/layers.conf
+	if [ "x$TOPICS" != "x" ] ; then
+		for t in $TOPICS ; do
+			info "Will opt in topic '$t'."
+			TOPIC_OPT="$TOPIC_OPT --topics $t"
+		done
+	fi
 }
 
 dump_array() {
@@ -495,14 +488,16 @@ for l in ${AVAIL_LAYERS[@]} ; do
 done
 
 info "Copying boot template ..."
-cp -av ${PWD}/boot ${OUTDIR}/
-mv ${OUTDIR}/boot/grub/installer.cfg ${OUTDIR}/boot/grub/grub.cfg
+make -C ${PWD}/boot/grub install
 
 info "Generating recipe ..."
 $PWD/gen-recipe.py ${OUTDIR}/sysroots.ini ${OUTDIR}/manifest/recipe.json
 
 info "Downloading translated recipe ..."
 curl -Lo "$OUTDIR"/manifest/recipe-i18n.json https://releases.aosc.io/manifest/recipe-i18n.json
+
+info "Copying hooks ..."
+cp -av ${PWD}/hooks ${OUTDIR}/squashfs/
 
 info "Build successful!"
 tree -h ${OUTDIR}
