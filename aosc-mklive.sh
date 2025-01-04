@@ -13,6 +13,7 @@ Environment variables:
 	REPO	URL to the AOSC OS package repository.
 	BRANCH	Which topic to install.
 	RETRO	Whether to generate a Retro LiveKit.
+	TOPICS	Topics to integrate/slipstream as part of the image.
 EOF
 }
 
