@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-21 10:07+0800\n"
+"POT-Creation-Date: 2025-01-12 21:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,26 +87,26 @@ msgstr ""
 msgid "Install AOSC OS (Basic graphics)"
 msgstr ""
 
-#: installer.cfg:101 installer.cfg:113 livekit.cfg:77 livekit.cfg:89
+#: installer.cfg:101 installer.cfg:115 livekit.cfg:77 livekit.cfg:91
 msgid "Utilities >>"
 msgstr ""
 
-#: installer.cfg:103 installer.cfg:114 livekit.cfg:79 livekit.cfg:90
+#: installer.cfg:103 installer.cfg:116 livekit.cfg:79 livekit.cfg:92
 msgid "Memory Test"
 msgstr ""
 
-#: installer.cfg:107 livekit.cfg:83
+#: installer.cfg:108 livekit.cfg:84
 msgid "UEFI Firmware Settings"
 msgstr ""
 
-#: installer.cfg:121 livekit.cfg:97
+#: installer.cfg:123 livekit.cfg:99
 msgid "Boot Default OS"
 msgstr ""
 
-#: installer.cfg:126 livekit.cfg:102
+#: installer.cfg:128 livekit.cfg:104
 msgid "Restart"
 msgstr ""
 
-#: installer.cfg:129 livekit.cfg:105
+#: installer.cfg:131 livekit.cfg:107
 msgid "Power Off"
 msgstr ""
