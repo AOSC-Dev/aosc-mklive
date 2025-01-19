@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-12 21:38+0800\n"
+"POT-Creation-Date: 2025-01-19 16:51+0800\n"
 "PO-Revision-Date: 2024-11-21 02:48+0000\n"
 "Last-Translator: Old Dodo <cyan@cyano.uk>\n"
 "Language-Team: English (United States) <https://weblate.aosc.io/projects/"
@@ -93,27 +93,27 @@ msgstr "Troubleshooting Options >>"
 msgid "Install AOSC OS (Basic graphics)"
 msgstr "Install AOSC OS (Basic graphics)"
 
-#: installer.cfg:101 installer.cfg:115 livekit.cfg:77 livekit.cfg:91
+#: installer.cfg:103 installer.cfg:117 livekit.cfg:79 livekit.cfg:93
 msgid "Utilities >>"
 msgstr "Utilities >>"
 
-#: installer.cfg:103 installer.cfg:116 livekit.cfg:79 livekit.cfg:92
+#: installer.cfg:105 installer.cfg:118 livekit.cfg:81 livekit.cfg:94
 msgid "Memory Test"
 msgstr "Memory Test"
 
-#: installer.cfg:108 livekit.cfg:84
+#: installer.cfg:110 livekit.cfg:86
 msgid "UEFI Firmware Settings"
 msgstr "UEFI Firmware Settings"
 
-#: installer.cfg:123 livekit.cfg:99
+#: installer.cfg:125 livekit.cfg:101
 msgid "Boot Default OS"
 msgstr "Boot Default OS"
 
-#: installer.cfg:128 livekit.cfg:104
+#: installer.cfg:130 livekit.cfg:106
 msgid "Restart"
 msgstr "Restart"
 
-#: installer.cfg:131 livekit.cfg:107
+#: installer.cfg:133 livekit.cfg:109
 msgid "Power Off"
 msgstr "Power Off"
 
