@@ -17,6 +17,7 @@ if [ "x$INSTALLER" != "x1" ] ; then
 	popd
 	rm -r $tmpdir
 	dracut \
+		--xz -c /dev/zero \
 		--add "aosc-livekit-loader drm" --omit "crypt mdraid lvm" \
 		--xz --no-early-microcode \
 		"/live-initramfs.img" \
@@ -24,6 +25,7 @@ if [ "x$INSTALLER" != "x1" ] ; then
 else
 	cp -av /run/mklive/dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
 	dracut \
+		--xz -c /dev/zero \
 		--add "aosc-livekit-loader drm" \
 		--xz --no-early-microcode \
 		--omit "crypt mdraid lvm" \
