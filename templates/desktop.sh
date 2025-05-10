@@ -31,7 +31,8 @@ mkdir -pv $TGT/usr/lib/systemd/system/sddm.service.wants
 ln -sfv ../select-language-gui.service $TGT/usr/lib/systemd/system/sddm.service.wants/select-language-gui.service
 
 echo "Cleaning up ..."
-rm -r $TGT/var/cache/apt
+rm -r $TGT/var/cache/apt/archives
+rm -r $TGT/var/lib/oma/*
 rm -r $TGT/var/lib/apt/lists/*
 if [ -e $TGT/etc/machine-id ] ; then
 	rm $TGT/machine-id
