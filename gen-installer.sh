@@ -178,7 +178,9 @@ bootstrap_base() {
 	_dir="${WORKDIR}"/base
 	info "Bootstrapping base tarball ..."
 	aoscbootstrap \
-		${BRANCH:-stable} $_dir ${REPO} \
+		--branch ${BRANCH:-stable} \
+		--target $WORKDIR/livekit \
+		--mirror ${REPO:-https://repo.aosc.io/debs} \
 		--config "$AOSCBOOTSTRAP/config/aosc-mainline.toml" \
 		-x \
 		$TOPIC_OPT \

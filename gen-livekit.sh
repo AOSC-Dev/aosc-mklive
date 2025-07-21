@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # New LiveKit generator.
 # This "new" LiveKit will use our dracut loader to load the LiveKit.
 
@@ -46,7 +46,9 @@ info "Invoking aoscbootstrap ..."
 if [[ "${ARCH}" = "loongarch64" ]]; then
 	echo "Generating LiveKit distribution (loongarch64) ..."
 	aoscbootstrap \
-		${BRANCH:-stable} $WORKDIR/livekit ${REPO:-https://repo.aosc.io/debs} \
+		--branch ${BRANCH:-stable} \
+		--target $WORKDIR/livekit \
+		--mirror ${REPO:-https://repo.aosc.io/debs} \
 		--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
 		-x --force \
 		$TOPIC_OPTS \
@@ -60,7 +62,9 @@ if [[ "${ARCH}" = "loongarch64" ]]; then
 elif [[ "${RETRO}" != "1" ]]; then
 	echo "Generating LiveKit distribution ..."
 	aoscbootstrap \
-		${BRANCH:-stable} ${WORKDIR}/livekit ${REPO:-https://repo.aosc.io/debs} \
+		--branch ${BRANCH:-stable} \
+		--target $WORKDIR/livekit \
+		--mirror ${REPO:-https://repo.aosc.io/debs} \
 		--config /usr/share/aoscbootstrap/config/aosc-mainline.toml \
 		-x --force \
 		--arch ${ARCH:-$(dpkg --print-architecture)} \
@@ -73,7 +77,9 @@ elif [[ "${RETRO}" != "1" ]]; then
 else
 	echo "Generating Retro LiveKit distribution ..."
 	aoscbootstrap \
-		${BRANCH:-stable} ${WORKDIR}/livekit ${REPO:-https://repo.aosc.io/debs-retro} \
+		--branch ${BRANCH:-stable} \
+		--target $WORKDIR/livekit \
+		--mirror ${REPO:-https://repo.aosc.io/debs} \
 		--config /usr/share/aoscbootstrap/config/aosc-retro.toml \
 		-x --force \
 		--arch ${ARCH:-$(dpkg --print-architecture)} \
