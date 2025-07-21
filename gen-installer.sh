@@ -179,7 +179,8 @@ bootstrap_base() {
 	info "Bootstrapping base tarball ..."
 	aoscbootstrap \
 		--branch ${BRANCH:-stable} \
-		--target $WORKDIR/livekit \
+		--target $_dir \
+		--force \
 		--mirror ${REPO:-https://repo.aosc.io/debs} \
 		--config "$AOSCBOOTSTRAP/config/aosc-mainline.toml" \
 		-x \
