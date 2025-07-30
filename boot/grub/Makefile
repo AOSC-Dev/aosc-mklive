@@ -88,7 +88,7 @@ POT := $(PODIR)/aosc-live-media-menu.pot
 MENUS := installer.cfg livekit.cfg
 
 # Other GRUB config files.
-OTHERCFGS := grub.cfg init.cfg installer-flat.cfg livekit-flat.cfg quirks.cfg serial-args.cfg
+OTHERCFGS := grub.cfg init.cfg quirks.cfg serial-args.cfg
 
 # Generated language selection menu.
 LANGSEL := langsel.cfg
