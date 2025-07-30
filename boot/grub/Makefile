@@ -181,10 +181,11 @@ install: all
 	sed -i -e 's|set tgt=installer|set tgt=$(TARGET)|g' $(DESTDIR)$(PREFIX)/grub.cfg
 
 TESTISO ?= /tmp/test.iso
+ISODIR ?= iso
 
 testiso: install
 	pushd $(TOP)/../..
-	grub-mkrescue -o $(TESTISO) iso -- -volid LiveKit
+	grub-mkrescue -o $(TESTISO) $(ISODIR) -- -volid LiveKit
 	echo -e "\033[1;36m>>> \033[0;1mSueccessfully generated test ISO file at $(TESTISO)."
 
 .PHONY: help
