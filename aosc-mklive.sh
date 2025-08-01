@@ -73,6 +73,11 @@ if [[ "${ARCH}" = "amd64" || \
 	cd ..
 fi
 
+if [ "$ARCH" = "loongson3" ] ; then
+	echo "Installing PMON boot.cfg ..."
+	install -vm644 "$PWD"/boot/boot-$tgt.cfg "$PWD"/iso/boot/boot.cfg
+fi
+
 echo "Generating ISO with grub-mkrescue ..."
 systemd-nspawn -D $SYSROOT_DIR \
 	env DEBIAN_FRONTEND=noninteractive apt install --yes libisoburn grub
