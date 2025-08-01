@@ -329,7 +329,7 @@ pack_templates() {
 	if [ -e "${PWD}"/templates/$tgt.sh ] ; then
 		info "Running template script ..."
 		# this script needs to be executed outside.
-		env WORKDIR="$WORKDIR" OUTDIR="$OUTDIR" TOP="$PWD" TGT=${WORKDIR}/$tgt-template-merged \
+		env WORKDIR="$WORKDIR" OUTDIR="$OUTDIR" ARCH="$ARCH" TOP="$PWD" TGT=${WORKDIR}/$tgt-template-merged \
 			bash "$PWD"/templates/$tgt.sh
 	fi
 	if [ -d "${PWD}/templates/$tgt" ] ; then
