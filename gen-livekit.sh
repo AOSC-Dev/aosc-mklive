@@ -93,6 +93,10 @@ mkdir -pv "$ISODIR"/boot
 cp -v "$WORKDIR"/livekit/kernel "$ISODIR"/boot/kernel
 cp -v "$WORKDIR"/livekit/live-initramfs.img "$ISODIR"/boot/live-initramfs.img
 rm -v "$WORKDIR"/livekit/kernel "$WORKDIR"/livekit/live-initramfs.img
+if [ "$ARCH" = "loongson3" ] ; then
+	cp -v "$WORKDIR"/livekit/live-initramfs-lite.img "$ISODIR"/boot/minird.img
+	rm -v "$WORKDIR"/livekit/live-initramfs-lite.img
+fi
 
 if [[ "${RETRO}" != "1" ]]; then
 	echo "Copying LiveKit template ..."
