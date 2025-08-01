@@ -37,10 +37,12 @@ tgt=$1
 case "$tgt" in
 	livekit)
 		call_gen_livekit
+		SYSROOT_DIR=work/livekit
 		ISO_NAME="aosc-os_livekit_$(date +%Y%m%d)${REV:+.$REV}_${ARCH}.iso"
 		;;
 	installer)
 		call_gen_installer
+		SYSROOT_DIR=work/base
 		ISO_NAME="aosc-os_installer_$(date +%Y%m%d)${REV:+.$REV}_${ARCH}.iso"
 		;;
 	*)
@@ -72,9 +74,12 @@ if [[ "${ARCH}" = "amd64" || \
 fi
 
 echo "Generating ISO with grub-mkrescue ..."
-grub-mkrescue \
-	-o "$ISO_NAME" \
-	iso -- -volid "LiveKit"
+systemd-nspawn -D $SYSROOT_DIR \
+	env DEBIAN_FRONTEND=noninteractive apt install --yes libisoburn grub
+systemd-nspawn -D $SYSROOT_DIR --bind "$PWD":/mnt \
+	grub-mkrescue \
+		-o /mnt/"$ISO_NAME" \
+		/mnt/iso -- -volid "LiveKit"
 
 if [[ "$ARCH" = "amd64" || \
       "$ARCH" = "arm64" || \
@@ -147,4 +152,4 @@ if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
 fi
 
 echo "Cleaning up ..."
-rm -fr iso to-squash livekit memtest sb
+rm -fr iso to-squash livekit memtest sb work
