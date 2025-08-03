@@ -80,6 +80,8 @@ fi
 
 echo "Generating ISO with grub-mkrescue ..."
 systemd-nspawn -D $SYSROOT_DIR \
+	apt update
+systemd-nspawn -D $SYSROOT_DIR \
 	env DEBIAN_FRONTEND=noninteractive apt install --yes libisoburn grub
 systemd-nspawn -D $SYSROOT_DIR --bind "$PWD":/mnt \
 	grub-mkrescue \
