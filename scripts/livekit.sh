@@ -33,6 +33,25 @@ else
 		$(ls /usr/lib/modules/)
 fi
 
+if [ "$(dpkg --print-architecture)" = "loongson3" ] ; then
+	# Generate a stripped-down version of the initrd, specifically for
+	# PMON, because:
+	# 1. It is VERY slow for PMON to load a file into the memory from
+	#    USB. A 7MiB kernel takes thirty seconds!
+	# 2. Some PMON implementations does not support long file names in
+	#    ISO9660 - PMON will report ENOENT if one tries to load them.
+	# 3. Furthermore, we might have to embed an ext2 partition just to
+	#    cope with some other limitations of some weird PMON impls.
+	echo "Generating a stripped-down initramfs for PMON ..."
+	dracut \
+		--xz \
+		-c /dev/zero \
+		--add "drm dm aosc-livekit-loader" \
+		--xz --no-early-microcode \
+		--omit "network i18n plymouth crypt mdraid lvm ostree qemu virtiofs bcache btreefs kernel-modules-extra hwdb lunmask btrfs modsign dm systemd-battery-check qemu-net resume  " \
+		"/live-initramfs-lite.img" --force
+fi
+
 echo "Moving kernel image out ..."
 if [ -f /boot/vmlinuz-* ]; then
     mv -v /boot/vmlinuz-* /kernel
