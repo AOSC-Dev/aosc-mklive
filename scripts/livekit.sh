@@ -8,6 +8,7 @@ sed -e 's|semaphore|livekit|g' \
     -i /etc/plymouth/plymouthd.conf
 
 echo "Generating a LiveKit initramfs ..."
+
 if [ "x$INSTALLER" != "x1" ] ; then
 	tmpdir=$(mktemp -d)
 	pushd $tmpdir
@@ -16,9 +17,12 @@ if [ "x$INSTALLER" != "x1" ] ; then
 		cp -av dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
 	popd
 	rm -r $tmpdir
+	# Host-only mode should be disabled. This initramfs is generic.
 	dracut \
 		--xz -c /dev/zero \
-		--add "aosc-livekit-loader drm" --omit "crypt mdraid lvm" \
+		--add "aosc-livekit-loader drm" \
+		--omit "crypt mdraid lvm" \
+		--no-hostonly \
 		--xz --no-early-microcode \
 		"/live-initramfs.img" \
 		$(ls /usr/lib/modules/)
@@ -27,6 +31,8 @@ else
 	dracut \
 		--xz -c /dev/zero \
 		--add "aosc-livekit-loader drm" \
+		--omit "crypt mdraid lvm" \
+		--no-hostonly \
 		--xz --no-early-microcode \
 		--omit "crypt mdraid lvm" \
 		"/live-initramfs.img" \
