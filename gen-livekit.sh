@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 # New LiveKit generator.
 # This "new" LiveKit will use our dracut loader to load the LiveKit.
 
