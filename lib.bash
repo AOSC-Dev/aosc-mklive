@@ -54,13 +54,17 @@ packfs() {
 # $1: Output file
 # $2: Path used as root (can not be a file)
 pack_squashfs() {
-	local rootpath outfile
+	local rootpath outfile comp
 	outfile="$1"
 	rootpath="$2"
-
+	if [ "$LOCAL_TESTING" = "1" ] ; then
+		comp="-no-compression"
+	else
+		comp="-comp xz"
+	fi
 	info "Packing squashfs from '$rootpath' to '$outfile' ..."
 	pushd "$rootpath"
 	mksquashfs . ${outfile} \
-		-noappend -comp xz -processors $(nproc)
+		-noappend $comp -processors $(nproc)
 	popd
 }
