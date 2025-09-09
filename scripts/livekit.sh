@@ -3,12 +3,44 @@ MANUALS_TO_STRIP=(
 	"/usr/share/man/man3l"
 )
 
+default_config() {
+	case "$(uname -m)" in
+		loongarch64)
+			echo "16k"
+			;;
+		*)
+			;;
+	esac
+}
+
 echo "Customising Plymouth theme ..."
 sed -e 's|semaphore|livekit|g' \
     -i /etc/plymouth/plymouthd.conf
 
 echo "Generating a LiveKit initramfs ..."
-
+IFS=$'\n'
+KERNELS=($(ls /usr/lib/modules/))
+unset IFS
+for kernel in "${KERNELS[@]}" ; do
+	IFS='-'
+	components=($kernel)
+	unset IFS
+	kernel_config="${components[3]}"
+	if [ -n "$kernel_config" ] ; then
+		if [ "$(default_config)" = "$kernel_config" ] ; then
+			kernel_selected="$kernel"
+			break
+		fi
+	else
+		kernel_selected="$kernel"
+		break
+	fi
+done
+if [ -z "$kernel_selected" ] ; then
+	echo "Internal error - no kernel selected to generate a initramfs image"
+	exit 1
+fi
+echo "Generating initramfs image using kernel $kernel_selected ..."
 if [ "x$INSTALLER" != "x1" ] ; then
 	tmpdir=$(mktemp -d)
 	pushd $tmpdir
@@ -24,8 +56,8 @@ if [ "x$INSTALLER" != "x1" ] ; then
 		--omit "crypt mdraid lvm" \
 		--no-hostonly \
 		--xz --no-early-microcode \
-		"/live-initramfs.img" \
-		$(ls /usr/lib/modules/)
+		/live-initramfs.img \
+		"$kernel_selected"
 else
 	cp -av /run/mklive/dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
 	dracut \
@@ -35,8 +67,8 @@ else
 		--no-hostonly \
 		--xz --no-early-microcode \
 		--omit "crypt mdraid lvm" \
-		"/live-initramfs.img" \
-		$(ls /usr/lib/modules/)
+		/live-initramfs.img \
+		"$kernel_selected"
 fi
 
 if [ "$(dpkg --print-architecture)" = "loongson3" ] ; then
@@ -59,13 +91,30 @@ if [ "$(dpkg --print-architecture)" = "loongson3" ] ; then
 fi
 
 echo "Moving kernel image out ..."
-if [ -f /boot/vmlinuz-* ]; then
-    mv -v /boot/vmlinuz-* /kernel
-elif [ -f /boot/vmlinux-* ]; then
-    mv -v /boot/vmlinux-* /kernel
-else
-    echo "No kernel installed, aborting ..."
+for f in "vmlinuz-$kernel_selected" "vmlinux-$kernel_selected" ; do
+	if [  -e /boot/"$f" ] ; then
+		mv -v /boot/$f /kernel
+		break
+	fi
+done
+if [ ! -e /kernel ] ; then
+	echo "Internal error - /kernel does not exist"
+	exit 1
 fi
+
+echo "Cleaning up unused kernel files ..."
+for kernel in "${KERNELS[@]}" ; do
+	if [ "$kernel" = "$kernel_selected" ] ; then
+		continue
+	fi
+	for f in "vmlinuz-$kernel" "vmlinux-$kernel" ; do
+		if [ -e /boot/"$f" ] ; then
+			rm -v /boot/$f
+		fi
+	done
+	rm -rvf /lib/modules/"$kernel"
+	rm -rvf /usr/src/linux-headers-"$kernel" || true
+done
 
 echo "Enabling KMSCON with auto-login ..."
 rm -fv /etc/systemd/system/getty.target.wants/getty@tty1.service
