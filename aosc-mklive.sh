@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+shopt -s extglob
+
 usage() {
 	cat << EOF
 Usage: $0 livekit|installer
@@ -17,6 +19,68 @@ Environment variables:
 EOF
 }
 
+export ARCH="${ARCH:-$(dpkg --print-architecture)}"
+
+case "$ARCH" in
+	amd64)
+		memtest86plus_files=(memtest32.bin memtest32.efi memtest64.efi)
+		;;
+	loongarch64)
+		memtest86plus_files=(memtest64.efi)
+		;;
+	*)
+		memtest86plus_files=()
+		;;
+esac
+
+check_env() {
+	local missing_bins=() err=0
+	echo "Checking build environment ..."
+	echo "Checking binaries ..."
+	for bin in \
+		mksquashfs xorriso aoscbootstrap grub-mkrescue ; do
+		echo -n "Checking if command '$bin' exists ... "
+		if ! command -v "$bin" &>/dev/null ; then
+			echo "no"
+			missing_bins+=("$bin")
+			continue
+		fi
+		echo "yes"
+	done
+	if [ "${#missing_bins[@]}" -gt 0 ] ; then
+		echo "Some of the required commands are missing in the system:"
+		for bin in "${mising_binsp[@]}" ; do
+			echo "- $bin"
+		done
+		echo "Please install them before proceeding."
+		err=1
+	fi
+	echo -n "Checking for loop device support ..."
+	if [ ! -e "/dev/loop-control" ] ; then
+		err=1
+		echo "no"
+		echo "Your system currently does not have loop device support."
+	else
+		echo "yes"
+	fi
+	# The rest of this logic checks for Memtest86+ binaries.
+	if [ "${ARCH/@(amd64|loongarch64)/}" == "$ARCH" ] ; then
+		return $err
+	fi
+	echo "Checking for Memtest86+ binaries ..."
+	if [ ! -d "/boot/memtest86plus" ] ; then
+		echo "memtest86plus hasn't been installed on your system."
+		err=1
+	fi
+	for f in "${memtest86plus_files[@]}" ; do
+		if [ ! -e /boot/memtest86plus/$f ] ; then
+			echo "- Memtest86+ file '$f' does not exist"
+			err=1
+		fi
+	done
+	return "$err"
+}
+
 call_gen_installer() {
 	echo "Calling gen-installer.sh ..."
 	env REPO=$REPO TOPICS="$TOPICS" ${PWD}/gen-installer.sh || { echo "Failed to generate an installer image!" ; exit 1 ; }
@@ -31,7 +95,10 @@ call_gen_livekit() {
 
 [ "x$EUID" = "x0" ] || { echo "Please run me as root." ; exit 1 ; }
 
-export ARCH="${ARCH:-$(dpkg --print-architecture)}"
+check_env || {
+	echo "Error(s) found, see optupt above for details."
+	exit 1
+}
 
 tgt=$1
 case "$tgt" in
