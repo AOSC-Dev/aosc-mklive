@@ -40,6 +40,13 @@ WHITELIST="^/efi
     # Remove some extra files that absolutely should not be in the release files.
     echo -e '\e[1mRemoving sensitive files ...\e[0m'
     rm -fv /etc/machine-id
+    # Creating an empty machine-id file for systemd to fill it on the first
+    # boot, since we are now defaulting to read-only for the boot process,
+    # and once the filesystem is read only, files can not be created.
+    # Systemd bind-mounts a temporary file to /etc/machine-id and updates
+    # it once the filesystem is mounted read-write. Thus, an empty machine-
+    # id file is required for systemd to function properly.
+    touch /etc/machine-id
     rm -fv /etc/ssh/ssh_host_*_key*
 }
 
