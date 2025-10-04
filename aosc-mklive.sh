@@ -118,26 +118,14 @@ case "$tgt" in
 		;;
 esac
 
-if [[ "${ARCH}" = "amd64" || \
-      "${ARCH}" = "i486" ]]; then
-	echo "Building and installing Memtest86+ ..."
-	mkdir memtest && cd memtest
-	wget https://www.memtest.org/download/v${MT86VER:-7.00}/mt86plus_${MT86VER:-7.00}.src.zip
-	unzip mt86plus_${MT86VER:-7.00}.src.zip
-
-	if [[ "${ARCH}" = "amd64" ]]; then
-		make -C build64
-		install -Dvm644 build64/memtest.{bin,efi} \
-			../iso/boot/
-	elif [[ "${ARCH}" = "i486" ]]; then
-		sed -e 's|i586|i486|g' \
-			-i build32/Makefile
-		make -C build32 \
-			CC="gcc-multilib-wrapper"
-		install -Dvm644 build32/memtest.{bin,efi} \
-			../iso/boot/
-	fi
-	cd ..
+# Install memtest86+ from the host system
+if [ "${ARCH/@(amd64|loongarch64)/}" != "$ARCH" ] ; then
+	echo "Installing Memtest86+ binaries ..."
+	for file in "${memtest86plus_files[@]}" ; do
+		install -Dvm644 \
+			/boot/memtest86plus/"$file" \
+			"$PWD"/iso/boot/"$file"
+	done
 fi
 
 if [ "$ARCH" = "loongson3" ] ; then
