@@ -85,8 +85,9 @@ if [ "$(dpkg --print-architecture)" = "loongson3" ] ; then
 		--xz \
 		-c /dev/zero \
 		--add "drm dm aosc-livekit-loader" \
+		--no-hostonly \
 		--xz --no-early-microcode \
-		--omit "network i18n plymouth crypt mdraid lvm ostree qemu virtiofs bcache btreefs kernel-modules-extra hwdb lunmask btrfs modsign dm systemd-battery-check qemu-net resume  " \
+		--omit "network i18n plymouth crypt mdraid lvm ostree qemu virtiofs bcache btreefs kernel-modules-extra hwdb lunmask btrfs modsign systemd-battery-check qemu-net resume  " \
 		"/live-initramfs-lite.img" --force
 fi
 
