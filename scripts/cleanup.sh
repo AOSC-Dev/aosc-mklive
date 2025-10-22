@@ -46,7 +46,7 @@ WHITELIST="^/efi
     # Systemd bind-mounts a temporary file to /etc/machine-id and updates
     # it once the filesystem is mounted read-write. Thus, an empty machine-
     # id file is required for systemd to function properly.
-    touch /etc/machine-id
+    echo "uninitialized" > /etc/machine-id
     rm -fv /etc/ssh/ssh_host_*_key*
 }
 
