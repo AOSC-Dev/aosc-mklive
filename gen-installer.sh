@@ -21,8 +21,8 @@ WORKDIR=${WORKDIR:-$PWD/work}
 # Output directory.
 OUTDIR=${OUTDIR:-$PWD/iso}
 # Layers.
-LAYERS=("desktop-common" "livekit" "desktop" "desktop-nvidia" "server")
-LAYERS_NONVIDIA=("desktop-common" "livekit" "desktop" "server")
+LAYERS=("desktop-common" "livekit" "desktop" "desktop-nvidia")
+LAYERS_NONVIDIA=("desktop-common" "livekit" "desktop")
 # Available layers for different archs.
 LAYERS_amd64=("${LAYERS[@]}")
 LAYERS_arm64=("${LAYERS[@]}")
@@ -43,8 +43,8 @@ PKGS_desktop_latx=("latx" "wine")
 # It does noting to the behaviour to this script.
 # NOTE livekit must not present in this array. It will be added later.
 # NOTE base must not present in this array, as base will get mounted automatically.
-SYSROOTS=("desktop" "desktop-nvidia" "server")
-SYSROOTS_NONVIDIA=("desktop" "server")
+SYSROOTS=("desktop" "desktop-nvidia")
+SYSROOTS_NONVIDIA=("desktop")
 SYSROOTS_amd64=("${SYSROOTS[@]}")
 SYSROOTS_arm64=("${SYSROOTS[@]}")
 SYSROOTS_loongarch64=("${SYSROOTS_NONVIDIA[@]}")
