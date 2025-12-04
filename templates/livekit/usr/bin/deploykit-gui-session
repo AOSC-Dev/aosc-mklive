@@ -10,6 +10,16 @@ alsactl init &
 xset s off &
 # Set volume to a lower value.
 pactl set-sink-volume '@DEFAULT_SINK@' '60%'
+
+# Wait for the Window Manager to fully initialize.
+while true ; do
+	sleep 1
+	if xprop -root | grep -q _NET_SUPPORTING_WM_CHECK ; then
+		break
+	fi
+done
+sleep 1
+
 env WEBKIT_DISABLE_DMABUF_RENDERER=1 deploykit-gui -d /usr/share/deploykit-gui/bgm
 
 # Process clean-up.
