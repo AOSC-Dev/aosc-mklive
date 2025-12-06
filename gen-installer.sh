@@ -12,6 +12,8 @@ source lib.bash
 ARCH=${ARCH:-$(dpkg --print-architecture)}
 # Topic parameter to pass to aoscbootstrap
 TOPIC_OPT=
+# Filesystem type.
+FSTYPE="${FSTYPE:-erofs}"
 # Path to aoscbootstrap scripts and recipes
 AOSCBOOTSTRAP=${AOSCBOOTSTRAP:-/usr/share/aoscbootstrap}
 # Package repository to download packages from.
@@ -20,6 +22,8 @@ REPO=${REPO:-https://repo.aosc.io/debs}
 WORKDIR=${WORKDIR:-$PWD/work}
 # Output directory.
 OUTDIR=${OUTDIR:-$PWD/iso}
+# Prefix directory for layers, templates and configuration.
+OUT_PREFIX="$OUTDIR"/livekit
 # Layers.
 LAYERS=("desktop-common" "livekit" "desktop" "desktop-nvidia")
 LAYERS_NONVIDIA=("desktop-common" "livekit" "desktop")
@@ -301,15 +305,13 @@ squash_layer() {
 		return
 	fi
 	info "Squashing layer $tgt ..."
-	pushd "$WORKDIR/$tgt"
 	if [ "x$1" = "xbase" ] ; then
-		outfile="${OUTDIR}/squashfs/$tgt.squashfs"
+		outfile="${OUT_PREFIX}/$tgt.$FSTYPE"
 	else
-		outfile="${OUTDIR}/squashfs/layers/$tgt.squashfs"
+		outfile="${OUT_PREFIX}/layers/$tgt.$FSTYPE"
 	fi
-	mksquashfs . ${outfile} \
-		-noappend -comp xz -processors $(nproc)
-	popd
+	packfs "$FSTYPE" "$outfile" "$WORKDIR"/"$tgt" || \
+		die "Failed to pack layer into an filesystem image."
 }
 
 pack_templates() {
@@ -347,11 +349,9 @@ pack_templates() {
 	info "Umounting template layer ..."
 	umount ${WORKDIR}/$tgt-template-merged
 	info "Squashing template layer ..."
-	outfile=${OUTDIR}/squashfs/templates/$tgt.squashfs
-	pushd ${WORKDIR}/$tgt-template
-	mksquashfs . ${outfile} \
-		-noappend -comp xz -processors $(nproc)
-	popd
+	outfile=${OUT_PREFIX}/templates/"$tgt"."$FSTYPE"
+	packfs "$FSTYPE" "$outfile" "${WORKDIR}"/"$tgt"-template || \
+		die "Failed to pack the template into a filesystem image."
 }
 
 get_info() {
@@ -401,12 +401,12 @@ prepare() {
 	done
 	mkdir -pv ${WORKDIR}/merged
 	mkdir -pv ${OUTDIR}/manifest
-	mkdir -pv ${OUTDIR}/squashfs/layers
-	mkdir -pv ${OUTDIR}/squashfs/templates
+	mkdir -pv ${OUT_PREFIX}/layers
+	mkdir -pv ${OUT_PREFIX}/templates
 	# File for gen-recipe.py to read. Contains recipe information.
 	touch ${OUTDIR}/sysroots.ini
 	# File for the dracut loader to read. Contains layers and their dependencies.
-	touch ${OUTDIR}/squashfs/layers.conf
+	touch ${OUT_PREFIX}/livekit.conf
 	if [ "x$TOPICS" != "x" ] ; then
 		for t in $TOPICS ; do
 			info "Will opt in topic '$t'."
@@ -458,7 +458,9 @@ cat > ${OUTDIR}/sysroots.ini << EOF
 sysroots=${AVAIL_SYSROOTS1[@]}
 
 EOF
-cat > ${OUTDIR}/squashfs/layers.conf << EOF
+cat > ${OUT_PREFIX}/livekit.conf << EOF
+# Filesystem type.
+FSTYPE="$FSTYPE"
 # All available layers.
 LAYERS=$(dump_array AVAIL_LAYERS)
 # All possible sysroots these layers combine to.
@@ -474,9 +476,9 @@ SYSROOT_DEP_desktop_nvidia=("base" "desktop-common" "desktop" "desktop-nvidia")
 SYSROOT_DEP_desktop_latx=("base" "desktop-common" "desktop" "desktop-latx")
 SYSROOT_DEP_livekit_nvidia=("base" "desktop-common" "desktop-nvidia" "livekit")
 
-TEMPLATE_desktop_nvidia="desktop.squashfs"
-TEMPLATE_desktop_latx="desktop.squashfs"
-TEMPLATE_livekit_nvidia="livekit.squashfs"
+TEMPLATE_desktop_nvidia="desktop.$FSTYPE"
+TEMPLATE_desktop_latx="desktop.$FSTYPE"
+TEMPLATE_livekit_nvidia="livekit.$FSTYPE"
 EOF
 bootstrap_base
 get_info base
@@ -503,8 +505,8 @@ info "Downloading translated recipe ..."
 curl -Lo "$OUTDIR"/manifest/recipe-i18n.json https://releases.aosc.io/manifest/recipe-i18n.json
 
 info "Copying hooks ..."
-cp -av ${PWD}/hooks ${OUTDIR}/squashfs/
+cp -av ${PWD}/hooks ${OUT_PREFIX}/
 
 info "Build successful!"
 tree -h ${OUTDIR}
-info "Total image size: $(du -sh ${OUTDIR}/squashfs | awk '{ print $1 }')"
+info "Total image size: $(du -sh ${OUT_PREFIX} | awk '{ print $1 }')"

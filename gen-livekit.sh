@@ -1,14 +1,8 @@
 #!/bin/bash
 # New LiveKit generator.
 # This "new" LiveKit will use our dracut loader to load the LiveKit.
-
+set -e
 source lib.bash
-# Config file for the dracut loader.
-CONF="# AOSC OS LiveKit config for LiveKit loader.
-# The LiveKit itself is the base layer.
-# No more configuration required!
-SYSROOT_DEP_base=('base')
-"
 
 # Set of '--topics TOPIC' options to be passed to aoscbootstrap.
 TOPICS_OPT=
@@ -17,13 +11,14 @@ WORKDIR=${PWD}/work
 ISODIR=${PWD}/iso
 AOSCBOOTSTRAP=${AOSCBOOTSTRAP:-/usr/share/aoscbootstrap}
 FSTYPE=${FSTYPE:-squashfs}
+OUT_PREFIX="$ISODIR"/livekit
 
 info "Generating LiveKit distribution ..."
 
 info "Preparing ..."
 rm -rf iso work
 mkdir -p $WORKDIR/livekit
-mkdir -p $ISODIR/$FSTYPE
+mkdir -p $ISODIR/livekit
 # We have to pack up the dracut module and copy into the target sysroot
 # where it will be untarred and installed into initrd.
 tar cf $WORKDIR/livekit/dracut.tar dracut
@@ -107,16 +102,23 @@ if [[ "${RETRO}" != "1" ]]; then
 	fi
 fi
 
+# Config file for the dracut loader.
+CONF="# AOSC OS LiveKit config for LiveKit loader.
+# The LiveKit itself is the base layer.
+# No more configuration required!
+FSTYPE="$FSTYPE"
+SYSROOT_DEP_base=('base')
+"
 info "Squashing rootfs ..."
-packfs "$FSTYPE" "$ISODIR"/"$FSTYPE"/base.squashfs "$WORKDIR"/livekit
+packfs "$FSTYPE" "$OUT_PREFIX"/base."$FSTYPE" "$WORKDIR"/livekit
 
 info "Installing GRUB config files ..."
 make -C "$PWD"/boot/grub install TARGET=livekit
 
 info "Writing config file ..."
-echo "$CONF" > $ISODIR/$FSTYPE/layers.conf
+echo "$CONF" > "$OUT_PREFIX"/livekit.conf
 
 info "Copying hooks ..."
-cp -a "$PWD"/hooks $ISODIR/$FSTYPE/
+cp -a "$PWD"/hooks "$OUT_PREFIX"/
 
 info "Done generating the LiveKit image!"
