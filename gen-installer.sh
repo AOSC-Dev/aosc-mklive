@@ -155,7 +155,7 @@ start_container() {
 }
 
 kill_container() {
-	local _cnt _dir
+	local _cnt _dir _timeout=30
 	_dir="${WORKDIR}"/merged
 	if ! machinectl -q status isobuild &>/dev/null ; then
 		die "The container is not running!"
@@ -163,8 +163,11 @@ kill_container() {
 	info "Killing container ..."
 	machinectl terminate isobuild
 	_cnt=0
+	if [ "$ARCH" != "$(dpkg --print-architecture)" ] ; then
+		_timeout=300
+	fi
 	while machinectl -q status isobuild &>/dev/null ; do
-		if [ $_cnt -ge "30" ] ; then
+		if [ $_cnt -ge $_timeout ] ; then
 			die "The container can not be terminated after 30 seconds."
 		fi
 		sleep 1
