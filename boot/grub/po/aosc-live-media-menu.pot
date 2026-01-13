@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-19 16:51+0800\n"
+"POT-Creation-Date: 2026-01-13 17:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,92 +21,133 @@ msgstr ""
 msgid "Install AOSC OS (Command-line Only)"
 msgstr ""
 
-#: installer.cfg:11 installer.cfg:48 livekit.cfg:11 livekit.cfg:48
+#: installer.cfg:7 installer.cfg:44 livekit.cfg:7 livekit.cfg:44
 msgid "Install AOSC OS"
 msgstr ""
 
-#: installer.cfg:13 livekit.cfg:13
+#: installer.cfg:9 livekit.cfg:9
 msgid "Install AOSC OS (Serial Console)"
 msgstr ""
 
-#: installer.cfg:18 livekit.cfg:18
+#: installer.cfg:14 livekit.cfg:14
 #, sh-format
 msgid ""
 "Your system currently have $memsize MiB of memory, but at least $memreq MiB "
 "is required to run LiveKit/Retro."
 msgstr ""
 
-#: installer.cfg:19 livekit.cfg:19
+#: installer.cfg:15 livekit.cfg:15
 msgid "The requirement is not fullfilled, thus LiveKit has been disabled.."
 msgstr ""
 
-#: installer.cfg:21 livekit.cfg:21
+#: installer.cfg:17 livekit.cfg:17
 #, sh-format
 msgid ""
 "Your system currently have $memsize MiB of memory, but at least $memreq MiB "
 "is required to run the graphical environment."
 msgstr ""
 
-#: installer.cfg:22 livekit.cfg:22
+#: installer.cfg:18 livekit.cfg:18
 msgid "The graphical environment has been disabled."
 msgstr ""
 
-#: installer.cfg:25 livekit.cfg:25
+#: installer.cfg:21 livekit.cfg:21
 msgid "Press any key to return to the main menu."
 msgstr ""
 
-#: installer.cfg:30 livekit.cfg:30
+#: installer.cfg:26 livekit.cfg:26
 msgid "LiveKit has detected that your system has insufficient memory"
 msgstr ""
 
-#: installer.cfg:34 livekit.cfg:34
+#: installer.cfg:30 livekit.cfg:30
 msgid "to run the LiveKit and has disabled the live environment."
 msgstr ""
 
-#: installer.cfg:38 livekit.cfg:38
+#: installer.cfg:34 livekit.cfg:34
 msgid "and has disabled the graphical environment."
 msgstr ""
 
-#: installer.cfg:54
-msgid "Install AOSC OS (With NVIDIA graphics)"
+#: installer.cfg:50
+msgid "Graphics options for AOSC OS installation >>"
 msgstr ""
 
-#: installer.cfg:60
+#: installer.cfg:54
 msgid "Try AOSC OS Desktop"
 msgstr ""
 
-#: installer.cfg:66
-msgid "Try AOSC OS Desktop (With NVIDIA graphics)"
+#: installer.cfg:60
+msgid "Graphics options for AOSC OS Desktop >>"
 msgstr ""
 
-#: installer.cfg:90
+#: installer.cfg:82
 msgid "Troubleshooting Options >>"
 msgstr ""
 
-#: installer.cfg:91 livekit.cfg:54
+#: installer.cfg:83 livekit.cfg:50
 msgid "Install AOSC OS (Basic graphics)"
 msgstr ""
 
-#: installer.cfg:103 installer.cfg:117 livekit.cfg:79 livekit.cfg:93
+#: installer.cfg:95 installer.cfg:113 livekit.cfg:75 livekit.cfg:93
 msgid "Utilities >>"
 msgstr ""
 
-#: installer.cfg:105 installer.cfg:118 livekit.cfg:81 livekit.cfg:94
+#: installer.cfg:97 installer.cfg:114 livekit.cfg:77 livekit.cfg:94
 msgid "Memory Test"
 msgstr ""
 
-#: installer.cfg:110 livekit.cfg:86
+#: installer.cfg:106 livekit.cfg:86
 msgid "UEFI Firmware Settings"
 msgstr ""
 
-#: installer.cfg:125 livekit.cfg:101
+#: installer.cfg:121 livekit.cfg:101
 msgid "Boot Default OS"
 msgstr ""
 
-#: installer.cfg:130 livekit.cfg:106
+#: installer.cfg:126 livekit.cfg:106
 msgid "Restart"
 msgstr ""
 
-#: installer.cfg:133 livekit.cfg:109
+#: installer.cfg:129 livekit.cfg:109
 msgid "Power Off"
+msgstr ""
+
+#: installer-livekit-gpus.cfg:3
+msgid "Install AOSC OS (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
+msgstr ""
+
+#: installer-livekit-gpus.cfg:8
+msgid "Install AOSC OS (With NVIDIA graphics, up to GTX 10 series)"
+msgstr ""
+
+#: installer-livekit-gpus.cfg:15
+msgid "Install AOSC OS (With Zhaoxin KX-6000G/7000 series)"
+msgstr ""
+
+#: installer-livekit-gpus.cfg:20
+msgid "Install AOSC OS (With Zhaoxin KX-6000/6900 series)"
+msgstr ""
+
+#: installer-livekit-gpus.cfg:27
+msgid "Install AOSC OS (With Loongson 7A2000/LG110 graphics)"
+msgstr ""
+
+#: installer-desktop-gpus.cfg:3
+msgid ""
+"Try AOSC OS Desktop (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
+msgstr ""
+
+#: installer-desktop-gpus.cfg:8
+msgid "Try AOSC OS Desktop (With NVIDIA graphics, up to GTX 10 series)"
+msgstr ""
+
+#: installer-desktop-gpus.cfg:15
+msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000G/7000 series)"
+msgstr ""
+
+#: installer-desktop-gpus.cfg:20
+msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000/6900 series)"
+msgstr ""
+
+#: installer-desktop-gpus.cfg:27
+msgid "Try AOSC OS Desktop (With Loongson 7A2000/LG110 graphics)"
 msgstr ""
