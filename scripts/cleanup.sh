@@ -7,6 +7,7 @@ WHITELIST="^/efi
 ^/usr
 ^/var/lib/apt/gen
 ^/var/lib/apt/extended_states
+^/var/lib/atm
 ^/var/lib/dkms
 ^/var/lib/dpkg
 ^/var/log/journal$
@@ -48,6 +49,8 @@ WHITELIST="^/efi
     # id file is required for systemd to function properly.
     echo "uninitialized" > /etc/machine-id
     rm -fv /etc/ssh/ssh_host_*_key*
+    # Indicate first boot to populate system users and tmpfiles.
+    rm -fv /etc/.updated
 }
 
 set -eo pipefail
