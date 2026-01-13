@@ -84,7 +84,7 @@ def main():
 		import subprocess
 		arch = subprocess.getoutput('dpkg --print-architecture')
 	dataset = configparser.ConfigParser()
-	dataset.read('recipe.ini')
+	dataset.read('helpers/recipe.ini')
 	archs = dataset.get('recipe', 'archs').split()
 	if arch not in archs:
 		print(f"ERROR: Specified target {arch} looks like an invalid one.")
