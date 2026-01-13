@@ -22,6 +22,7 @@ systemd-nspawn -D $TGT systemctl mask suspend.target
 systemd-nspawn -D $TGT systemctl mask hibernation.target
 
 echo "Installing Installation tools ..."
+echo "deb ${REPO} stable main" > "$TGT"/etc/apt/sources.list
 systemd-nspawn -D $TGT -- oma --no-check-dbus install \
 	-y --no-refresh-topics \
 	gparted select-language-gui xinit
@@ -30,11 +31,4 @@ echo "Enabling language selection UI ..."
 mkdir -pv $TGT/usr/lib/systemd/system/sddm.service.wants
 ln -sfv ../select-language-gui.service $TGT/usr/lib/systemd/system/sddm.service.wants/select-language-gui.service
 
-echo "Cleaning up ..."
-rm -r $TGT/var/cache/apt/archives
-rm -r $TGT/var/lib/oma/*
-rm -r $TGT/var/lib/apt/lists/*
-if [ -e $TGT/etc/machine-id ] ; then
-	rm $TGT/etc/machine-id
-	echo "uninitialized" > $TGT/etc/machine-id
-fi
+echo "deb https://repo.aosc.io/anthon/debs stable main" > "$TGT"/etc/apt/sources.list
