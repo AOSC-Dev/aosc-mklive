@@ -85,7 +85,7 @@ PODIR := po
 POT := $(PODIR)/aosc-live-media-menu.pot
 
 # GRUB script which contains translatable strings
-MENUS := installer.cfg livekit.cfg
+MENUS := installer.cfg livekit.cfg installer-livekit-gpus.cfg installer-desktop-gpus.cfg
 
 # Other GRUB config files.
 OTHERCFGS := grub.cfg init.cfg quirks.cfg serial-args.cfg
@@ -179,6 +179,8 @@ install: all
 	install -Dvm644 -t $(DESTDIR)$(PREFIX) $(MENUS) $(OTHERCFGS) $(LANGSEL)
 	$(foreach f,$(OTHERFILES),$(call install-other-files,$(f)))
 	sed -i -e 's|set tgt=installer|set tgt=$(TARGET)|g' $(DESTDIR)$(PREFIX)/grub.cfg
+	sed -i -e 's|set volid="@VOLID@"|set volid="$(VOLID)"|g' $(DESTDIR)$(PREFIX)/init.cfg
+	sed -i -e 's|set volid="@VOLID@"|set volid="$(VOLID)"|g' $(DESTDIR)$(PREFIX)/grub.cfg
 
 TESTISO ?= /tmp/test.iso
 ISODIR ?= iso
