@@ -1,0 +1,404 @@
+#!/bin/bash
+
+set -e
+shopt -s extglob
+
+# Current directory.
+TOP="$PWD"
+# Passed to getopt.
+PROGNAME="$0"
+# Target architecture.
+ARCH="$(dpkg --print-architecture)"
+# ISO date.
+DATE="$(date "+%Y%m%d")"
+# ISO revision.
+REV=""
+# Repo URL.
+REPO="https://repo-hk.aosc.io/anthon/debs"
+# Enabled topics.
+TOPICS=()
+# Filesystem type used to compress overlays.
+FSTYPE=erofs
+# Whether to put ISO images directly to the current directory.
+OUT_CWD=0
+# Path to aoscbootstrap recipes.
+AOSCBOOTSTRAP="/usr/share/aoscbootstrap"
+# Set to 1 to disable all compressions.
+LOCAL_TESTING=0
+# Targets.
+TARGETS=()
+# Work directory.
+# + WORKDIR/
+#   * base/
+#   * iso/	# content of the iso image
+#   * local/	# workdir= for overlayfs
+#   * merged/	# Mountpoint of the overlayfs
+#   + overlays/
+#     * desktop-common/
+#     * desktop/
+#     * livekit/
+#     * ...
+#   + templates/
+#     * ...
+WORKDIR="$TOP"/work
+STAMPDIR="$WORKDIR"/stamps
+OVERLAYDIR="$WORKDIR"/overlays
+# ISO contents directory.
+ISODIR="$TOP"/work/iso
+OUT_PREFIX="$ISODIR"/livekit
+
+ERR=0
+
+exit_hdl() {
+	if [ -e "$STAMPDIR"/merged.lock ] ; then
+		kill_container || true
+		umount_container || true
+	fi
+}
+
+check_env() {
+	local missing_bins=() err=0
+	echo "Checking build environment ..." >&2
+	echo "Checking binaries ..." >&2
+	for bin in \
+		mksquashfs xorriso aoscbootstrap grub-mkrescue \
+		systemd-nspawn machinectl mkfs.erofs losetup ; do
+		echo -n "Checking if command '$bin' exists ... " >&2
+		if ! command -v "$bin" &>/dev/null ; then
+			echo "no" >&2
+			missing_bins+=("$bin")
+			continue
+		fi
+		echo "yes" >&2
+	done
+	if [ "${#missing_bins[@]}" -gt 0 ] ; then
+		echo "Some of the required commands are missing in the system:" >&2
+		for bin in "${mising_binsp[@]}" ; do
+			echo "- $bin" >&2
+		done
+		echo "Please install them before proceeding." >&2
+		err=1
+	fi
+	echo -n "Checking for loop device support ... " >&2
+	if [ ! -e "/dev/loop-control" ] ; then
+		err=1
+		echo "no" >&2
+		echo "Your system currently does not have loop device support." >&2
+	else
+		echo "yes" >&2
+	fi
+	# The rest of this logic checks for Memtest86+ binaries.
+	if [ "${ARCH/@(amd64|loongarch64)/}" == "$ARCH" ] ; then
+		return $err
+	fi
+	echo -n "Checking for Memtest86+ binaries ... " >&2
+	if [ ! -d "/boot/memtest86plus" ] ; then
+		echo "memtest86plus hasn't been installed on your system." >&2
+		err=1
+	fi
+	for f in "${memtest86plus_files[@]}" ; do
+		if [ ! -e /boot/memtest86plus/$f ] ; then
+			echo "-- Memtest86+ file '$f' does not exist." >&2
+			err=1
+		fi
+	done
+	if [ "$err" == "0" ] ; then
+		echo "yes" >&2
+	else
+		echo "no" >&2
+	fi
+	echo -n "Checking for free loop devices ... " >&2
+	if [ -z "$(losetup -f)" ] ; then
+		echo "no" >&2
+		echo "-- No free loop device(s) available." >&2
+		err=1
+	else
+		echo "yes" >&2
+	fi
+	return "$err"
+}
+
+usage() {
+	cat >&2 << EOF
+Usage: $PROGNAME [OPTIONS] TARGET [TARGET..]
+
+Targets:
+	livekit		Generate a LiveKit ISO
+	installer	Generate an installation ISO
+
+Options:
+	-h, --help
+		Prints this help message
+	-a, --arch ARCH
+		Target architecture
+	-d, --date DATE
+		Specify date with YYYYMMDD format
+	-v, --revision REVISION
+		Specify revision of the ISO (starting with a digit)
+	-r, --repo, -m, --mirror URL
+		Repository to download packages from
+	-t, --topic, --topics TOPIC_NAME
+		Build ISOs with specified topics; Support white space
+		separated lists
+	-f, --fstype TYPE
+		Select filesystem used by the ISO: squashfs, erofs
+	-O, --output-to-cwd
+		Do not create os-\$ARCH/\$TARGET when placing output files
+	-x, --xtrace
+		Enable Bash xtrace (for debugging)
+	--aoscbootstrap-dir DIR
+		Path to aoscbootstrap recipes and scripts
+	--local-testing
+		Enable local testing mode, disabling compression for all
+		filesystems
+
+Notes:
+	* Default filesytem type is erofs.
+	* Make sure there is sufficient disk space before enabling
+	  --local-testing.
+EOF
+}
+
+parse_cmdline() {
+	while true; do
+	case "$1" in
+		-a|--arch)
+			ARCH="$2"
+			shift 2
+			;;
+		-d|--date)
+			DATE="$2"
+			# This is enough.
+			if [ "${DATE//[0-9][0-9][0-9][0-9][0-1][0-9][0-3][0-9]/}" != "" ]; then
+				echo "FATAL: date must be in YYYYMMDD format" >&2
+				exit 1
+			fi
+			shift 2
+			;;
+		-v|--revision)
+			REV="$2"
+			if [ "${REV//[^0-9]/}" != "${REV}" ]; then
+				echo "FATAL: REV must start with a digit" >&2
+				exit 1
+			fi
+			REV=".$REV"
+			shift 2
+			;;
+		-h|--help)
+			usage
+			exit 0
+			;;
+		-r|--repo|-m|--mirror)
+			export REPO="$2"
+			shift 2
+			;;
+		-t|--topic|--topics)
+			TOPICS+=($2)
+			shift 2
+			;;
+		-f|--fstype)
+			FSTYPE="$2"
+			shift 2
+			;;
+		-O|--output-to-cmd)
+			OUT_CWD=1
+			shift
+			;;
+		--local-testing)
+			LOCAL_TESTING=1
+			shift
+			;;
+		-x|--xtrace)
+			exec 10> aosc-mklive-debug.log
+			BASH_XTRACEFD=10
+			PS4='> ${BASH_SOURCE}:${LINENO}: '
+			set -x
+			shift
+			;;
+		--)
+			shift
+			break
+			;;
+		*)
+			echo "FATAL: Unknown option ‘$1’" >&2
+			exit 1
+			;;
+	esac
+	done
+	if [ -z "$1" ] ; then
+		echo "FATAL: required target missing"
+		usage
+		exit 1
+	fi
+	IFS=$'\n'
+	TARGETS=($(echo "$*" | sort | uniq))
+	unset IFS
+	for target in "${TARGETS[@]}" ; do
+		if [ ! -d "$TOP"/overlays/"$target" ] ; then
+			echo "FATAL: Unknown target ‘$target’." >&2
+			exit 1
+		fi
+	done
+}
+
+OPTS="$(getopt -o "a:d:f:hm:r:t:v:xO" --long "arch:,repo:,date:,mirror:,topic:topics:,fstype:,aoscbootstrap-dir:,revision:,local-testing,xtrace,help" -n "$PROGNAME" -- "$@")"
+if [ "$?" != 0 ] ; then
+	usage
+	exit 1
+fi
+eval set -- "$OPTS"
+parse_cmdline "$@" || { usage; exit 1; }
+
+if [ "$EUID" != "0" ] ; then
+	echo "FATAL: This tool requires root." >&2
+	exit 1
+fi
+
+if ! check_env ; then
+	echo "FATAL: Error(s) found." >&2
+	exit 1
+fi
+
+source lib.bash
+
+echo "================================================================================" >&2
+echo "			      AOSC Live Media Generator" >&2
+echo "================================================================================" >&2
+
+if bool "$OUT_CWD"; then
+	OUTDIR="$TOP"
+else
+	OUTDIR="$TOP"/os-"$ARCH"
+fi
+
+info "Architecture       : $ARCH"
+info "Architecture group : $(ab_get_archgroup)"
+info "Filesystem backend : $FSTYPE"
+info "ISOs to build      : ${TARGETS[*]}"
+info "Repo URL	   : $REPO"
+info "Date string	: $DATE"
+info "Revision	   : $REV"
+if [ "${#TOPICS[@]}" -gt 0 ] ; then
+	info "Topic(s) enabled   : ${TOPICS[*]}"
+fi
+info "Local testing      : $(fmt_bool "$LOCAL_TESTING")"
+
+trap "exit_hdl" ERR EXIT
+
+for target in "${TARGETS[@]}" ; do
+	info "Preparing to generate $target ..."
+	ISONAME="aosc-os_${target}_${DATE}${REV}_${ARCH}.iso"
+	if bool "$OUT_CWD" ; then
+		OUTPUT="$TOP"/"$ISONAME"
+	else
+		OUTPUT="$TOP"/os-"$ARCH"/"$target"/"$ISONAME"
+	fi
+	VOLID="aosc-os-$target-$DATE"
+	info "ISO Volume Name: $VOLID"
+
+	mkdir -p "$(dirname "$OUTPUT")"
+	info "Output path: $OUTPUT"
+
+	info "Prepairing ..."
+	pre_cleanup
+	prepare
+
+	info "Reading configuration ..."
+	read_tgt_config "$target"
+	archgroup="$(ab_get_archgroup)"
+	config="$AOSCBOOTSTRAP/config/aosc-$archgroup.toml"
+	declare -A COLLECTED_OVERLAYS
+	OVERLAYS=()
+	for sysroot in "${SYSROOTS[@]}" ; do
+		# NOTE: Using subshells to avoid polluting the environment.
+		if [ "$sysroot" = "base" ] ; then
+			info "Generating base distribution ..."
+			(
+				set -e
+				source "overlays/"$target"/base.conf"
+				if [ -n "$SCRIPT_PREBOOTSTRAP" ] && [ -e "$SCRIPT_PREBOOTSTRAP" ] ; then
+					info "Running pre-base templates ..."
+					info source "$SCRIPT_PREBOOTSTRAP"
+				fi
+				gen_base "$RECIPE" "$config" "${SCRIPTS_BOOTSTRAP[@]}" || die "Failed to generate base distribution!"
+				if [ -n "$SCRIPT_POSTBOOTSTRAP" ] && [ -e "$SCRIPT_POSTBOOTSTRAP" ] ; then
+					info "Running post-base templates ..."
+					info source "$SCRIPT_POSTBOOTSTRAP"
+				fi
+
+				info "Packing base distribution ..."
+				packfs "$FSTYPE" "$OUT_PREFIX"/base."$FSTYPE" "$WORKDIR"/base
+				get_info base
+
+			) || die "Failed to generate the base distribution!"
+			continue
+		fi
+		source "$TOP"/sysroots/"$target"/"$sysroot".conf
+		info "Generating overlays that make up sysroot '$sysroot' ..."
+		dbg "Overlays that make up $sysroot: ${OVERLAY_DEP[@]}"
+		for overlay in "${OVERLAY_DEP[@]}" ; do
+			if [ "$overlay" = "base" ] ; then
+				warn "Skipping base - you should remove base in \${DEPS[@]} in ‘sysroots/$target/$overlay.conf’."
+				continue
+			fi
+			if [ -e "$STAMPDIR"/"$overlay".stamp ] ; then
+				info "Overlay ‘$overlay’ is already generated. Skipping."
+				continue
+			fi
+			mount_overlay "$target" "$overlay"
+			start_container
+			install_overlay "$target" "$overlay"
+			kill_container
+			postinst_overlay "$target" "$overlay"
+			umount_container
+			squash_overlay "$overlay"
+			touch "$STAMPDIR"/"$overlay".stamp
+			COLLECTED_OVERLAYS[$overlay]="$overlay"
+		done
+		# Templates are overlayed on sysroots.
+		info "Applying template for $target ..."
+		mount_sysroot "$target" "$sysroot"
+		get_info "$sysroot"
+		pack_templates "$sysroot"
+		umount_sysroot # umount merged sysroota
+	done
+	OVERLAYS=(${COLLECTED_OVERLAYS[@]})
+	info "Overlays for this target: ${OVERLAYS[@]}"
+	info "Installing boot files ..."
+	make -C boot/grub install TARGET="$target" DESTDIR="$ISODIR" VOLID="$VOLID"
+
+	info "Installing dracut loader configuration ..."
+	install -Dvm644 "$TOP"/targets/"$target".loader.conf \
+		"$OUT_PREFIX"/livekit.conf
+	echo "FSTYPE=$FSTYPE" >> "$OUT_PREFIX"/livekit.conf
+
+	info "Installing hooks ..."
+	cp -av "$TOP"/hooks "$OUT_PREFIX"/hooks
+
+	info "Running pre-process script ..."
+	source "$TOP"/scripts/iso-pre-process.bash
+
+	info "Generating ISO ..."
+	create_iso "$VOLID" "$WORKDIR"/base "${ISODIR##$TOP/}" "${OUTPUT##$TOP/}"
+
+	info "Running post-process script ..."
+	source "$TOP"/scripts/iso-post-process.bash
+
+	info "Generating checksum ..."
+	sha256sum "$OUTPUT" \
+		> "$OUTPUT".sha256sum
+
+	if [ "x$SUDO_UID" != "x" ] && [ "x$SUDO_GID" != "x" ] ; then
+		info "Fixing permissions of the output ..."
+		if [ -d "$TOP"/os-"$ARCH" ] ; then
+			chown -vR "$SUDO_UID":"$SUDO_GID" "$TOP"/os-"$ARCH"
+		else
+			chown -v "$SUDO_UID:$SUDO_GID" "$OUTPUT" "$OUTPUT.sha256sum"
+		fi
+	fi
+
+	info "Cleaning up ..."
+	rm -fr "$ISODIR" "$WORKDIR"
+	unset OVERLAYS COLLECTED_OVERLAYS
+done
+info "Generation successfully!"

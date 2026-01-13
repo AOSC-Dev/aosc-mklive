@@ -1,0 +1,42 @@
+#!/bin/bash
+if [ "$target" = installer ] ; then
+	info "Creating configuration ..."
+	# Remove livekit from SYSROOTS[@].
+	# This is for the installer data.
+	SYSROOT1=()
+	# Remove base from SYSROOTS[@].
+	# This is for the loader configuration.
+	SYSROOT2=()
+	for s in "${SYSROOTS[@]}" ; do
+		if [ "$s" != "base" ] ; then
+			SYSROOT2+=("$s")
+		fi
+		if [ "${s/livekit/}" == "$s" ] ; then
+			SYSROOT1+=("$s")
+		fi
+	done
+	echo "[installer]" >> "$ISODIR"/sysroots.ini
+	echo "sysroots=${SYSROOT1[*]}" >> "$ISODIR"/sysroots.ini
+	echo "LAYERS=$(dump_array OVERLAYS)" >> "$OUT_PREFIX"/livekit.conf
+	echo "SYSROOT_LAYERS=$(dump_array SYSROOT2)" >> "$OUT_PREFIX"/livekit.conf
+	cat "$TOP"/targets/installer.loader.conf.part2 >> "$OUT_PREFIX"/livekit.conf
+
+	info "Generating recipe ..."
+	"$TOP"/helpers/gen-recipe.py "$ISODIR"/sysroots.ini "$ISODIR"/manifest/recipe.json
+
+	info "Downloading translated recipe ..."
+	curl -Lo "$ISODIR"/manifest/recipe-i18n.json \
+		https://releases.aosc.io/manifest/recipe-i18n.json
+fi	
+# Install memtest86+ from the host system
+if [ "${ARCH/@(amd64|loongarch64)/}" != "$ARCH" ] ; then
+	echo "Installing Memtest86+ binaries ..."
+	for file in "${memtest86plus_files[@]}" ; do
+		install -Dvm644 \
+			/boot/memtest86plus/"$file" \
+			"$PWD"/iso/boot/"$file"
+	done
+elif [ "$ARCH" = "loongson3" ] ; then
+	echo "Installing PMON boot.cfg ..."
+	install -vm644 "$PWD"/boot/boot-$target.cfg "$PWD"/iso/boot/boot.cfg
+fi
