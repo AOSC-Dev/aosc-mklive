@@ -13,6 +13,15 @@ default_config() {
 	esac
 }
 
+# We are generating using mklive (this script is being run by postinst_overlay()).
+if [ "$MKLIVE" = "1" ] ; then
+	kernel_out="/run/mklive-out/boot/kernel"
+	initrd_out="/run/mklive-out/boot/live-initramfs.img"
+else
+	kernel_out="/kernel"
+	initrd_out="/live-initramfs.img"
+fi
+
 echo "Customising Plymouth theme ..."
 sed -e 's|semaphore|livekit|g' \
     -i /etc/plymouth/plymouthd.conf
@@ -40,36 +49,29 @@ if [ -z "$kernel_selected" ] ; then
 	echo "Internal error - no kernel selected to generate a initramfs image"
 	exit 1
 fi
-echo "Generating initramfs image using kernel $kernel_selected ..."
-if [ "x$INSTALLER" != "x1" ] ; then
-	tmpdir=$(mktemp -d)
-	pushd $tmpdir
-		tar xf /dracut.tar
-		rm /dracut.tar
-		cp -av dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
-	popd
-	rm -r $tmpdir
-	# Host-only mode should be disabled. This initramfs is generic.
-	dracut \
-		--xz -c /dev/zero \
-		--add "aosc-livekit-loader drm" \
-		--omit "crypt mdraid lvm" \
-		--no-hostonly \
-		--xz --no-early-microcode \
-		/live-initramfs.img \
-		"$kernel_selected"
-else
-	cp -av /run/mklive/dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
-	dracut \
-		--xz -c /dev/zero \
-		--add "aosc-livekit-loader drm" \
-		--omit "crypt mdraid lvm" \
-		--no-hostonly \
-		--xz --no-early-microcode \
-		--omit "crypt mdraid lvm" \
-		/live-initramfs.img \
-		"$kernel_selected"
+
+if [ "$ARCH" = "loongarch64" ] ; then
+	echo "Teaking xorg.conf to mark amdgpu as a discrete GPU ..."
+	cat >> /etc/X11/xorg.conf << EOF
+Section "OutputClass"
+    Identifier "Discrete GPU"
+    MatchDriver "amdgpu"
+    Option "PrimaryGPU" "yes"
+EndSection
+EOF
 fi
+
+echo "Generating initramfs image using kernel $kernel_selected ..."
+cp -av /run/mklive/dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
+dracut \
+	--xz -c /dev/zero \
+	--add "aosc-livekit-loader drm" \
+	--omit "crypt mdraid lvm" \
+	--no-hostonly \
+	--no-hostonly-cmdline \
+	--no-early-microcode \
+	"$initrd_out" \
+	"$kernel_selected"
 
 if [ "$(dpkg --print-architecture)" = "loongson3" ] ; then
 	# Generate a stripped-down version of the initrd, specifically for
@@ -86,19 +88,21 @@ if [ "$(dpkg --print-architecture)" = "loongson3" ] ; then
 		-c /dev/zero \
 		--add "drm dm aosc-livekit-loader" \
 		--no-hostonly \
+		--no-hostonly-cmdline \
 		--xz --no-early-microcode \
 		--omit "network i18n plymouth crypt mdraid lvm ostree qemu virtiofs bcache btreefs kernel-modules-extra hwdb lunmask btrfs modsign systemd-battery-check qemu-net resume  " \
-		"/live-initramfs-lite.img" --force
+		"${initrd_out/.img/-lite.img}" --force
 fi
 
 echo "Moving kernel image out ..."
 for f in "vmlinuz-$kernel_selected" "vmlinux-$kernel_selected" ; do
 	if [  -e /boot/"$f" ] ; then
-		mv -v /boot/$f /kernel
+		mv -v /boot/$f "$kernel_out"
 		break
 	fi
 done
-if [ ! -e /kernel ] ; then
+
+if [ ! -e "$kernel_out"	] ; then
 	echo "Internal error - /kernel does not exist"
 	exit 1
 fi
@@ -113,6 +117,7 @@ for kernel in "${KERNELS[@]}" ; do
 			rm -v /boot/$f
 		fi
 	done
+	rm -rvf /boot/initramfs-"$kernel".img
 	rm -rvf /lib/modules/"$kernel"
 	rm -rvf /usr/src/linux-headers-"$kernel" || true
 done
@@ -159,6 +164,10 @@ usermod -a -G autologin live
 echo "Disabling suspend and hibernation ..."
 systemctl mask suspend.target
 systemctl mask hibernation.target
+
+echo "Enabling LightDM ..."
+# The actual unit file will be replaced by the one in the template.
+systemctl enable lightdm.service
 
 echo "Disabling open file handle limit ..."
 sed -e '/^fs.file-max/d' \
