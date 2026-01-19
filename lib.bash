@@ -271,7 +271,7 @@ generate_overlay_opts() {
 	IFS=$'\n'
 	local deps=($(
 		source "$TOP"/overlays/"$media"/"$tgt".conf
-		echo "${DEPS[*]}"
+		echo "${OVERLAY_DEPS[*]}"
 	))
 	unset IFS
 	for dep in "${deps[@]}" ; do
