@@ -8,6 +8,11 @@ export LANG=C.UTF-8
 export LANGUAGE=C.UTF-8
 export LC_ALL=C.UTF-8
 
+# Force libmount to use mount(2) to mount overlayfs.
+# The lowerdir option for the overlayfs will past the limit of fsconfig(2),
+# which is 256 characters.
+export LIBMOUNT_FORCE_MOUNT2=always
+
 if [ "$LOCAL_TESTING" = "1" ] ; then
 	SQUASHFS_COMP=none
 	EROFS_COMP=none
