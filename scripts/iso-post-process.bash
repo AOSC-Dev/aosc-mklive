@@ -33,7 +33,10 @@ if [[ "$ARCH" = "amd64" || \
 		mkdir -p ""$ISODIR"/EFI/debian"
 		cat > "$ISODIR"/EFI/debian/grub.cfg <<EOF
 loadfont unicode
-menuentry 'Secure Boot is enabled and NOT supported!' {
+menuentry 'Sorry, AOSC OS does not support Secure Boot.' {
+	true
+}
+menuentry 'Please disable Secure Boot before continuing.' {
 	true
 }
 menuentry 'UEFI Firmware Settings' {
