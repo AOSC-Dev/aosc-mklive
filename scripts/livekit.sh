@@ -15,6 +15,7 @@ default_config() {
 
 # We are generating using mklive (this script is being run by postinst_overlay()).
 if [ "$MKLIVE" = "1" ] ; then
+	mkdir -pv /run/mklive-out/boot
 	kernel_out="/run/mklive-out/boot/kernel"
 	initrd_out="/run/mklive-out/boot/live-initramfs.img"
 else

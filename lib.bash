@@ -482,6 +482,7 @@ prepare() {
 		mkdir -pv ${OVERLAYDIR}/$layer
 	done
 	mkdir -pv ${WORKDIR}/merged
+	mkdir -pv ${ISODIR}/boot
 	mkdir -pv ${ISODIR}/manifest
 	mkdir -pv ${OUT_PREFIX}/layers
 	mkdir -pv ${OUT_PREFIX}/templates
