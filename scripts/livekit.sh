@@ -211,3 +211,12 @@ sed \
 
 echo "Making way for a dkcli warpper ..."
 mv -v /usr/bin/dkcli{,.bin}
+
+echo "Generating ld.so cache ..."
+ldconfig
+
+echo "Generating font cache ..."
+fc-cache -fv
+
+echo "Disabling fc-cache.service preset ..."
+sed -i -e '/fc-cache.service/d' /usr/lib/systemd/system-preset/80-aosc-os-base.preset

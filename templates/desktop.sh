@@ -32,3 +32,13 @@ mkdir -pv $TGT/usr/lib/systemd/system/sddm.service.wants
 ln -sfv ../select-language-gui.service $TGT/usr/lib/systemd/system/sddm.service.wants/select-language-gui.service
 
 echo "deb https://repo.aosc.io/anthon/debs stable main" > "$TGT"/etc/apt/sources.list
+
+echo "Generating ld.so cache ..."
+ldconfig
+
+echo "Generating font cache ..."
+fc-cache -fv
+
+echo "Disabling fc-cache.service preset ..."
+sed -i -e '/fc-cache.service/d' /usr/lib/systemd/system-preset/75-aosc-os-desktop.preset
+sed -i -e '/fc-cache.service/d' /usr/lib/systemd/system-preset/80-aosc-os-base.preset
