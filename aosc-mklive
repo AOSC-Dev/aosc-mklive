@@ -96,12 +96,6 @@ check_env() {
 		echo "memtest86plus hasn't been installed on your system." >&2
 		err=1
 	fi
-	for f in "${memtest86plus_files[@]}" ; do
-		if [ ! -e /boot/memtest86plus/$f ] ; then
-			echo "-- Memtest86+ file '$f' does not exist." >&2
-			err=1
-		fi
-	done
 	if [ "$err" == "0" ] ; then
 		echo "yes" >&2
 	else

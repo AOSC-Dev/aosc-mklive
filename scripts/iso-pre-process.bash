@@ -1,4 +1,13 @@
 #!/bin/bash
+case "$ARCH" in
+	amd64)
+		MEMTEST_FILES=("memtest32" "memtest64")
+		;;
+	loongarch64)
+		MEMTEST_FILES=("memtest64")
+		;;
+esac
+
 if [ "$target" = installer ] ; then
 	info "Creating configuration ..."
 	# Remove livekit from SYSROOTS[@].
@@ -28,13 +37,13 @@ if [ "$target" = installer ] ; then
 	curl -Lo "$ISODIR"/manifest/recipe-i18n.json \
 		https://releases.aosc.io/manifest/recipe-i18n.json
 fi	
-# Install memtest86+ from the host system
+# Install memtest86+ from the container
 if [ "${ARCH/@(amd64|loongarch64)/}" != "$ARCH" ] ; then
 	echo "Installing Memtest86+ binaries ..."
-	for file in "${memtest86plus_files[@]}" ; do
+	for file in "${MEMTEST_FILES[@]}" ; do
 		install -Dvm644 \
-			/boot/memtest86plus/"$file" \
-			"$PWD"/iso/boot/"$file"
+			"$WORKDIR"/base/boot/memtest86plus/"$file" \
+			"$ISODIR"/boot/"$file"
 	done
 elif [ "$ARCH" = "loongson3" ] ; then
 	echo "Installing PMON boot.cfg ..."
