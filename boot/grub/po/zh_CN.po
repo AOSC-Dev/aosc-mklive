@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 17:53+0800\n"
+"POT-Creation-Date: 2026-02-13 17:20+0800\n"
 "PO-Revision-Date: 2024-11-21 02:57+0000\n"
 "Last-Translator: Old Dodo <cyan@cyano.uk>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.aosc.io/"
@@ -117,30 +117,25 @@ msgstr "重新启动"
 msgid "Power Off"
 msgstr "关机"
 
-#: installer-livekit-gpus.cfg:3
+#: installer-livekit-gpus.cfg:2
 #, fuzzy
 msgid "Install AOSC OS (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
 msgstr "安装 AOSC OS（NVIDIA 显卡）"
 
-#: installer-livekit-gpus.cfg:8
+#: installer-livekit-gpus.cfg:7
 #, fuzzy
 msgid "Install AOSC OS (With NVIDIA graphics, up to GTX 10 series)"
 msgstr "安装 AOSC OS（NVIDIA 显卡）"
 
-#: installer-livekit-gpus.cfg:15
+#: installer-livekit-gpus.cfg:14
 #, fuzzy
 msgid "Install AOSC OS (With Zhaoxin KX-6000G/7000 series)"
 msgstr "安装 AOSC OS（NVIDIA 显卡）"
 
-#: installer-livekit-gpus.cfg:20
+#: installer-livekit-gpus.cfg:19
 #, fuzzy
 msgid "Install AOSC OS (With Zhaoxin KX-6000/6900 series)"
 msgstr "安装 AOSC OS（NVIDIA 显卡）"
-
-#: installer-livekit-gpus.cfg:27
-#, fuzzy
-msgid "Install AOSC OS (With Loongson 7A2000/LG110 graphics)"
-msgstr "安装 AOSC OS（基本图形）"
 
 #: installer-desktop-gpus.cfg:3
 #, fuzzy
@@ -163,10 +158,13 @@ msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000/6900 series)"
 msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 
-#: installer-desktop-gpus.cfg:27
 #, fuzzy
-msgid "Try AOSC OS Desktop (With Loongson 7A2000/LG110 graphics)"
-msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
+#~ msgid "Install AOSC OS (With Loongson 7A2000/LG110 graphics)"
+#~ msgstr "安装 AOSC OS（基本图形）"
+
+#, fuzzy
+#~ msgid "Try AOSC OS Desktop (With Loongson 7A2000/LG110 graphics)"
+#~ msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 
 #, fuzzy
 #~ msgid "Install AOSC OS (With NVIDIA graphics since RTX 20 series)"
