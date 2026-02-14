@@ -93,6 +93,10 @@ def main():
 	data.read(ini_file)
 	sysroots = data.get('installer', 'sysroots').split()
 	recipe = AOSCRecipe()
+	if 'base' in sysroots:
+	# Put base at the back of the array.
+		sysroots.pop(sysroots.index('base'))
+		sysroots.append('base')
 	for variant in sysroots:
 		if variant not in dataset.sections():
 			print(f"ERROR: Variant {variant} not present in recipe.ini.")
