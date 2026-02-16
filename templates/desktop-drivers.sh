@@ -18,9 +18,9 @@ case "$CURNAME" in
 		DRACUT_ADD_DRIVERS=" zx_core zx "
 		OUT_INITRD="live-initramfs-zhaoxin.img"
 		;;
-	desktop-loonggpu)
-		DRACUT_ADD_DRIVERS=" loonggpu "
-		OUT_INITRD="live-initramfs-loonggpu.img"
+	desktop-arise)
+		DRACUT_ADD_DRIVERS=" arise "
+		OUT_INITRD="live-initramfs-arise.img"
 		;;
 	*)
 		die "Invalid name linked to this script!"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-13 17:20+0800\n"
+"POT-Creation-Date: 2026-02-16 16:06+0800\n"
 "PO-Revision-Date: 2024-11-21 02:57+0000\n"
 "Last-Translator: Old Dodo <cyan@cyano.uk>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.aosc.io/"
@@ -137,6 +137,11 @@ msgstr "安装 AOSC OS（NVIDIA 显卡）"
 msgid "Install AOSC OS (With Zhaoxin KX-6000/6900 series)"
 msgstr "安装 AOSC OS（NVIDIA 显卡）"
 
+#: installer-livekit-gpus.cfg:26
+#, fuzzy
+msgid "Install AOSC OS (With Glenfly Arise 1000/2000 graphics)"
+msgstr "安装 AOSC OS（基本图形）"
+
 #: installer-desktop-gpus.cfg:3
 #, fuzzy
 msgid ""
@@ -158,13 +163,10 @@ msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000/6900 series)"
 msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 
+#: installer-desktop-gpus.cfg:27
 #, fuzzy
-#~ msgid "Install AOSC OS (With Loongson 7A2000/LG110 graphics)"
-#~ msgstr "安装 AOSC OS（基本图形）"
-
-#, fuzzy
-#~ msgid "Try AOSC OS Desktop (With Loongson 7A2000/LG110 graphics)"
-#~ msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
+msgid "Try AOSC OS Desktop (With Glenfly Arise 1000/2000 graphics)"
+msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 
 #, fuzzy
 #~ msgid "Install AOSC OS (With NVIDIA graphics since RTX 20 series)"
