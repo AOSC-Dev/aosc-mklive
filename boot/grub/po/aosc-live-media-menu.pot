@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-13 17:20+0800\n"
+"POT-Creation-Date: 2026-02-16 16:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,6 +127,10 @@ msgstr ""
 msgid "Install AOSC OS (With Zhaoxin KX-6000/6900 series)"
 msgstr ""
 
+#: installer-livekit-gpus.cfg:26
+msgid "Install AOSC OS (With Glenfly Arise 1000/2000 graphics)"
+msgstr ""
+
 #: installer-desktop-gpus.cfg:3
 msgid ""
 "Try AOSC OS Desktop (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
@@ -142,4 +146,8 @@ msgstr ""
 
 #: installer-desktop-gpus.cfg:20
 msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000/6900 series)"
+msgstr ""
+
+#: installer-desktop-gpus.cfg:27
+msgid "Try AOSC OS Desktop (With Glenfly Arise 1000/2000 graphics)"
 msgstr ""
