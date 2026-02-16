@@ -39,6 +39,12 @@ menuentry 'Sorry, AOSC OS does not support Secure Boot.' {
 menuentry 'Please disable Secure Boot before continuing.' {
 	true
 }
+menuentry 'For more details, please visit:' {
+	true
+}
+menuentry 'https://aosc.io/aosc-os/secure-boot/' {
+	true
+}
 menuentry 'UEFI Firmware Settings' {
 	fwsetup
 }
