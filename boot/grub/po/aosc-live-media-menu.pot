@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-16 16:06+0800\n"
+"POT-Creation-Date: 2026-02-26 10:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,42 +112,41 @@ msgid "Power Off"
 msgstr ""
 
 #: installer-livekit-gpus.cfg:2
-msgid "Install AOSC OS (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
+msgid "Install AOSC OS (for NVIDIA GPUs since RTX 20 series)"
 msgstr ""
 
 #: installer-livekit-gpus.cfg:7
-msgid "Install AOSC OS (With NVIDIA graphics, up to GTX 10 series)"
+msgid "Install AOSC OS (for NVIDIA GPUs up to GTX 10 series)"
 msgstr ""
 
 #: installer-livekit-gpus.cfg:14
-msgid "Install AOSC OS (With Zhaoxin KX-6000G/7000 series)"
+msgid "Install AOSC OS (for integrated Zhaoxin C-1080/1190 GPUs)"
 msgstr ""
 
 #: installer-livekit-gpus.cfg:19
-msgid "Install AOSC OS (With Zhaoxin KX-6000/6900 series)"
+msgid "Install AOSC OS (for integrated Zhaoxin C-960 GPUs)"
 msgstr ""
 
 #: installer-livekit-gpus.cfg:26
-msgid "Install AOSC OS (With Glenfly Arise 1000/2000 graphics)"
+msgid "Install AOSC OS (for Glenfly Arise 1000/2000 GPUs)"
 msgstr ""
 
 #: installer-desktop-gpus.cfg:3
-msgid ""
-"Try AOSC OS Desktop (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
+msgid "Try AOSC OS Desktop (for NVIDIA GPUs since RTX 20 series)"
 msgstr ""
 
 #: installer-desktop-gpus.cfg:8
-msgid "Try AOSC OS Desktop (With NVIDIA graphics, up to GTX 10 series)"
+msgid "Try AOSC OS Desktop (for NVIDIA GPUs up to RTX 20 series)"
 msgstr ""
 
 #: installer-desktop-gpus.cfg:15
-msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000G/7000 series)"
+msgid "Try AOSC OS Desktop (for integrated Zhaoxin C-1180/1190 GPUs)"
 msgstr ""
 
 #: installer-desktop-gpus.cfg:20
-msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000/6900 series)"
+msgid "Try AOSC OS Desktop (for integrated Zhaoxin C-960 GPUs)"
 msgstr ""
 
 #: installer-desktop-gpus.cfg:27
-msgid "Try AOSC OS Desktop (With Glenfly Arise 1000/2000 graphics)"
+msgid "Try AOSC OS Desktop (for Glenfly Arise 1000/2000 GPUs)"
 msgstr ""

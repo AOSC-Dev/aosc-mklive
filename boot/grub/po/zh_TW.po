@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-16 16:06+0800\n"
+"POT-Creation-Date: 2026-02-26 10:27+0800\n"
 "PO-Revision-Date: 2024-11-21 02:57+0000\n"
 "Last-Translator: Kaiyang Wu <origincode@aosc.io>\n"
 "Language-Team: Chinese (Traditional Han script) <https://weblate.aosc.io/"
@@ -119,59 +119,68 @@ msgstr "關機"
 
 #: installer-livekit-gpus.cfg:2
 #, fuzzy
-msgid "Install AOSC OS (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
+msgid "Install AOSC OS (for NVIDIA GPUs since RTX 20 series)"
 msgstr "安裝 AOSC OS（附帶 NVIDIA 顯示卡驅動程式）"
 
 #: installer-livekit-gpus.cfg:7
 #, fuzzy
-msgid "Install AOSC OS (With NVIDIA graphics, up to GTX 10 series)"
+msgid "Install AOSC OS (for NVIDIA GPUs up to GTX 10 series)"
 msgstr "安裝 AOSC OS（附帶 NVIDIA 顯示卡驅動程式）"
 
 #: installer-livekit-gpus.cfg:14
 #, fuzzy
-msgid "Install AOSC OS (With Zhaoxin KX-6000G/7000 series)"
+msgid "Install AOSC OS (for integrated Zhaoxin C-1080/1190 GPUs)"
 msgstr "安裝 AOSC OS（附帶 NVIDIA 顯示卡驅動程式）"
 
 #: installer-livekit-gpus.cfg:19
 #, fuzzy
-msgid "Install AOSC OS (With Zhaoxin KX-6000/6900 series)"
+msgid "Install AOSC OS (for integrated Zhaoxin C-960 GPUs)"
 msgstr "安裝 AOSC OS（附帶 NVIDIA 顯示卡驅動程式）"
 
 #: installer-livekit-gpus.cfg:26
 #, fuzzy
-msgid "Install AOSC OS (With Glenfly Arise 1000/2000 graphics)"
+msgid "Install AOSC OS (for Glenfly Arise 1000/2000 GPUs)"
 msgstr "安裝 AOSC OS（基本圖形）"
 
 #: installer-desktop-gpus.cfg:3
 #, fuzzy
-msgid ""
-"Try AOSC OS Desktop (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
+msgid "Try AOSC OS Desktop (for NVIDIA GPUs since RTX 20 series)"
 msgstr "試用 AOSC OS 桌面版（附帶 NVIDIA 顯示卡驅動程式）"
 
 #: installer-desktop-gpus.cfg:8
 #, fuzzy
-msgid "Try AOSC OS Desktop (With NVIDIA graphics, up to GTX 10 series)"
+msgid "Try AOSC OS Desktop (for NVIDIA GPUs up to RTX 20 series)"
 msgstr "試用 AOSC OS 桌面版（附帶 NVIDIA 顯示卡驅動程式）"
 
 #: installer-desktop-gpus.cfg:15
 #, fuzzy
-msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000G/7000 series)"
+msgid "Try AOSC OS Desktop (for integrated Zhaoxin C-1180/1190 GPUs)"
 msgstr "試用 AOSC OS 桌面版（附帶 NVIDIA 顯示卡驅動程式）"
 
 #: installer-desktop-gpus.cfg:20
 #, fuzzy
-msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000/6900 series)"
+msgid "Try AOSC OS Desktop (for integrated Zhaoxin C-960 GPUs)"
 msgstr "試用 AOSC OS 桌面版（附帶 NVIDIA 顯示卡驅動程式）"
 
 #: installer-desktop-gpus.cfg:27
 #, fuzzy
-msgid "Try AOSC OS Desktop (With Glenfly Arise 1000/2000 graphics)"
+msgid "Try AOSC OS Desktop (for Glenfly Arise 1000/2000 GPUs)"
 msgstr "試用 AOSC OS 桌面版（附帶 NVIDIA 顯示卡驅動程式）"
 
 #, fuzzy
-#~ msgid "Install AOSC OS (With NVIDIA graphics since RTX 20 series)"
+#~ msgid ""
+#~ "Install AOSC OS (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
 #~ msgstr "安裝 AOSC OS（附帶 NVIDIA 顯示卡驅動程式）"
 
 #, fuzzy
-#~ msgid "Try AOSC OS Desktop (With NVIDIA graphics since RTX 20 series)"
+#~ msgid "Install AOSC OS (With Zhaoxin KX-6000G/7000 series)"
+#~ msgstr "安裝 AOSC OS（附帶 NVIDIA 顯示卡驅動程式）"
+
+#, fuzzy
+#~ msgid ""
+#~ "Try AOSC OS Desktop (With NVIDIA graphics, GTX 16/RTX 20 series and later)"
+#~ msgstr "試用 AOSC OS 桌面版（附帶 NVIDIA 顯示卡驅動程式）"
+
+#, fuzzy
+#~ msgid "Try AOSC OS Desktop (With Zhaoxin KX-6000G/7000 series)"
 #~ msgstr "試用 AOSC OS 桌面版（附帶 NVIDIA 顯示卡驅動程式）"
