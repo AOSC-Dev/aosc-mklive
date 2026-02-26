@@ -158,7 +158,6 @@ kill_container() {
 
 pack_squashfs() {
 	local _comp outfile="$1" rootpath="$2"
-	pushd "$WORKDIR/$tgt"
 	case "${SQUASHFS_COMP:-xz}" in
 		none)
 			_comp="-no-compression"
