@@ -27,10 +27,15 @@ case "$CURNAME" in
 		;;
 esac
 
-default_config() {
-	# Stub - loongarch64 does not have NVIDIA drivers, and there's no
-	# other kernel configurations for arm64.
-	echo ""
+default_configuration() {
+	case "$ARCH" in
+		loongarch64)
+			echo "16k"
+			;;
+		*)
+			echo ""
+			;;
+	esac
 }
 
 echo "Installing plymouth-livekit ..."
