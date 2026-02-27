@@ -33,10 +33,10 @@ if [ "$target" = installer ] ; then
 	info "Generating recipe ..."
 	"$TOP"/helpers/gen-recipe.py "$ISODIR"/sysroots.ini "$ISODIR"/manifest/recipe.json
 
-	info "Downloading translated recipe ..."
-	curl -Lo "$ISODIR"/manifest/recipe-i18n.json \
-		https://releases.aosc.io/manifest/recipe-i18n.json
-fi	
+	info "Generating recipe translations ..."
+	"$TOP"/helpers/gen-i18n.py "$TOP"/helpers/recipe.ini "$TOP"/helpers/i18n gen-manifest
+	cp -v "$TOP"/helpers/i18n/recipe-i18n.json "$ISODIR"/manifest/recipe-i18n.json
+fi
 # Install memtest86+ from the container
 if [ "${ARCH/@(amd64|loongarch64)/}" != "$ARCH" ] ; then
 	echo "Installing Memtest86+ binaries ..."
