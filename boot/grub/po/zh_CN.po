@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-26 10:27+0800\n"
-"PO-Revision-Date: 2024-11-21 02:57+0000\n"
+"POT-Creation-Date: 2026-02-27 18:34+0800\n"
+"PO-Revision-Date: 2026-02-27 18:45+0800\n"
 "Last-Translator: Old Dodo <cyan@cyano.uk>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.aosc.io/"
 "projects/aosc-mklive/grub-menu/zh_Hans/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.1\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: installer.cfg:4 livekit.cfg:4
 msgid "Install AOSC OS (Command-line Only)"
@@ -75,7 +75,7 @@ msgstr "图形安装环境，因此您无法使用图形安装程序。"
 
 #: installer.cfg:50
 msgid "Graphics options for AOSC OS installation >>"
-msgstr ""
+msgstr "安装 AOSC OS 的其他图形选项 >>"
 
 #: installer.cfg:54
 msgid "Try AOSC OS Desktop"
@@ -83,7 +83,7 @@ msgstr "试用 AOSC OS 桌面版"
 
 #: installer.cfg:60
 msgid "Graphics options for AOSC OS Desktop >>"
-msgstr ""
+msgstr "试用 AOSC OS 的其他图形选项 >>"
 
 #: installer.cfg:82
 msgid "Troubleshooting Options >>"
@@ -118,54 +118,52 @@ msgid "Power Off"
 msgstr "关机"
 
 #: installer-livekit-gpus.cfg:2
-#, fuzzy
-msgid "Install AOSC OS (for NVIDIA GPUs since RTX 20 series)"
+msgid "Install AOSC OS (NVIDIA)"
 msgstr "安装 AOSC OS（NVIDIA 显卡）"
 
 #: installer-livekit-gpus.cfg:7
-#, fuzzy
-msgid "Install AOSC OS (for NVIDIA GPUs up to GTX 10 series)"
-msgstr "安装 AOSC OS（NVIDIA 显卡）"
+msgid "Install AOSC OS (NVIDIA GPUs older than GeForce GTX 16 series)"
+msgstr "安装 AOSC OS（NVIDIA GeForce GTX 16 以下系列显卡）"
 
 #: installer-livekit-gpus.cfg:14
-#, fuzzy
-msgid "Install AOSC OS (for integrated Zhaoxin C-1080/1190 GPUs)"
-msgstr "安装 AOSC OS（NVIDIA 显卡）"
+msgid "Install AOSC OS (Glenfly Arise 1000/2000 series GPUs)"
+msgstr "安装 AOSC OS（格兰菲 Arise 1000/2000 系列显卡）"
 
-#: installer-livekit-gpus.cfg:19
-#, fuzzy
-msgid "Install AOSC OS (for integrated Zhaoxin C-960 GPUs)"
-msgstr "安装 AOSC OS（NVIDIA 显卡）"
+#: installer-livekit-gpus.cfg:21
+msgid "Install AOSC OS (integrated Zhaoxin C-1080/1190 GPUs)"
+msgstr "安装 AOSC OS（兆芯 C-1080/1190 集成显卡）"
 
 #: installer-livekit-gpus.cfg:26
-#, fuzzy
-msgid "Install AOSC OS (for Glenfly Arise 1000/2000 GPUs)"
-msgstr "安装 AOSC OS（基本图形）"
+msgid "Install AOSC OS (integrated Zhaoxin C-960 GPUs)"
+msgstr "安装 AOSC OS（兆芯 C-960 集成显卡）"
 
 #: installer-desktop-gpus.cfg:3
-#, fuzzy
-msgid "Try AOSC OS Desktop (for NVIDIA GPUs since RTX 20 series)"
+msgid "Try AOSC OS Desktop (NVIDIA GPUs)"
 msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 
 #: installer-desktop-gpus.cfg:8
-#, fuzzy
-msgid "Try AOSC OS Desktop (for NVIDIA GPUs up to RTX 20 series)"
-msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
+msgid "Try AOSC OS Desktop (NVIDIA GPUs older than GeForce GTX 16 series)"
+msgstr "试用 AOSC OS 桌面版（NVIDIA GeForce GTX 16 以下系列显卡）"
 
 #: installer-desktop-gpus.cfg:15
-#, fuzzy
-msgid "Try AOSC OS Desktop (for integrated Zhaoxin C-1180/1190 GPUs)"
-msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
+msgid "Try AOSC OS Desktop Desktop (Glenfly Arise 1000/2000 series GPUs)"
+msgstr "试用 AOSC OS 桌面版（格兰菲 Arise 1000/2000 系列显卡）"
 
-#: installer-desktop-gpus.cfg:20
-#, fuzzy
-msgid "Try AOSC OS Desktop (for integrated Zhaoxin C-960 GPUs)"
-msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
+#: installer-desktop-gpus.cfg:22
+msgid "Try AOSC OS Desktop (integrated Zhaoxin C-1080/1190 GPUs)"
+msgstr "试用 AOSC OS 桌面版（兆芯 C-1080/1190 集成显卡）"
 
 #: installer-desktop-gpus.cfg:27
+msgid "Try AOSC OS Desktop (integrated Zhaoxin C-960 GPUs)"
+msgstr "试用 AOSC OS 桌面版（兆芯 C-960 集成显卡）"
+
 #, fuzzy
-msgid "Try AOSC OS Desktop (for Glenfly Arise 1000/2000 GPUs)"
-msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
+#~ msgid "Install AOSC OS (for NVIDIA GPUs since RTX 20 series)"
+#~ msgstr "安装 AOSC OS（NVIDIA 显卡）"
+
+#, fuzzy
+#~ msgid "Try AOSC OS Desktop (for NVIDIA GPUs up to RTX 20 series)"
+#~ msgstr "试用 AOSC OS 桌面版（NVIDIA 显卡）"
 
 #, fuzzy
 #~ msgid ""

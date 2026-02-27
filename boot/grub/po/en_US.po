@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-26 10:27+0800\n"
+"POT-Creation-Date: 2026-02-27 18:34+0800\n"
 "PO-Revision-Date: 2024-11-21 02:48+0000\n"
 "Last-Translator: Old Dodo <cyan@cyano.uk>\n"
 "Language-Team: English (United States) <https://weblate.aosc.io/projects/"
@@ -119,53 +119,61 @@ msgstr "Power Off"
 
 #: installer-livekit-gpus.cfg:2
 #, fuzzy
-msgid "Install AOSC OS (for NVIDIA GPUs since RTX 20 series)"
-msgstr "Install AOSC OS (With NVIDIA graphics)"
+msgid "Install AOSC OS (NVIDIA)"
+msgstr "Install AOSC OS"
 
 #: installer-livekit-gpus.cfg:7
 #, fuzzy
-msgid "Install AOSC OS (for NVIDIA GPUs up to GTX 10 series)"
+msgid "Install AOSC OS (NVIDIA GPUs older than GeForce GTX 16 series)"
 msgstr "Install AOSC OS (With NVIDIA graphics)"
 
 #: installer-livekit-gpus.cfg:14
 #, fuzzy
-msgid "Install AOSC OS (for integrated Zhaoxin C-1080/1190 GPUs)"
-msgstr "Install AOSC OS (With NVIDIA graphics)"
+msgid "Install AOSC OS (Glenfly Arise 1000/2000 series GPUs)"
+msgstr "Install AOSC OS (Basic graphics)"
 
-#: installer-livekit-gpus.cfg:19
+#: installer-livekit-gpus.cfg:21
 #, fuzzy
-msgid "Install AOSC OS (for integrated Zhaoxin C-960 GPUs)"
+msgid "Install AOSC OS (integrated Zhaoxin C-1080/1190 GPUs)"
 msgstr "Install AOSC OS (With NVIDIA graphics)"
 
 #: installer-livekit-gpus.cfg:26
 #, fuzzy
-msgid "Install AOSC OS (for Glenfly Arise 1000/2000 GPUs)"
-msgstr "Install AOSC OS (Basic graphics)"
+msgid "Install AOSC OS (integrated Zhaoxin C-960 GPUs)"
+msgstr "Install AOSC OS (With NVIDIA graphics)"
 
 #: installer-desktop-gpus.cfg:3
 #, fuzzy
-msgid "Try AOSC OS Desktop (for NVIDIA GPUs since RTX 20 series)"
-msgstr "Try AOSC OS Desktop (With NVIDIA graphics)"
+msgid "Try AOSC OS Desktop (NVIDIA GPUs)"
+msgstr "Try AOSC OS Desktop"
 
 #: installer-desktop-gpus.cfg:8
 #, fuzzy
-msgid "Try AOSC OS Desktop (for NVIDIA GPUs up to RTX 20 series)"
+msgid "Try AOSC OS Desktop (NVIDIA GPUs older than GeForce GTX 16 series)"
 msgstr "Try AOSC OS Desktop (With NVIDIA graphics)"
 
 #: installer-desktop-gpus.cfg:15
 #, fuzzy
-msgid "Try AOSC OS Desktop (for integrated Zhaoxin C-1180/1190 GPUs)"
+msgid "Try AOSC OS Desktop Desktop (Glenfly Arise 1000/2000 series GPUs)"
 msgstr "Try AOSC OS Desktop (With NVIDIA graphics)"
 
-#: installer-desktop-gpus.cfg:20
+#: installer-desktop-gpus.cfg:22
 #, fuzzy
-msgid "Try AOSC OS Desktop (for integrated Zhaoxin C-960 GPUs)"
+msgid "Try AOSC OS Desktop (integrated Zhaoxin C-1080/1190 GPUs)"
 msgstr "Try AOSC OS Desktop (With NVIDIA graphics)"
 
 #: installer-desktop-gpus.cfg:27
 #, fuzzy
-msgid "Try AOSC OS Desktop (for Glenfly Arise 1000/2000 GPUs)"
+msgid "Try AOSC OS Desktop (integrated Zhaoxin C-960 GPUs)"
 msgstr "Try AOSC OS Desktop (With NVIDIA graphics)"
+
+#, fuzzy
+#~ msgid "Install AOSC OS (for NVIDIA GPUs since RTX 20 series)"
+#~ msgstr "Install AOSC OS (With NVIDIA graphics)"
+
+#, fuzzy
+#~ msgid "Try AOSC OS Desktop (for NVIDIA GPUs up to RTX 20 series)"
+#~ msgstr "Try AOSC OS Desktop (With NVIDIA graphics)"
 
 #, fuzzy
 #~ msgid ""
