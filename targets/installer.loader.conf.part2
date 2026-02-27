@@ -1,26 +1,30 @@
 SYSROOT_DEP_desktop=("base" "desktop-common" "desktop")
 SYSROOT_DEP_livekit=("base" "desktop-common" "livekit")
 
-SYSROOT_DEP_desktop_nvidia=("base" "desktop-common" "desktop" "dkms-common" "driver-nvidia-common" "driver-nvidia")
-SYSROOT_DEP_desktop_nvidia_open=("base" "desktop-common" "desktop" "dkms-common" "driver-nvidia-common" "driver-nvidia-open")
+SYSROOT_DEP_desktop_nvidia=("base" "desktop-common" "desktop" "dkms-common" "driver-nvidia")
+SYSROOT_DEP_desktop_nvidia_open=("base" "desktop-common" "desktop" "dkms-common" "driver-nvidia-open")
 SYSROOT_DEP_desktop_cx4=("base" "desktop-common" "desktop" "dkms-common" "driver-cx4")
 SYSROOT_DEP_desktop_zhaoxin=("base" "desktop-common" "desktop" "dkms-common" "driver-zhaoxin")
 SYSROOT_DEP_desktop_arise=("base" "desktop-common" "desktop" "dkms-common" "driver-glenfly-arise")
+SYSROOT_DEP_desktop_loonggpu=("base" "desktop-common" "desktop" "dkms-common" "driver-loonggpu")
 
-SYSROOT_DEP_livekit_nvidia=("base" "desktop-common" "livekit" "dkms-common" "driver-nvidia-common" "driver-nvidia")
-SYSROOT_DEP_livekit_nvidia_open=("base" "desktop-common" "livekit" "dkms-common" "driver-nvidia-common" "driver-nvidia-open")
+SYSROOT_DEP_livekit_nvidia=("base" "desktop-common" "livekit" "dkms-common" "driver-nvidia")
+SYSROOT_DEP_livekit_nvidia_open=("base" "desktop-common" "livekit" "dkms-common" "driver-nvidia-open")
 SYSROOT_DEP_livekit_cx4=("base" "desktop-common" "livekit" "dkms-common" "driver-cx4")
 SYSROOT_DEP_livekit_zhaoxin=("base" "desktop-common" "livekit" "dkms-common" "driver-zhaoxin")
 SYSROOT_DEP_livekit_arise=("base" "desktop-common" "livekit" "dkms-common" "driver-glenfly-arise")
+SYSROOT_DEP_livekit_loonggpu=("base" "desktop-common" "livekit" "dkms-common" "driver-loonggpu")
 
 TEMPLATE_desktop_nvidia="desktop.$FSTYPE"
 TEMPLATE_desktop_nvidia_open="desktop.$FSTYPE"
 TEMPLATE_desktop_cx4="desktop.$FSTYPE"
 TEMPLATE_desktop_zhaoxin="desktop.$FSTYPE"
 TEMPLATE_desktop_arise="desktop.$FSTYPE"
+TEMPLATE_desktop_loonggpu="desktop.$FSTYPE"
 
 TEMPLATE_livekit_nvidia="livekit.$FSTYPE"
 TEMPLATE_livekit_nvidia_open="livekit.$FSTYPE"
 TEMPLATE_livekit_cx4="livekit.$FSTYPE"
 TEMPLATE_livekit_zhaoxin="livekit.$FSTYPE"
 TEMPLATE_livekit_arise="livekit.$FSTYPE"
+TEMPLATE_livekit_loonggpu="livekit.$FSTYPE"
