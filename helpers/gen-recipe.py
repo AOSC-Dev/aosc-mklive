@@ -93,6 +93,9 @@ def main():
 	data.read(ini_file)
 	sysroots = data.get('installer', 'sysroots').split()
 	recipe = AOSCRecipe()
+	if 'desktop-loonggpu' in sysroots:
+		sysroots.pop(sysroots.index('desktop-loonggpu'))
+		sysroots.insert(0, "desktop-loonggpu")
 	if 'base' in sysroots:
 	# Put base at the back of the array.
 		sysroots.pop(sysroots.index('base'))
