@@ -75,7 +75,7 @@ msgstr "圖形化安裝環境，因此您無法使用圖形化安裝程式。"
 
 #: installer.cfg:50
 msgid "Graphics options for AOSC OS installation >>"
-msgstr "安裝 AOSC OS 的其他圖形選項 >>"
+msgstr "安裝 AOSC OS（其他圖形選項）>>"
 
 #: installer.cfg:54
 msgid "Try AOSC OS Desktop"
@@ -83,7 +83,7 @@ msgstr "試用 AOSC OS 桌面版"
 
 #: installer.cfg:60
 msgid "Graphics options for AOSC OS Desktop >>"
-msgstr "試用 AOSC OS 的其他圖形選項 >>"
+msgstr "試用 AOSC OS（其他圖形選項）>>"
 
 #: installer.cfg:82
 msgid "Troubleshooting Options >>"
