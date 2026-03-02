@@ -14,7 +14,8 @@ DATE="$(date "+%Y%m%d")"
 # ISO revision.
 REV=""
 # Repo URL.
-REPO="https://repo-hk.aosc.io/anthon/debs"
+DEFAULT_REPO="https://repo.aosc.io/anthon/debs"
+REPO="${REPO:-$DEFAULT_REPO}"
 # Enabled topics.
 TOPICS=()
 # Filesystem type used to compress overlays.
@@ -124,18 +125,21 @@ Options:
 	-h, --help
 		Prints this help message
 	-a, --arch ARCH
-		Target architecture
+		Target architecture (default: $ARCH)
 	-d, --date DATE
-		Specify date with YYYYMMDD format
+		Specify date in YYYYMMDD format
 	-v, --revision REVISION
 		Specify revision of the ISO (starting with a digit)
 	-r, --repo, -m, --mirror URL
 		Repository to download packages from
+		(can be overridden using environment variable: REPO)
+		(default: https://repo.aosc.io/debs)
 	-t, --topic, --topics TOPIC_NAME
 		Build ISOs with specified topics; Support white space
 		separated lists
 	-f, --fstype TYPE
 		Select filesystem used by the ISO: squashfs, erofs
+		(default: erofs)
 	-O, --output-to-cwd
 		Do not create os-\$ARCH/\$TARGET when placing output files
 	-x, --xtrace
@@ -183,7 +187,12 @@ parse_cmdline() {
 			exit 0
 			;;
 		-r|--repo|-m|--mirror)
-			export REPO="$2"
+			if [ "$REPO" != "$DEFAULT_REPO" ] ; then
+				echo "WARNING: REPO is set in the environment. Ignoring --repo and --mirror option." >&2
+				export REPO
+			else
+				export REPO="$2"
+			fi
 			shift 2
 			;;
 		-t|--topic|--topics)
