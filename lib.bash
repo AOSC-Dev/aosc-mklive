@@ -153,6 +153,9 @@ kill_container() {
 		_cnt=$((_cnt+1))
 	done
 	rm "$STAMPDIR"/merged.lock
+	while [ -e "$_dir"/../.#merged.lck ] ; do
+		sleep 5
+	done
 	info "The container is terminated."
 }
 
