@@ -321,12 +321,12 @@ for target in "${TARGETS[@]}" ; do
 				source "overlays/"$target"/base.conf"
 				if [ -n "$SCRIPT_PREBOOTSTRAP" ] && [ -e "$SCRIPT_PREBOOTSTRAP" ] ; then
 					info "Running pre-base templates ..."
-					info source "$SCRIPT_PREBOOTSTRAP"
+					source "$SCRIPT_PREBOOTSTRAP"
 				fi
 				gen_base "$RECIPE" "$config" "${SCRIPTS_BOOTSTRAP[@]}" || die "Failed to generate base distribution!"
 				if [ -n "$SCRIPT_POSTBOOTSTRAP" ] && [ -e "$SCRIPT_POSTBOOTSTRAP" ] ; then
 					info "Running post-base templates ..."
-					info source "$SCRIPT_POSTBOOTSTRAP"
+					source "$SCRIPT_POSTBOOTSTRAP"
 				fi
 
 				info "Packing base distribution ..."
