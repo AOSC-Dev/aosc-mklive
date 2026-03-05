@@ -63,6 +63,11 @@ EOF
 fi
 
 echo "Generating initramfs image using kernel $kernel_selected ..."
+if [ "$MKLIVE" != 1 ] ; then
+	mkdir /run/mklive
+	tar xf /dracut.tar -C /run/mklive
+	rm /dracut.tar
+fi
 cp -av /run/mklive/dracut/90aosc-livekit-loader /usr/lib/dracut/modules.d/
 dracut \
 	--xz -c /dev/zero \
