@@ -23,7 +23,7 @@ if [[ "$ARCH" = "amd64" || \
 	xorriso -osirrox on -indev "$OUTPUT" -extract_l / "$ISODIR"/ "${files_to_extract[@]}" --
 	if [[ "$have_sb" = "1" ]]; then
 		mkdir -p $WORKDIR/sb
-		wget -O $WORKDIR/sb/grub.deb "https://deb.debian.org/debian/pool/main/g/grub-efi-${ARCH}-signed/grub-efi-${ARCH}-signed_1+2.12+9_${ARCH}.deb"
+		wget -O $WORKDIR/sb/grub.deb "https://deb.debian.org/debian/pool/main/g/grub-efi-${ARCH}-signed/grub-efi-${ARCH}-signed_1+2.12+9+deb13u1_${ARCH}.deb"
 		wget -O $WORKDIR/sb/shim.deb "https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.47+15.8-1_${ARCH}.deb"
 		dpkg-deb -x $WORKDIR/sb/grub.deb $WORKDIR/sb
 		dpkg-deb -x $WORKDIR/sb/shim.deb $WORKDIR/sb
