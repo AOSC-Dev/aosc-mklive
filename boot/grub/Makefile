@@ -79,6 +79,9 @@ DEFAULT_LANG := zh_CN
 # What this disk is (LiveKit or Installer)
 TARGET := installer
 
+# Volume ID.
+VOLID := LiveKit
+
 PODIR := po
 
 # POT file
@@ -98,6 +101,12 @@ OTHERFILES := fonts/unicode.pf2
 
 # PO files
 PO = $(wildcard po/*.po)
+
+ifeq ($(TARGET),installer)
+	LIVEKIT_BOOT_TGT = livekit
+else
+	LIVEKIT_BOOT_TGT = base
+endif
 
 .ONESHELL:
 
@@ -178,9 +187,10 @@ install: all
 	install -Dvm644 -t $(DESTDIR)$(PREFIX)/locales-aosc $(wildcard po/*.mo)
 	install -Dvm644 -t $(DESTDIR)$(PREFIX) $(MENUS) $(OTHERCFGS) $(LANGSEL)
 	$(foreach f,$(OTHERFILES),$(call install-other-files,$(f)))
-	sed -i -e 's|set tgt=installer|set tgt=$(TARGET)|g' $(DESTDIR)$(PREFIX)/grub.cfg
+	sed -i -e 's|@TARGET@|$(TARGET)|g' $(DESTDIR)$(PREFIX)/grub.cfg
+	sed -i -e 's|@VOLID@|$(VOLID)|g' $(DESTDIR)$(PREFIX)/grub.cfg
+	sed -i -e 's|@LIVEKIT_BOOT_TGT@|$(LIVEKIT_BOOT_TGT)|g' $(DESTDIR)$(PREFIX)/grub.cfg
 	sed -i -e 's|set volid="@VOLID@"|set volid="$(VOLID)"|g' $(DESTDIR)$(PREFIX)/init.cfg
-	sed -i -e 's|set volid="@VOLID@"|set volid="$(VOLID)"|g' $(DESTDIR)$(PREFIX)/grub.cfg
 
 TESTISO ?= /tmp/test.iso
 ISODIR ?= iso
