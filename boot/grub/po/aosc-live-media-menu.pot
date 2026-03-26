@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aosc-os-live-media-menu 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-27 18:34+0800\n"
+"POT-Creation-Date: 2026-03-26 10:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Install AOSC OS (Command-line Only)"
 msgstr ""
 
-#: installer.cfg:7 installer.cfg:44 livekit.cfg:7 livekit.cfg:44
+#: installer.cfg:7 installer.cfg:53 livekit.cfg:7 livekit.cfg:44
 msgid "Install AOSC OS"
 msgstr ""
 
@@ -67,47 +67,47 @@ msgstr ""
 msgid "and has disabled the graphical environment."
 msgstr ""
 
-#: installer.cfg:50
+#: installer.cfg:59
 msgid "Graphics options for AOSC OS installation >>"
 msgstr ""
 
-#: installer.cfg:54
+#: installer.cfg:63
 msgid "Try AOSC OS Desktop"
 msgstr ""
 
-#: installer.cfg:60
+#: installer.cfg:69
 msgid "Graphics options for AOSC OS Desktop >>"
 msgstr ""
 
-#: installer.cfg:82
+#: installer.cfg:91
 msgid "Troubleshooting Options >>"
 msgstr ""
 
-#: installer.cfg:83 livekit.cfg:50
+#: installer.cfg:92 livekit.cfg:50
 msgid "Install AOSC OS (Basic graphics)"
 msgstr ""
 
-#: installer.cfg:95 installer.cfg:113 livekit.cfg:75 livekit.cfg:93
+#: installer.cfg:104 installer.cfg:122 livekit.cfg:75 livekit.cfg:93
 msgid "Utilities >>"
 msgstr ""
 
-#: installer.cfg:97 installer.cfg:114 livekit.cfg:77 livekit.cfg:94
+#: installer.cfg:106 installer.cfg:123 livekit.cfg:77 livekit.cfg:94
 msgid "Memory Test"
 msgstr ""
 
-#: installer.cfg:106 livekit.cfg:86
+#: installer.cfg:115 livekit.cfg:86
 msgid "UEFI Firmware Settings"
 msgstr ""
 
-#: installer.cfg:121 livekit.cfg:101
+#: installer.cfg:130 livekit.cfg:101
 msgid "Boot Default OS"
 msgstr ""
 
-#: installer.cfg:126 livekit.cfg:106
+#: installer.cfg:135 livekit.cfg:106
 msgid "Restart"
 msgstr ""
 
-#: installer.cfg:129 livekit.cfg:109
+#: installer.cfg:138 livekit.cfg:109
 msgid "Power Off"
 msgstr ""
 

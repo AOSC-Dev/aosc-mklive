@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-27 18:34+0800\n"
+"POT-Creation-Date: 2026-03-19 09:52+0800\n"
 "PO-Revision-Date: 2026-02-27 18:45+0800\n"
 "Last-Translator: Old Dodo <cyan@cyano.uk>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.aosc.io/"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Install AOSC OS (Command-line Only)"
 msgstr "安装 AOSC OS（命令行模式）"
 
-#: installer.cfg:7 installer.cfg:44 livekit.cfg:7 livekit.cfg:44
+#: installer.cfg:7 installer.cfg:53 livekit.cfg:7 livekit.cfg:44
 msgid "Install AOSC OS"
 msgstr "安装 AOSC OS"
 
@@ -73,47 +73,47 @@ msgstr "安装环境，因此您无法使用 LiveKit。"
 msgid "and has disabled the graphical environment."
 msgstr "图形安装环境，因此您无法使用图形安装程序。"
 
-#: installer.cfg:50
+#: installer.cfg:59
 msgid "Graphics options for AOSC OS installation >>"
 msgstr "安装 AOSC OS（其他图形选项）>>"
 
-#: installer.cfg:54
+#: installer.cfg:63
 msgid "Try AOSC OS Desktop"
 msgstr "试用 AOSC OS 桌面版"
 
-#: installer.cfg:60
+#: installer.cfg:69
 msgid "Graphics options for AOSC OS Desktop >>"
 msgstr "试用 AOSC OS（其他图形选项）>>"
 
-#: installer.cfg:82
+#: installer.cfg:91
 msgid "Troubleshooting Options >>"
 msgstr "故障排除选项 >>"
 
-#: installer.cfg:83 livekit.cfg:50
+#: installer.cfg:92 livekit.cfg:50
 msgid "Install AOSC OS (Basic graphics)"
 msgstr "安装 AOSC OS（基本图形）"
 
-#: installer.cfg:95 installer.cfg:113 livekit.cfg:75 livekit.cfg:93
+#: installer.cfg:104 installer.cfg:122 livekit.cfg:75 livekit.cfg:93
 msgid "Utilities >>"
 msgstr "实用工具 >>"
 
-#: installer.cfg:97 installer.cfg:114 livekit.cfg:77 livekit.cfg:94
+#: installer.cfg:106 installer.cfg:123 livekit.cfg:77 livekit.cfg:94
 msgid "Memory Test"
 msgstr "内存测试工具"
 
-#: installer.cfg:106 livekit.cfg:86
+#: installer.cfg:115 livekit.cfg:86
 msgid "UEFI Firmware Settings"
 msgstr "UEFI 设置界面"
 
-#: installer.cfg:121 livekit.cfg:101
+#: installer.cfg:130 livekit.cfg:101
 msgid "Boot Default OS"
 msgstr "启动默认系统"
 
-#: installer.cfg:126 livekit.cfg:106
+#: installer.cfg:135 livekit.cfg:106
 msgid "Restart"
 msgstr "重新启动"
 
-#: installer.cfg:129 livekit.cfg:109
+#: installer.cfg:138 livekit.cfg:109
 msgid "Power Off"
 msgstr "关机"
 
