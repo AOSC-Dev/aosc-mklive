@@ -202,7 +202,9 @@ ln -sfv ../deploykit-gui.service \
 
 echo "Removing a problematic library ..."
 # FIXME: Causes crashes on unaccelerated platforms (i.e. VMs).
-rm -v /usr/lib/gstreamer-1.0/libgstvaapi.so
+if [ -e /usr/lib/gstreamer-1.0/libgstvaapi.so ] ; then
+	rm -v /usr/lib/gstreamer-1.0/libgstvaapi.so
+fi
 
 echo "Removing unused CJK fonts ..."
 rm -v \
