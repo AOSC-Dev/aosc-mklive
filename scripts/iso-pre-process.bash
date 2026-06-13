@@ -48,4 +48,5 @@ if [ "${ARCH/@(amd64|loongarch64)/}" != "$ARCH" ] ; then
 elif [ "$ARCH" = "loongson3" ] ; then
 	echo "Installing PMON boot.cfg ..."
 	install -vm644 "$PWD"/boot/boot-$target.cfg "$ISODIR"/boot/boot.cfg
+	sed -i -e "s,@VOLID@,$VOLID,g" "$ISODIR"/boot/boot.cfg
 fi
