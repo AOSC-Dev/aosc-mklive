@@ -296,7 +296,7 @@ for target in "${TARGETS[@]}" ; do
 	else
 		OUTPUT="$TOP"/os-"$ARCH"/"$target"/"$ISONAME"
 	fi
-	VOLID="aosc-os-$target-$DATE"
+	VOLID="AOSCINSTALL"
 	info "ISO Volume Name: $VOLID"
 
 	mkdir -p "$(dirname "$OUTPUT")"
