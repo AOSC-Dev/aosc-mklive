@@ -31,7 +31,8 @@ if [ "$target" = installer ] ; then
 	cat "$TOP"/targets/installer.loader.conf.part2 >> "$OUT_PREFIX"/livekit.conf
 
 	info "Generating recipe ..."
-	"$TOP"/helpers/gen-recipe.py "$ISODIR"/sysroots.ini "$ISODIR"/manifest/recipe.json
+	env ARCH="$ARCH" \
+		"$TOP"/helpers/gen-recipe.py "$ISODIR"/sysroots.ini "$ISODIR"/manifest/recipe.json
 
 	info "Generating recipe translations ..."
 	"$TOP"/helpers/gen-i18n.py "$TOP"/helpers/recipe.ini "$TOP"/helpers/i18n gen-manifest
