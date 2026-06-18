@@ -244,7 +244,7 @@ parse_cmdline() {
 	done
 }
 
-OPTS="$(getopt -o "a:d:f:hm:r:t:v:xO" --long "arch:,repo:,date:,mirror:,topic:topics:,fstype:,aoscbootstrap-dir:,revision:,local-testing,xtrace,help" -n "$PROGNAME" -- "$@")"
+OPTS="$(getopt -o "a:d:f:hm:r:t:v:xO" --long "arch:,repo:,date:,mirror:,topic:,topics:,fstype:,aoscbootstrap-dir:,revision:,local-testing,xtrace,help" -n "$PROGNAME" -- "$@")"
 if [ "$?" != 0 ] ; then
 	usage
 	exit 1
