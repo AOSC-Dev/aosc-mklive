@@ -278,9 +278,9 @@ info "Architecture       : $ARCH"
 info "Architecture group : $(ab_get_archgroup)"
 info "Filesystem backend : $FSTYPE"
 info "ISOs to build      : ${TARGETS[*]}"
-info "Repo URL	   : $REPO"
-info "Date string	: $DATE"
-info "Revision	   : $REV"
+info "Repo URL           : $REPO"
+info "Date string        : $DATE"
+info "Revision           : $REV"
 if [ "${#TOPICS[@]}" -gt 0 ] ; then
 	info "Topic(s) enabled   : ${TOPICS[*]}"
 fi
