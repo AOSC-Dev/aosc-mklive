@@ -30,4 +30,4 @@ source /etc/locale.conf
 
 # After "exiting" DeployKit (by selecting "Rescue & Recovery"), launch a full
 # MATE desktop session.
-mate-session
+dbus-run-session mate-session
