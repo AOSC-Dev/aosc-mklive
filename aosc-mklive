@@ -175,8 +175,8 @@ parse_cmdline() {
 			;;
 		-v|--revision)
 			REV="$2"
-			if [ "${REV//[^0-9]/}" != "${REV}" ]; then
-				echo "FATAL: REV must start with a digit" >&2
+			if [ "${REV//[^0-9a-zA-Z-_]}" != "${REV}" ]; then
+				echo "FATAL: Invalid revision string, only alphabets, digits, hyphens and underscores are allowed" >&2
 				exit 1
 			fi
 			REV=".$REV"
