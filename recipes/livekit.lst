@@ -1,4 +1,4 @@
-%include /usr/share/aoscbootstrap/recipes/base.lst
+%include /usr/share/aoscbootstrap/recipes/mainline-base.lst
 adobe-source-code-pro
 adobe-source-sans
 arc-theme
