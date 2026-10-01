@@ -28,8 +28,8 @@ systemd-nspawn -D $TGT -- oma --no-check-dbus install \
 	gparted select-language-gui xinit
 
 echo "Enabling language selection UI ..."
-mkdir -pv $TGT/usr/lib/systemd/system/sddm.service.wants
-ln -sfv ../select-language-gui.service $TGT/usr/lib/systemd/system/sddm.service.wants/select-language-gui.service
+mkdir -pv $TGT/usr/lib/systemd/system/plasmalogin.service.wants
+ln -sfv ../select-language-gui.service $TGT/usr/lib/systemd/system/plasmalogin.service.wants/select-language-gui.service
 
 echo "deb https://repo.aosc.io/anthon/debs stable main" > "$TGT"/etc/apt/sources.list
 

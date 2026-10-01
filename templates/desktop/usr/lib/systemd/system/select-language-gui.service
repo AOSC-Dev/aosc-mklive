@@ -1,6 +1,6 @@
 [Unit]
 Description=Language Selection Interface (GUI)
-Before=sddm.service
+Before=plasmalogin.service
 After=multi-user.target
 Conflicts=select-language-tui.service
 
