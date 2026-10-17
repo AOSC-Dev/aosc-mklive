@@ -7,6 +7,7 @@ echo "Creating a live user ... "
 useradd -R $TGT -m -s /bin/bash live
 usermod -R $TGT -aG audio,video,plugdev,tty,wheel live
 chfn -R $TGT -f "Live session user"
+echo 'live:live' | chpasswd
 
 echo "Copying user skeletons ..."
 for file in $(ls -A ${WORKDIR}/merged/etc/skel/) ; do
